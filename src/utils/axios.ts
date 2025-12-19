@@ -44,3 +44,6 @@ export const fetcherPost = async (args: string | [string, AxiosRequestConfig]) =
 
   return res.data;
 };
+
+// Export axios types and utilities
+export type { AxiosResponse, AxiosError } from 'axios';

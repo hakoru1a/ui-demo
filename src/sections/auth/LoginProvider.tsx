@@ -29,18 +29,10 @@ export default function LoginProvider({ currentLoginWith }: LoginProps) {
 
   const loginHandlers = {
     Jwt: () => navigate(APP_AUTH === AuthProvider.JWT ? '/login' : '/jwt/login?auth=jwt'),
-    Firebase: () => navigate(APP_AUTH === AuthProvider.FIREBASE ? '/login' : '/firebase/login?auth=firebase'),
-    Auth0: () => navigate(APP_AUTH === AuthProvider.AUTH0 ? '/login' : '/auth0/login?auth=auth0'),
-    Aws: () => navigate(APP_AUTH === AuthProvider.AWS ? '/login' : '/aws/login?auth=aws'),
-    Supabase: () => navigate(APP_AUTH === AuthProvider.SUPABASE ? '/login' : '/supabase/login?auth=supabase')
   };
 
   const buttonData = [
     { name: 'jwt', icon: Jwt, handler: loginHandlers.Jwt },
-    { name: 'firebase', icon: Firebase, handler: loginHandlers.Firebase },
-    { name: 'auth0', icon: Auth0, handler: loginHandlers.Auth0 },
-    { name: 'aws', icon: Aws, handler: loginHandlers.Aws },
-    { name: 'supabase', icon: Supabase, handler: loginHandlers.Supabase }
   ];
 
   const currentLoginExists = buttonData.some((button) => button.name === currentLoginWith);
