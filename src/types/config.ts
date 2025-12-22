@@ -2,7 +2,7 @@ import { MenuOrientation, ThemeMode, ThemeDirection } from 'config';
 
 export type FontFamily = `'Inter', sans-serif` | `'Poppins', sans-serif` | `'Roboto', sans-serif` | `'Public Sans', sans-serif`;
 export type PresetColor = 'default' | 'theme1' | 'theme2' | 'theme3' | 'theme4' | 'theme5' | 'theme6' | 'theme7' | 'theme8';
-export type I18n = 'en' | 'fr' | 'ro' | 'zh' | 'vi'; // 'en' - English, 'fr' - French, 'ro' - Romanian, 'zh' - Chinese, 'vi' - Vietnamese
+export type I18n = 'en' | 'vi'; // 'en' - English, 'vi' - Vietnamese
 
 // ==============================|| CONFIG TYPES ||============================== //
 
@@ -20,10 +20,8 @@ export type DefaultConfigProps = {
   /**
    * The props used for display menu-items with multi-language.
    * We provide static below languages according to 'react-intl' options - https://www.npmjs.com/package/react-intl
-   * 'en' (default)
-   * 'fr'
-   * 'ro'
-   * 'zh'
+   * 'en' - English
+   * 'vi' - Vietnamese
    */
   i18n: I18n;
 
