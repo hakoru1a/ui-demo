@@ -1,8 +1,7 @@
-import { useRef, useState } from 'react';
-
-// material-ui
-import useMediaQuery from '@mui/material/useMediaQuery';
+import TranslationOutlined from '@ant-design/icons/TranslationOutlined';
+import Box from '@mui/material/Box';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+// material-ui
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -10,16 +9,15 @@ import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useRef, useState } from 'react';
 
 // project imports
 import IconButton from 'components/@extended/IconButton';
 import Transitions from 'components/@extended/Transitions';
-
 import useConfig from 'hooks/useConfig';
 
 // assets
-import TranslationOutlined from '@ant-design/icons/TranslationOutlined';
 
 // types
 import { I18n } from 'types/config';
@@ -31,14 +29,14 @@ export default function Localization() {
 
   const { i18n, onChangeLocalization } = useConfig();
 
-  const anchorRef = useRef<any>(null);
+  const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
 
   const handleClose = (event: MouseEvent | TouchEvent) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+    if (anchorRef.current && anchorRef.current.contains(event.target as Node)) {
       return;
     }
     setOpen(false);
@@ -134,6 +132,18 @@ export default function Localization() {
                           <Typography color="text.primary">中国人</Typography>
                           <Typography variant="caption" color="text.secondary" sx={{ ml: '8px' }}>
                             (Chinese)
+                          </Typography>
+                        </Grid>
+                      }
+                    />
+                  </ListItemButton>
+                  <ListItemButton selected={i18n === 'vi'} onClick={() => handleListItemClick('vi')}>
+                    <ListItemText
+                      primary={
+                        <Grid container>
+                          <Typography color="text.primary">Tiếng Việt</Typography>
+                          <Typography variant="caption" color="text.secondary" sx={{ ml: '8px' }}>
+                            (Vietnamese)
                           </Typography>
                         </Grid>
                       }

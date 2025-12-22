@@ -9,7 +9,7 @@ export const linkedInColor = '#0e76a8';
 
 export const APP_DEFAULT_PATH = '/sample-page';
 export const HORIZONTAL_MAX_ITEM = 7;
-export const DRAWER_WIDTH = 260;
+export const DRAWER_WIDTH = 280;
 export const MINI_DRAWER_WIDTH = 60;
 
 export enum SimpleLayoutType {
@@ -57,7 +57,7 @@ export const APP_AUTH: AuthProvider = AuthProvider.JWT;
 
 const config: DefaultConfigProps = {
   fontFamily: `'Public Sans', sans-serif`,
-  i18n: 'en',
+  i18n: 'vi',
   menuOrientation: MenuOrientation.VERTICAL,
   miniDrawer: false,
   container: true,

@@ -1,5 +1,4 @@
 import { ReactNode, useEffect, useState } from 'react';
-
 // third-party
 import { IntlProvider, MessageFormatElement } from 'react-intl';
 
@@ -16,6 +15,8 @@ const loadLocaleData = (locale: I18n) => {
       return import('utils/locales/ro.json');
     case 'zh':
       return import('utils/locales/zh.json');
+    case 'vi':
+      return import('utils/locales/vi.json');
     case 'en':
     default:
       return import('utils/locales/en.json');
@@ -42,7 +43,7 @@ export default function Locales({ children }: Props) {
   return (
     <>
       {messages && (
-        <IntlProvider locale={i18n} defaultLocale="en" messages={messages}>
+        <IntlProvider locale={i18n} defaultLocale="vi" messages={messages}>
           {children}
         </IntlProvider>
       )}
