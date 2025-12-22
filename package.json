@@ -53,7 +53,10 @@
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
-    "knip": "knip"
+    "prettier:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx}\"",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "knip": "knip",
+    "prepare": "husky"
   },
   "eslintConfig": {
     "extends": [
@@ -78,6 +81,7 @@
     "@eslint/eslintrc": "3.3.1",
     "@eslint/js": "9.25.1",
     "@types/chance": "1.1.6",
+    "@types/eslint-plugin-jsx-a11y": "^6",
     "@types/jest": "29.5.14",
     "@types/lodash-es": "4.17.12",
     "@types/node": "22.14.1",
@@ -88,13 +92,28 @@
     "@typescript-eslint/parser": "8.31.0",
     "eslint": "9.25.1",
     "eslint-config-prettier": "10.1.2",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-prettier": "5.2.6",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "5.2.0",
+    "husky": "^9.1.7",
     "immutable": "5.1.1",
     "knip": "5.50.5",
+    "lint-staged": "^16.2.7",
     "prettier": "3.5.3",
     "prettier-eslint-cli": "8.0.1",
     "typescript": "5.8.3"
   },
-  "packageManager": "yarn@4.9.1"
+  "packageManager": "yarn@4.9.1",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,scss,md}": [
+      "prettier --write"
+    ]
+  }
 }

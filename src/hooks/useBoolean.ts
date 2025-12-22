@@ -29,7 +29,7 @@ const useBoolean = (defaultValue?: boolean): ReturnType => {
     onTrue,
     onFalse,
     onToggle,
-    setValue,
+    setValue
   };
 };
 

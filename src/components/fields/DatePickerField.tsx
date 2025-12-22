@@ -18,12 +18,11 @@ const DatePickerField = forwardRef<HTMLDivElement, DatePickerFieldProps>((props,
         textField: {
           ...slotProps?.textField,
           error: error,
-          helperText: helperText,
-        },
+          helperText: helperText
+        }
       }}
     />
   );
 });
 
 export default DatePickerField;
-

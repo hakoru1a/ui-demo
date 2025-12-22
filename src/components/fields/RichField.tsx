@@ -8,4 +8,3 @@ const RichField = forwardRef<HTMLDivElement, RichFieldProps>((props, ref) => {
 });
 
 export default RichField;
-

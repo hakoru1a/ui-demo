@@ -1,11 +1,4 @@
-import {
-  Checkbox,
-  FormControlLabel,
-  type CheckboxProps,
-  FormGroup,
-  FormHelperText,
-  FormControl,
-} from '@mui/material';
+import { Checkbox, FormControlLabel, type CheckboxProps, FormGroup, FormHelperText, FormControl } from '@mui/material';
 import { forwardRef } from 'react';
 
 export type CheckboxFieldProps = CheckboxProps & {
@@ -27,4 +20,3 @@ const CheckboxField = forwardRef<HTMLButtonElement, CheckboxFieldProps>((props, 
 });
 
 export default CheckboxField;
-

@@ -11,13 +11,12 @@ const NumberField = forwardRef<HTMLDivElement, NumberFieldProps>((props, ref) =>
       {...props}
       slotProps={{
         htmlInput: {
-          ...props.slotProps?.htmlInput,
+          ...props.slotProps?.htmlInput
         },
-        ...props.slotProps,
+        ...props.slotProps
       }}
     />
   );
 });
 
 export default NumberField;
-

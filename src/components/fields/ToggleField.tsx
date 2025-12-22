@@ -1,11 +1,4 @@
-import {
-  Switch,
-  FormControlLabel,
-  type SwitchProps,
-  FormGroup,
-  FormHelperText,
-  FormControl,
-} from '@mui/material';
+import { Switch, FormControlLabel, type SwitchProps, FormGroup, FormHelperText, FormControl } from '@mui/material';
 import { forwardRef } from 'react';
 
 export type ToggleFieldProps = SwitchProps & {
@@ -27,4 +20,3 @@ const ToggleField = forwardRef<HTMLButtonElement, ToggleFieldProps>((props, ref)
 });
 
 export default ToggleField;
-

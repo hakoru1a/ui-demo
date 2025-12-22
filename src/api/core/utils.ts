@@ -3,15 +3,11 @@ import axios from 'axios';
 
 import type { ApiResult } from './types';
 
-const createCancelToken = (executor: Dynamic) =>
-  executor ? new axios.CancelToken(executor) : axios.CancelToken.source().token;
+const createCancelToken = (executor: Dynamic) => (executor ? new axios.CancelToken(executor) : axios.CancelToken.source().token);
 
-export const initializeRequest = (
-  params?: DynamicObject,
-  cancellation?: Dynamic
-): AxiosRequestConfig => {
+export const initializeRequest = (params?: DynamicObject, cancellation?: Dynamic): AxiosRequestConfig => {
   const config: AxiosRequestConfig = {
-    params: { ...params },
+    params: { ...params }
   };
 
   if (cancellation) {
@@ -21,29 +17,26 @@ export const initializeRequest = (
   return config;
 };
 
-export const callApi = async <TResponse>(
-  callback: Promise<AxiosResponse<ApiResult<TResponse>>>
-): Promise<ApiResult<TResponse>> => {
+export const callApi = async <TResponse>(callback: Promise<AxiosResponse<ApiResult<TResponse>>>): Promise<ApiResult<TResponse>> => {
   try {
     const response = await callback;
     if (response.status >= 400) {
       return {
         status: response.status,
         error: response.data.error,
-        success: false,
+        success: false
       };
     }
     return {
       status: response.status,
       success: true,
       data: response?.data?.data,
-      meta: response?.data?.meta,
+      meta: response?.data?.meta
     };
   } catch (error: Dynamic) {
     return {
       ...error,
-      data: undefined,
+      data: undefined
     };
   }
 };
-
