@@ -5,7 +5,7 @@
  * TODO: This service extends BaseService to handle API calls for this feature
  */
 
-import { BaseService } from 'api/core';
+import { BaseService } from 'services/http';
 
 // TODO: Import your types
 // import { FeatureName, FeatureNameFormData } from '../types';
