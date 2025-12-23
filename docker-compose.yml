@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Read from .env file or use defaults
+        VITE_APP_API_URL: ${VITE_APP_API_URL:-http://localhost:3010/}
+        VITE_APP_BASE_NAME: ${VITE_APP_BASE_NAME:-/}
+    env_file:
+      - .env
+    container_name: react-spa-app
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
