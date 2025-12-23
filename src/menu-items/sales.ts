@@ -26,14 +26,14 @@ const sales: NavItemType = {
           id: 'sales-export-order-list',
           title: 'menu.sales.export-order-list',
           type: 'item',
-          url: '/sales/export-order/list',
+          url: '/export-orders',
           icon: UnorderedListOutlined
         },
         {
           id: 'sales-customer-crm',
           title: 'menu.sales.customer-crm',
           type: 'item',
-          url: '/sales/customer/crm',
+          url: '/crm/customers',
           icon: TeamOutlined
         }
       ]
@@ -48,14 +48,14 @@ const sales: NavItemType = {
           id: 'sales-invoice-packing-list',
           title: 'menu.sales.invoice-packing-list',
           type: 'item',
-          url: '/sales/documents/invoice-packing-list',
+          url: '/export-documents',
           icon: FileTextOutlined
         },
         {
           id: 'sales-shipment-tracking',
           title: 'menu.sales.shipment-tracking',
           type: 'item',
-          url: '/sales/documents/shipment-tracking',
+          url: '/vessel-tracking',
           icon: EnvironmentOutlined
         }
       ]
@@ -70,7 +70,7 @@ const sales: NavItemType = {
           id: 'sales-logistics-service-cost',
           title: 'menu.sales.logistics-service-cost',
           type: 'item',
-          url: '/sales/accounting/logistics-service-cost',
+          url: '/logistics-costing',
           icon: AccountBookOutlined
         }
       ]

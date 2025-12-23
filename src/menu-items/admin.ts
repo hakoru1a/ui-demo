@@ -2,16 +2,13 @@ import {
   SettingOutlined,
   BarChartOutlined,
   DashboardOutlined,
-  LineChartOutlined,
-  PieChartOutlined,
   UserOutlined,
   TeamOutlined,
   FileTextOutlined,
   SendOutlined,
   BookOutlined,
   SafetyCertificateOutlined,
-  CustomerServiceOutlined,
-  CalendarOutlined
+  CustomerServiceOutlined
 } from '@ant-design/icons';
 
 import { NavItemType } from 'types/menu';
@@ -32,42 +29,14 @@ const admin: NavItemType = {
           id: 'admin-dashboard-kpi',
           title: 'menu.admin.dashboard-kpi',
           type: 'item',
-          url: '/admin/reports/dashboard-kpi',
+          url: '/dashboards',
           icon: DashboardOutlined
         },
         {
-          id: 'admin-pl-report',
-          title: 'menu.admin.pl-report',
+          id: 'admin-reports',
+          title: 'menu.admin.reports',
           type: 'item',
-          url: '/admin/reports/pl-report',
-          icon: LineChartOutlined
-        },
-        {
-          id: 'admin-production-report',
-          title: 'menu.admin.production-report',
-          type: 'item',
-          url: '/admin/reports/production-report',
-          icon: BarChartOutlined
-        },
-        {
-          id: 'admin-inventory-count-report',
-          title: 'menu.admin.inventory-count-report',
-          type: 'item',
-          url: '/admin/reports/inventory-count-report',
-          icon: PieChartOutlined
-        },
-        {
-          id: 'admin-inbound-outbound-report',
-          title: 'menu.admin.inbound-outbound-report',
-          type: 'item',
-          url: '/admin/reports/inbound-outbound-report',
-          icon: BarChartOutlined
-        },
-        {
-          id: 'admin-production-area-report',
-          title: 'menu.admin.production-area-report',
-          type: 'item',
-          url: '/admin/reports/production-area-report',
+          url: '/reports',
           icon: BarChartOutlined
         }
       ]
@@ -82,21 +51,21 @@ const admin: NavItemType = {
           id: 'admin-hr-profile-contract-list',
           title: 'menu.admin.hr-profile-contract-list',
           type: 'item',
-          url: '/admin/hr/profile-contract-list',
+          url: '/hr/employees',
           icon: TeamOutlined
         },
         {
           id: 'admin-hr-timesheet-payroll',
           title: 'menu.admin.hr-timesheet-payroll',
           type: 'item',
-          url: '/admin/hr/timesheet-payroll',
+          url: '/timekeeping',
           icon: FileTextOutlined
         },
         {
           id: 'admin-hr-dispatch-order',
           title: 'menu.admin.hr-dispatch-order',
           type: 'item',
-          url: '/admin/hr/dispatch-order',
+          url: '/workforce-dispatch',
           icon: SendOutlined
         }
       ]
@@ -111,22 +80,15 @@ const admin: NavItemType = {
           id: 'admin-training-safety',
           title: 'menu.admin.training-safety',
           type: 'item',
-          url: '/admin/training/safety',
+          url: '/training',
           icon: SafetyCertificateOutlined
         },
         {
           id: 'admin-complaints-handling',
           title: 'menu.admin.complaints-handling',
           type: 'item',
-          url: '/admin/complaints/handling',
+          url: '/complaints',
           icon: CustomerServiceOutlined
-        },
-        {
-          id: 'admin-training-schedule',
-          title: 'menu.admin.training-schedule',
-          type: 'item',
-          url: '/admin/training/schedule',
-          icon: CalendarOutlined
         }
       ]
     }

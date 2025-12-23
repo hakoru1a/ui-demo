@@ -1,16 +1,11 @@
 import {
   ProjectOutlined,
   FileAddOutlined,
-  CheckCircleOutlined,
-  InfoCircleOutlined,
   BarChartOutlined,
   FileDoneOutlined,
   UnorderedListOutlined,
-  FileTextOutlined,
   DollarOutlined,
-  CreditCardOutlined,
-  WalletOutlined,
-  SafetyCertificateOutlined
+  WalletOutlined
 } from '@ant-design/icons';
 
 import { NavItemType } from 'types/menu';
@@ -31,28 +26,14 @@ const business: NavItemType = {
           id: 'business-pab-create',
           title: 'menu.business.pab-create',
           type: 'item',
-          url: '/business/pab/create',
+          url: '/pab',
           icon: FileAddOutlined
-        },
-        {
-          id: 'business-pab-approval',
-          title: 'menu.business.pab-approval',
-          type: 'item',
-          url: '/business/pab/approval',
-          icon: CheckCircleOutlined
-        },
-        {
-          id: 'business-pab-transaction-status',
-          title: 'menu.business.pab-transaction-status',
-          type: 'item',
-          url: '/business/pab/transaction-status',
-          icon: InfoCircleOutlined
         },
         {
           id: 'business-pab-report',
           title: 'menu.business.pab-report',
           type: 'item',
-          url: '/business/pab/report',
+          url: '/pab/reports',
           icon: BarChartOutlined
         }
       ]
@@ -67,15 +48,8 @@ const business: NavItemType = {
           id: 'business-contract-list',
           title: 'menu.business.contract-list',
           type: 'item',
-          url: '/business/contract/list',
+          url: '/contracts',
           icon: UnorderedListOutlined
-        },
-        {
-          id: 'business-contract-detail',
-          title: 'menu.business.contract-detail',
-          type: 'item',
-          url: '/business/contract/detail',
-          icon: FileTextOutlined
         }
       ]
     },
@@ -89,29 +63,15 @@ const business: NavItemType = {
           id: 'business-payment-order-list',
           title: 'menu.business.payment-order-list',
           type: 'item',
-          url: '/business/payment/order-list',
+          url: '/payments',
           icon: UnorderedListOutlined
-        },
-        {
-          id: 'business-payment-order-detail',
-          title: 'menu.business.payment-order-detail',
-          type: 'item',
-          url: '/business/payment/order-detail',
-          icon: CreditCardOutlined
         },
         {
           id: 'business-advance-slip-list',
           title: 'menu.business.advance-slip-list',
           type: 'item',
-          url: '/business/payment/advance-slip-list',
+          url: '/advances',
           icon: WalletOutlined
-        },
-        {
-          id: 'business-advance-approval',
-          title: 'menu.business.advance-approval',
-          type: 'item',
-          url: '/business/payment/advance-approval',
-          icon: SafetyCertificateOutlined
         }
       ]
     }

@@ -2,11 +2,13 @@ import { lazy } from 'react';
 
 // project imports
 import Loadable from 'components/Loadable';
+import { SimpleLayoutType } from 'config';
 import DashboardLayout from 'layout/Dashboard';
 import PagesLayout from 'layout/Pages';
 import SimpleLayout from 'layout/Simple';
 
-import { SimpleLayoutType } from 'config';
+// feature routes
+import { featureRoutes } from './FeatureRoutes';
 
 // pages routing
 const MaintenanceError = Loadable(lazy(() => import('pages/maintenance/404')));
@@ -34,6 +36,8 @@ const MainRoutes = {
         }
       ]
     },
+    // Feature routes (each has its own DashboardLayout)
+    ...featureRoutes,
     {
       path: '/maintenance',
       element: <PagesLayout />,

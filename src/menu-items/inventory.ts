@@ -2,10 +2,8 @@ import {
   DatabaseOutlined,
   ImportOutlined,
   UnorderedListOutlined,
-  FileTextOutlined,
   CheckSquareOutlined,
   AppstoreOutlined,
-  CalendarOutlined,
   SwapOutlined,
   GlobalOutlined
 } from '@ant-design/icons';
@@ -28,29 +26,15 @@ const inventory: NavItemType = {
           id: 'inventory-inbound-slip-list',
           title: 'menu.inventory.inbound-slip-list',
           type: 'item',
-          url: '/inventory/inbound/slip-list',
+          url: '/inventory-receipts',
           icon: UnorderedListOutlined
-        },
-        {
-          id: 'inventory-inbound-slip-detail',
-          title: 'menu.inventory.inbound-slip-detail',
-          type: 'item',
-          url: '/inventory/inbound/slip-detail',
-          icon: FileTextOutlined
         },
         {
           id: 'inventory-outbound-slip-list',
           title: 'menu.inventory.outbound-slip-list',
           type: 'item',
-          url: '/inventory/outbound/slip-list',
+          url: '/inventory-issues',
           icon: UnorderedListOutlined
-        },
-        {
-          id: 'inventory-outbound-slip-detail',
-          title: 'menu.inventory.outbound-slip-detail',
-          type: 'item',
-          url: '/inventory/outbound/slip-detail',
-          icon: FileTextOutlined
         }
       ]
     },
@@ -64,36 +48,22 @@ const inventory: NavItemType = {
           id: 'inventory-sku-list',
           title: 'menu.inventory.sku-list',
           type: 'item',
-          url: '/inventory/stock/sku-list',
+          url: '/sku',
           icon: UnorderedListOutlined
         },
         {
-          id: 'inventory-sku-detail',
-          title: 'menu.inventory.sku-detail',
+          id: 'inventory-stock-view',
+          title: 'menu.inventory.stock-view',
           type: 'item',
-          url: '/inventory/stock/sku-detail',
+          url: '/stock',
           icon: AppstoreOutlined
-        },
-        {
-          id: 'inventory-count-schedule',
-          title: 'menu.inventory.count-schedule',
-          type: 'item',
-          url: '/inventory/stock/count-schedule',
-          icon: CalendarOutlined
         },
         {
           id: 'inventory-count-slip-list',
           title: 'menu.inventory.count-slip-list',
           type: 'item',
-          url: '/inventory/stock/count-slip-list',
+          url: '/stocktakes',
           icon: UnorderedListOutlined
-        },
-        {
-          id: 'inventory-count-slip-detail',
-          title: 'menu.inventory.count-slip-detail',
-          type: 'item',
-          url: '/inventory/stock/count-slip-detail',
-          icon: FileTextOutlined
         }
       ]
     },
@@ -107,21 +77,14 @@ const inventory: NavItemType = {
           id: 'inventory-transfer-slip-list',
           title: 'menu.inventory.transfer-slip-list',
           type: 'item',
-          url: '/inventory/transfer/slip-list',
+          url: '/transfers',
           icon: UnorderedListOutlined
-        },
-        {
-          id: 'inventory-transfer-slip-detail',
-          title: 'menu.inventory.transfer-slip-detail',
-          type: 'item',
-          url: '/inventory/transfer/slip-detail',
-          icon: FileTextOutlined
         },
         {
           id: 'inventory-traceability',
           title: 'menu.inventory.traceability',
           type: 'item',
-          url: '/inventory/traceability',
+          url: '/traceability',
           icon: GlobalOutlined
         }
       ]
