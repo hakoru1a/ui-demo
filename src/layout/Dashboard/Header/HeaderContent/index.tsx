@@ -1,23 +1,22 @@
+import Box from '@mui/material/Box';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useMemo } from 'react';
 
 // material-ui
-import { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import Box from '@mui/material/Box';
 
 // project imports
-import Search from './Search';
-import Message from './Message';
-import Profile from './Profile';
-import Localization from './Localization';
-import Notification from './Notification';
-import FullScreen from './FullScreen';
-import MobileSection from './MobileSection';
-import MegaMenuSection from './MegaMenuSection';
-
-import useConfig from 'hooks/useConfig';
 import { MenuOrientation } from 'config';
+import useConfig from 'hooks/useConfig';
 import DrawerHeader from 'layout/Dashboard/Drawer/DrawerHeader';
+
+import FullScreen from './FullScreen';
+import Localization from './Localization';
+import Message from './Message';
+import MobileSection from './MobileSection';
+import Notification from './Notification';
+import Profile from './Profile';
+import Search from './Search';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
@@ -28,13 +27,10 @@ export default function HeaderContent() {
 
   const localization = useMemo(() => <Localization />, []);
 
-  const megaMenu = useMemo(() => <MegaMenuSection />, []);
-
   return (
     <>
       {menuOrientation === MenuOrientation.HORIZONTAL && !downLG && <DrawerHeader open={true} />}
       {!downLG && <Search />}
-      {!downLG && megaMenu}
       {!downLG && localization}
       {downLG && <Box sx={{ width: '100%', ml: 1 }} />}
 

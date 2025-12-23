@@ -60,7 +60,7 @@ const config: DefaultConfigProps = {
   i18n: 'vi',
   menuOrientation: MenuOrientation.VERTICAL,
   miniDrawer: false,
-  container: true,
+  container: false,
   mode: ThemeMode.LIGHT,
   presetColor: 'default',
   themeDirection: ThemeDirection.LTR
