@@ -38,3 +38,23 @@ _template/
 - Tất cả các file đều có comment `TODO` để hướng dẫn
 - Các folder có thể bỏ qua nếu không cần (ví dụ: không cần `validation/` nếu không có form)
 - Cập nhật imports và exports theo cấu trúc thực tế của project
+
+## Sharing Types với Features khác
+
+Nếu feature khác cần sử dụng types từ feature này:
+
+1. **Export types trong `index.ts`**:
+
+```typescript
+// features/my-feature/index.ts
+export type { MyFeatureType, MyFeatureFormData } from './types';
+```
+
+2. **Import từ feature khác**:
+
+```typescript
+// features/other-feature/components/SomeComponent.tsx
+import type { MyFeatureType } from 'features/my-feature';
+```
+
+Xem thêm chi tiết trong `docs/convention.md` phần "Sharing Types Between Features".

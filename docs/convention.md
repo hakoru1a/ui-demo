@@ -82,6 +82,7 @@ Dựa trên `docs/features.md`, các feature được tổ chức theo domain:
 
 - **Purpose**: Public exports của feature (optional)
 - **File**: `index.ts` - Export các components, hooks, types cần thiết
+- **Usage**: Dùng để export types, components, hooks cho các feature khác sử dụng
 
 ## 📚 Shared Resources (outside features/)
 
@@ -93,6 +94,96 @@ Các resources dùng chung được đặt ở root level:
 - **`src/types/`** - Shared types
 - **`src/utils/`** - Shared utilities
 - **`src/contexts/`** - Global contexts (Auth, Config, etc.)
+
+---
+
+## 🔗 Sharing Types Between Features
+
+Khi một feature cần sử dụng types từ feature khác, có 3 cách xử lý:
+
+### 1. Export qua `index.ts` của feature (Recommended)
+
+**Khi nào dùng**: Types chỉ được dùng bởi 1-2 features khác, thuộc về domain cụ thể
+
+**Cách làm**:
+
+- Export types từ `types.ts` trong file `index.ts` của feature
+- Import trực tiếp từ feature đó
+
+**Ví dụ**:
+
+```typescript
+// features/forest/forest-areas/index.ts
+export type { ForestArea, ForestAreaFormData } from './types';
+
+// features/forest/harvesting/harvest-plans/types.ts hoặc components
+import type { ForestArea } from 'features/forest/forest-areas';
+```
+
+### 2. Đặt vào `src/types/` (Shared Types)
+
+**Khi nào dùng**: Types được dùng bởi nhiều features khác nhau, không thuộc về một domain cụ thể
+
+**Cách làm**:
+
+- Tạo file trong `src/types/` (ví dụ: `src/types/forest.ts`, `src/types/common.ts`)
+- Export types từ đó
+- Import từ `types/`
+
+**Ví dụ**:
+
+```typescript
+// src/types/forest.ts
+export interface BaseForestEntity {
+  id: string;
+  name: string;
+  createdAt: Date;
+}
+
+// features/forest/forest-areas/types.ts
+import type { BaseForestEntity } from 'types/forest';
+
+export interface ForestArea extends BaseForestEntity {
+  area: number;
+  coordinates: Coordinate[];
+}
+```
+
+### 3. Tạo Domain-level Shared Types
+
+**Khi nào dùng**: Types được dùng bởi nhiều features trong cùng một domain (ví dụ: tất cả features trong `forest/`)
+
+**Cách làm**:
+
+- Tạo file `src/features/{domain}/types.ts` hoặc `src/features/{domain}/shared-types.ts`
+- Export types từ đó
+- Import từ domain folder
+
+**Ví dụ**:
+
+```typescript
+// features/forest/shared-types.ts
+export interface ForestBaseEntity {
+  id: string;
+  forestAreaId: string;
+  createdAt: Date;
+}
+
+// features/forest/harvesting/harvest-plans/types.ts
+import type { ForestBaseEntity } from '../../shared-types';
+
+export interface HarvestPlan extends ForestBaseEntity {
+  planDate: Date;
+  quantity: number;
+}
+```
+
+### 📋 Best Practices
+
+1. **Ưu tiên**: Export qua `index.ts` → Domain shared types → `src/types/`
+2. **Tránh**: Import trực tiếp từ `types.ts` của feature khác (trừ khi feature đó không có `index.ts`)
+3. **Naming**: Đặt tên types rõ ràng, tránh conflict (ví dụ: `ForestArea` thay vì `Area`)
+4. **Documentation**: Comment types phức tạp hoặc business logic quan trọng
 
 ---
 
