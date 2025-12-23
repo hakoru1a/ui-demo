@@ -6,7 +6,7 @@
  */
 
 // Export enums
-export type { OwnershipType, ForestAreaStatus, CertificateType, TreeType } from './enums';
+export type { OwnershipType, CertificateType, TreeType } from './enums';
 
 // Export entity types
 export type { Coordinates, ForestAreaBoundary, ForestArea } from './entity';
@@ -21,12 +21,4 @@ export type { AreaRange, ForestAreaFilters } from './filters';
 export type { MapLayer, MapViewConfig, MapEditMode, MapAction } from './map';
 
 // Export constants
-export {
-  OWNERSHIP_TYPE_OPTIONS,
-  STATUS_OPTIONS,
-  CERTIFICATE_OPTIONS,
-  TREE_TYPE_OPTIONS,
-  DEFAULT_STATUS,
-  CURRENT_YEAR,
-  MIN_PLANTING_YEAR
-} from './constants';
+export { OWNERSHIP_TYPE_OPTIONS, CERTIFICATE_OPTIONS, TREE_TYPE_OPTIONS, CURRENT_YEAR, MIN_PLANTING_YEAR } from './constants';

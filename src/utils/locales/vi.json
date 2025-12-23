@@ -266,5 +266,13 @@
   "menu.admin.complaints-training": "Khiếu nại & đào tạo",
   "menu.admin.training-safety": "Đào tạo & an toàn lao động",
   "menu.admin.complaints-handling": "Tiếp nhận & xử lý khiếu nại",
-  "menu.admin.training-schedule": "Lịch đào tạo"
+  "menu.admin.training-schedule": "Lịch đào tạo",
+  "filter": "Bộ lọc",
+  "all_columns_visible_label": "Tất cả cột hiển thị",
+  "all_column": "Tất cả cột",
+  "all_columns_hidden_label": "Không có cột nào được hiển thị",
+  "column_visible_label": "Cột hiển thị: {value}",
+  "csv_export_label": "Xuất CSV",
+  "row_per_page": "Số dòng trên trang",
+  "go_to": "Đến trang"
 }

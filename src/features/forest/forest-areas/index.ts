@@ -11,7 +11,6 @@
 export type {
   // Enums
   OwnershipType,
-  ForestAreaStatus,
   CertificateType,
   TreeType,
   // Entity
@@ -32,15 +31,7 @@ export type {
 } from './types';
 
 // Export constants
-export {
-  OWNERSHIP_TYPE_OPTIONS,
-  STATUS_OPTIONS,
-  CERTIFICATE_OPTIONS,
-  TREE_TYPE_OPTIONS,
-  DEFAULT_STATUS,
-  CURRENT_YEAR,
-  MIN_PLANTING_YEAR
-} from './types';
+export { OWNERSHIP_TYPE_OPTIONS, CERTIFICATE_OPTIONS, TREE_TYPE_OPTIONS, CURRENT_YEAR, MIN_PLANTING_YEAR } from './types';
 
 // Export hooks (if needed by other features)
 // export { useForestArea } from './hooks/useForestArea';

@@ -1,6 +1,8 @@
 // ==============================|| FOREST AREAS ENTITY ||============================== //
 
-import type { OwnershipType, ForestAreaStatus, CertificateType, TreeType } from './enums';
+import type { EntityStatus } from 'types/status';
+
+import type { OwnershipType, CertificateType, TreeType } from './enums';
 
 export interface Coordinates {
   latitude: number; // Vĩ độ
@@ -24,7 +26,7 @@ export interface ForestArea {
   province: string; // Tỉnh / Khu vực
   treeType?: TreeType; // Loại cây trồng: Keo / Bạch đàn...
   plantingYear?: number; // Năm trồng
-  status: ForestAreaStatus; // Trạng thái: Hoạt động / Tạm ngưng
+  status: EntityStatus; // Trạng thái: Hoạt động / Tạm ngưng
   certificates: CertificateType[]; // Chứng chỉ: FSC / PEFC
   notes?: string; // Ghi chú
   boundary?: ForestAreaBoundary; // Ranh giới vùng trồng (polygon)

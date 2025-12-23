@@ -12,7 +12,7 @@ const ForestAreaCreatePage = Loadable(lazy(() => import('./pages/ForestAreaCreat
 const ForestAreaEditPage = Loadable(lazy(() => import('./pages/ForestAreaEditPage')));
 const ForestAreasMapPage = Loadable(lazy(() => import('./pages/ForestAreasMapPage')));
 
-const ForestareasRoutes = {
+const ForestAreasRoutes = {
   path: '/forest-areas',
   element: <DashboardLayout />,
   children: [
@@ -39,4 +39,4 @@ const ForestareasRoutes = {
   ]
 };
 
-export default ForestareasRoutes;
+export default ForestAreasRoutes;

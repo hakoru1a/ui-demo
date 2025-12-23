@@ -1,7 +1,9 @@
 // ==============================|| FOREST AREAS FORM TYPES ||============================== //
 
+import type { EntityStatus } from 'types/status';
+
 import type { ForestAreaBoundary } from './entity';
-import type { OwnershipType, ForestAreaStatus, CertificateType, TreeType } from './enums';
+import type { OwnershipType, CertificateType, TreeType } from './enums';
 
 export interface ForestAreaFormData {
   code: string; // Mã vùng trồng (Auto-generate, Read-only)
@@ -12,7 +14,7 @@ export interface ForestAreaFormData {
   province: string; // Tỉnh / Khu vực - Required
   treeType?: TreeType; // Loại cây trồng
   plantingYear?: number; // Năm trồng
-  status: ForestAreaStatus; // Trạng thái - Required, Default: 'active'
+  status: EntityStatus; // Trạng thái - Required, Default: 'active'
   certificates: CertificateType[]; // Chứng chỉ
   notes?: string; // Ghi chú
 }
