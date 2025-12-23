@@ -154,9 +154,6 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
               )}
             </Stack>
           );
-        },
-        meta: {
-          align: 'center'
         }
       }
     ],
