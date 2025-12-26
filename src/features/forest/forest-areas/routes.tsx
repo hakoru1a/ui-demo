@@ -4,8 +4,11 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
 
+import { FOREST_AREA_PATHS } from './types/constants';
+
 // ==============================|| Forest Areas ROUTING ||============================== //
 
+// Lazy load pages
 const ForestAreasListPage = Loadable(lazy(() => import('./pages/ForestAreasListPage')));
 const ForestAreaDetailPage = Loadable(lazy(() => import('./pages/ForestAreaDetailPage')));
 const ForestAreaCreatePage = Loadable(lazy(() => import('./pages/ForestAreaCreatePage')));
@@ -13,28 +16,28 @@ const ForestAreaEditPage = Loadable(lazy(() => import('./pages/ForestAreaEditPag
 const ForestAreasMapPage = Loadable(lazy(() => import('./pages/ForestAreasMapPage')));
 
 const ForestAreasRoutes = {
-  path: '/forest-areas',
+  path: FOREST_AREA_PATHS.ROOT,
   element: <DashboardLayout />,
   children: [
     {
-      path: '',
+      path: FOREST_AREA_PATHS.LIST,
       element: <ForestAreasListPage />
     },
     {
-      path: ':id',
-      element: <ForestAreaDetailPage />
-    },
-    {
-      path: 'new',
+      path: FOREST_AREA_PATHS.NEW,
       element: <ForestAreaCreatePage />
     },
     {
-      path: ':id/edit',
-      element: <ForestAreaEditPage />
+      path: FOREST_AREA_PATHS.MAP,
+      element: <ForestAreasMapPage />
     },
     {
-      path: 'map',
-      element: <ForestAreasMapPage />
+      path: FOREST_AREA_PATHS.DETAIL,
+      element: <ForestAreaDetailPage />
+    },
+    {
+      path: FOREST_AREA_PATHS.EDIT,
+      element: <ForestAreaEditPage />
     }
   ]
 };

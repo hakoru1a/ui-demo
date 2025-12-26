@@ -1,26 +1,48 @@
 import type { ColumnFiltersState } from '@tanstack/react-table';
 import { useState, useEffect } from 'react';
 
-// ==============================|| FOREST AREA FILTER HOOK ||============================== //
+// ==============================|| TABLE FILTER DIALOG HOOK (GENERIC) ||============================== //
 
-interface UseForestAreaFilterProps {
+interface UseTableFilterDialogProps {
   columnFilters: ColumnFiltersState;
   onFilterChange: (filters: ColumnFiltersState) => void;
   onClose: () => void;
   open: boolean;
 }
 
-export default function useForestAreaFilter({ columnFilters, onFilterChange, onClose, open }: UseForestAreaFilterProps) {
-  // Local state for filter values
+/**
+ * Generic hook to manage filter dialog state and actions
+ * Can be reused for any table type
+ *
+ * @example
+ * ```tsx
+ * const {
+ *   filters,
+ *   handleFilterChange,
+ *   handleApply,
+ *   handleReset,
+ *   activeFilterCount
+ * } = useTableFilterDialog({
+ *   columnFilters,
+ *   onFilterChange,
+ *   onClose,
+ *   open
+ * });
+ * ```
+ */
+export function useTableFilterDialog({ columnFilters, onFilterChange, onClose, open }: UseTableFilterDialogProps) {
+  // Local state for filter values (before applying)
   const [filters, setFilters] = useState<Record<string, any>>({});
 
-  // Initialize filters from columnFilters
+  // Initialize filters from columnFilters when dialog opens
   useEffect(() => {
-    const initialFilters: Record<string, any> = {};
-    columnFilters.forEach((filter) => {
-      initialFilters[filter.id] = filter.value;
-    });
-    setFilters(initialFilters);
+    if (open) {
+      const initialFilters: Record<string, any> = {};
+      columnFilters.forEach((filter) => {
+        initialFilters[filter.id] = filter.value;
+      });
+      setFilters(initialFilters);
+    }
   }, [columnFilters, open]);
 
   // Update filter value
@@ -31,7 +53,7 @@ export default function useForestAreaFilter({ columnFilters, onFilterChange, onC
     }));
   };
 
-  // Apply filters - simplified logic
+  // Apply filters
   const handleApply = () => {
     const newFilters: ColumnFiltersState = Object.entries(filters)
       .filter(([_, value]) => {
@@ -52,19 +74,6 @@ export default function useForestAreaFilter({ columnFilters, onFilterChange, onC
     onClose();
   };
 
-  // Handle certificate checkbox change
-  const handleCertificateChange = (cert: 'FSC' | 'PEFC', checked: boolean) => {
-    const currentCerts = (filters.certificates as ('FSC' | 'PEFC')[]) || [];
-    if (checked) {
-      handleFilterChange('certificates', [...currentCerts, cert]);
-    } else {
-      handleFilterChange(
-        'certificates',
-        currentCerts.filter((c) => c !== cert)
-      );
-    }
-  };
-
   const activeFilterCount = columnFilters.length;
 
   return {
@@ -72,7 +81,6 @@ export default function useForestAreaFilter({ columnFilters, onFilterChange, onC
     handleFilterChange,
     handleApply,
     handleReset,
-    handleCertificateChange,
     activeFilterCount
   };
 }

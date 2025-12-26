@@ -1,23 +1,10 @@
 // material-ui
 import DownOutlined from '@ant-design/icons/DownOutlined';
 import RightOutlined from '@ant-design/icons/RightOutlined';
-import {
-  Box,
-  Collapse,
-  Grid,
-  IconButton,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography
-} from '@mui/material';
-
+import { Box, Collapse, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 // third-party
-import { flexRender, type Row, type Table as TanStackTable } from '@tanstack/react-table';
+import { flexRender, type Table as TanStackTable } from '@tanstack/react-table';
+import { Fragment } from 'react';
 
 // project imports
 import CircularLoader from 'components/CircularLoader';
@@ -28,7 +15,7 @@ import { EmptyTable, HeaderSort, TablePagination } from 'components/third-party/
 
 // types
 import { ForestArea } from '../types';
-import { CERTIFICATE_OPTIONS, TREE_TYPE_OPTIONS } from '../types/constants';
+import ForestAreaExpandedRow from './ForestAreaExpandedRow';
 
 interface ForestAreaTableProps {
   table: TanStackTable<ForestArea>;
@@ -40,65 +27,6 @@ interface ForestAreaTableProps {
 // ==============================|| FOREST AREA TABLE ||============================== //
 
 const ForestAreaTable = ({ table, data, loading = false, initialPageSize = 10 }: ForestAreaTableProps) => {
-  // Get label from options array
-  const getLabelFromOptions = <T extends string>(value: T | undefined, options: { value: T; label: string }[]): string => {
-    if (!value) return '-';
-    const option = options.find((opt) => opt.value === value);
-    return option?.label || value;
-  };
-
-  // Render expanded row content
-  const renderExpandedRow = (row: Row<ForestArea>) => {
-    const forestArea = row.original;
-
-    return (
-      <Box sx={{ py: 2, px: 3, backgroundColor: 'background.default' }}>
-        <Grid container spacing={2}>
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Loại cây trồng
-            </Typography>
-            <Typography variant="body2">{getLabelFromOptions(forestArea.treeType, TREE_TYPE_OPTIONS)}</Typography>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Năm trồng
-            </Typography>
-            <Typography variant="body2">{forestArea.plantingYear || '-'}</Typography>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Chứng chỉ
-            </Typography>
-            <Stack direction="row" spacing={0.5} flexWrap="wrap">
-              {forestArea.certificates && forestArea.certificates.length > 0 ? (
-                forestArea.certificates.map((cert) => {
-                  const certOption = CERTIFICATE_OPTIONS.find((opt) => opt.value === cert);
-                  return (
-                    <Typography key={cert} variant="body2" component="span">
-                      {certOption?.label || cert}
-                      {forestArea.certificates.indexOf(cert) < forestArea.certificates.length - 1 ? ', ' : ''}
-                    </Typography>
-                  );
-                })
-              ) : (
-                <Typography variant="body2">-</Typography>
-              )}
-            </Stack>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Ghi chú
-            </Typography>
-            <Typography variant="body2" sx={{ maxWidth: 300 }}>
-              {forestArea.notes || '-'}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Box>
-    );
-  };
-
   // Render table
   const renderTable = () => {
     if (loading) {
@@ -159,7 +87,7 @@ const ForestAreaTable = ({ table, data, loading = false, initialPageSize = 10 }:
               const isExpanded = row.getIsExpanded();
 
               return (
-                <>
+                <Fragment key={row.id}>
                   <TableRow
                     key={row.id}
                     hover
@@ -200,12 +128,12 @@ const ForestAreaTable = ({ table, data, loading = false, initialPageSize = 10 }:
                     <TableRow>
                       <TableCell colSpan={row.getVisibleCells().length + 1} sx={{ p: 0, border: 0 }}>
                         <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                          {renderExpandedRow(row)}
+                          <ForestAreaExpandedRow forestArea={row.original} />
                         </Collapse>
                       </TableCell>
                     </TableRow>
                   )}
-                </>
+                </Fragment>
               );
             })}
           </TableBody>

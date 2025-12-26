@@ -1,72 +1,77 @@
-// material-ui
+// ==============================|| FOREST AREA TABLE HEADER ||============================== //
+// Combines: StatusTabs + Toolbar + FilterPopover
+
+import CloseOutlined from '@ant-design/icons/CloseOutlined';
 import FilterOutlined from '@ant-design/icons/FilterOutlined';
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
-import { Box, IconButton, InputAdornment, Stack, Tab, Tabs, Toolbar, Tooltip, useTheme } from '@mui/material';
+import {
+  Box,
+  Button,
+  ClickAwayListener,
+  Divider,
+  IconButton,
+  InputAdornment,
+  Paper,
+  Popper,
+  Stack,
+  Tab,
+  Tabs,
+  Toolbar,
+  Tooltip,
+  useTheme
+} from '@mui/material';
 import type { ColumnFiltersState, Table } from '@tanstack/react-table';
+import { useRef } from 'react';
 import { useMemo } from 'react';
-
-// third-party
-
-// project imports
 import { useIntl } from 'react-intl';
 
+// project imports
+import Transitions from 'components/@extended/Transitions';
 import TextField from 'components/fields/TextField';
+import MainCard from 'components/MainCard';
 import { CSVExport, RowSelection, SelectColumnVisibility } from 'components/third-party/react-table';
+import { useTableFilterDialog } from 'hooks/table';
+import useBoolean from 'hooks/useBoolean';
 import { STATUS_OPTIONS, StatusFilter } from 'types/status';
 import { getStatusColorMap } from 'utils/getStatusColor';
 
-import ForestAreaFilter from './ForestAreaFilter';
+import type { ForestArea } from '../types';
 
-// assets
-
-// types
-
-import { ForestArea } from '../types';
-
-// ==============================|| FOREST AREA TABLE HEADER ||============================== //
+// ==============================|| TYPES ||============================== //
 
 interface ForestAreaTableHeaderProps {
   table: Table<ForestArea>;
+  // CSV Export
+  csvData: ForestArea[];
+  csvHeadersData: Array<{ label: string; key: string }>;
+  csvFilename?: string;
+  // Filter
+  columnFilters: ColumnFiltersState;
+  onFilterChange: (filters: ColumnFiltersState) => void;
+  // Status
+  statusFilter?: StatusFilter;
+  onStatusFilterChange?: (status: StatusFilter) => void;
+  // Search
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+  // Feature flags
   enableRowSelection?: boolean;
   enableCSVExport?: boolean;
   enableColumnVisibility?: boolean;
-  csvFilename?: string;
-  csvData: ForestArea[];
-  csvHeadersData: Array<{ label: string; key: string }>;
-  columnFilters: ColumnFiltersState;
-  filterDialogOpen: boolean;
-  setFilterDialogOpen: (open: boolean) => void;
-  filterAnchorRef: React.RefObject<HTMLButtonElement | null>;
-  onFilterChange: (filters: ColumnFiltersState) => void;
-  statusFilter?: StatusFilter;
-  onStatusFilterChange?: (status: StatusFilter) => void;
-  searchValue?: string;
-  onSearchChange?: (value: string) => void;
 }
 
-const ForestAreaTableHeader = ({
-  table,
-  enableRowSelection = false,
-  enableCSVExport = true,
-  enableColumnVisibility = true,
-  csvFilename = 'forest-areas',
-  csvData,
-  csvHeadersData,
-  columnFilters,
-  filterDialogOpen,
-  setFilterDialogOpen,
-  filterAnchorRef,
-  onFilterChange,
-  statusFilter = StatusFilter.ALL,
-  onStatusFilterChange,
-  searchValue = '',
-  onSearchChange
-}: ForestAreaTableHeaderProps) => {
-  const intl = useIntl();
+// ==============================|| STATUS TABS ||============================== //
+
+interface StatusTabsProps {
+  table: Table<ForestArea>;
+  statusFilter: StatusFilter;
+  onStatusFilterChange?: (status: StatusFilter) => void;
+}
+
+function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsProps) {
   const theme = useTheme();
   const tabColorMap = getStatusColorMap(theme);
 
-  // Count items by status (using pre-filtered data to get all items)
   const statusCounts = useMemo(() => {
     const allRows = table.getPreFilteredRowModel().rows;
     return {
@@ -76,136 +81,229 @@ const ForestAreaTableHeader = ({
     };
   }, [table]);
 
-  // Tabs configuration
   const tabsConfig = useMemo(
     () => [
-      {
-        value: StatusFilter.ALL,
-        labelKey: 'all',
-        defaultLabel: 'Tất cả',
-        count: statusCounts.all
-      },
+      { value: StatusFilter.ALL, label: 'Tất cả', count: statusCounts.all },
       {
         value: StatusFilter.ACTIVE,
-        labelKey: 'active',
-        defaultLabel: STATUS_OPTIONS.find((opt) => opt.value === 'active')?.label || 'Hoạt động',
+        label: STATUS_OPTIONS.find((opt) => opt.value === 'active')?.label || 'Hoạt động',
         count: statusCounts.active
       },
       {
         value: StatusFilter.INACTIVE,
-        labelKey: 'inactive',
-        defaultLabel: STATUS_OPTIONS.find((opt) => opt.value === 'inactive')?.label || 'Tạm ngưng',
+        label: STATUS_OPTIONS.find((opt) => opt.value === 'inactive')?.label || 'Tạm ngưng',
         count: statusCounts.inactive
       }
     ],
     [statusCounts]
   );
 
-  const handleStatusTabChange = (_event: React.SyntheticEvent, value: StatusFilter) => {
-    onStatusFilterChange?.(value);
-  };
+  return (
+    <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 2, pt: 2 }}>
+      <Tabs
+        value={statusFilter}
+        onChange={(_, value) => onStatusFilterChange?.(value)}
+        sx={{ '& .MuiTabs-indicator': { backgroundColor: tabColorMap[statusFilter], height: 3 } }}
+      >
+        {tabsConfig.map((tab) => (
+          <Tab
+            key={tab.value}
+            value={tab.value}
+            label={
+              <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                <span>{tab.label}</span>
+                <Box
+                  component="span"
+                  sx={{
+                    minWidth: 20,
+                    height: 20,
+                    px: 0.75,
+                    borderRadius: '10px',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    bgcolor: statusFilter === tab.value ? tabColorMap[tab.value] + '20' : 'action.hover',
+                    color: statusFilter === tab.value ? tabColorMap[tab.value] : 'text.secondary'
+                  }}
+                >
+                  {tab.count}
+                </Box>
+              </Box>
+            }
+            sx={{
+              textTransform: 'none',
+              fontWeight: statusFilter === tab.value ? 600 : 400,
+              '&.Mui-selected': { color: tabColorMap[tab.value] + ' !important' },
+              '&:hover': { color: tabColorMap[tab.value] }
+            }}
+          />
+        ))}
+      </Tabs>
+    </Box>
+  );
+}
+
+// ==============================|| FILTER POPOVER ||============================== //
+
+interface FilterPopoverProps {
+  open: boolean;
+  onClose: () => void;
+  anchorEl: HTMLElement | null;
+  columnFilters: ColumnFiltersState;
+  onFilterChange: (filters: ColumnFiltersState) => void;
+}
+
+function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange }: FilterPopoverProps) {
+  const { handleApply, handleReset, activeFilterCount } = useTableFilterDialog({
+    columnFilters,
+    onFilterChange,
+    onClose,
+    open
+  });
+
+  return (
+    <Popper
+      placement="bottom-end"
+      open={open}
+      anchorEl={anchorEl}
+      transition
+      disablePortal
+      sx={{ zIndex: 1300 }}
+      popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 9] } }] }}
+    >
+      {({ TransitionProps }) => (
+        <Transitions type="grow" position="top-right" in={open} {...TransitionProps}>
+          <Paper
+            elevation={8}
+            sx={(theme) => ({
+              boxShadow: theme.palette.mode === 'dark' ? '0px 8px 24px rgba(0, 0, 0, 0.4)' : '0px 8px 24px rgba(0, 0, 0, 0.12)',
+              width: { xs: 'calc(100vw - 32px)', sm: 400 },
+              maxHeight: 'calc(100vh - 200px)',
+              overflow: 'auto',
+              borderRadius: 2
+            })}
+          >
+            <ClickAwayListener onClickAway={onClose}>
+              <MainCard
+                elevation={0}
+                border={false}
+                content={false}
+                title={
+                  <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <FilterOutlined />
+                      <span>Bộ lọc</span>
+                      {activeFilterCount > 0 && (
+                        <Box
+                          component="span"
+                          sx={{
+                            px: 1,
+                            py: 0.25,
+                            borderRadius: 1,
+                            bgcolor: 'primary.main',
+                            color: 'primary.contrastText',
+                            fontSize: '0.75rem',
+                            fontWeight: 600
+                          }}
+                        >
+                          {activeFilterCount}
+                        </Box>
+                      )}
+                    </Stack>
+                    <IconButton size="small" onClick={onClose}>
+                      <CloseOutlined />
+                    </IconButton>
+                  </Stack>
+                }
+              >
+                <Divider />
+                {/* TODO: Add filter fields here based on ForestAreaFilters type */}
+                <Box sx={{ p: 2.5, minHeight: 100 }}>
+                  <Box sx={{ color: 'text.secondary', textAlign: 'center' }}>Thêm các trường lọc tại đây</Box>
+                </Box>
+                <Divider />
+                <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ p: 2.5 }}>
+                  <Button onClick={onClose} color="inherit" size="small">
+                    Hủy
+                  </Button>
+                  <Button onClick={handleReset} color="error" variant="outlined" size="small">
+                    Đặt lại
+                  </Button>
+                  <Button onClick={handleApply} variant="contained" size="small">
+                    Áp dụng
+                  </Button>
+                </Stack>
+              </MainCard>
+            </ClickAwayListener>
+          </Paper>
+        </Transitions>
+      )}
+    </Popper>
+  );
+}
+
+// ==============================|| MAIN COMPONENT ||============================== //
+
+const ForestAreaTableHeader = ({
+  table,
+  csvData,
+  csvHeadersData,
+  csvFilename = 'forest-areas',
+  columnFilters,
+  onFilterChange,
+  statusFilter = StatusFilter.ALL,
+  onStatusFilterChange,
+  searchValue = '',
+  onSearchChange,
+  enableRowSelection = false,
+  enableCSVExport = true,
+  enableColumnVisibility = true
+}: ForestAreaTableHeaderProps) => {
+  const intl = useIntl();
+  const filterPopover = useBoolean(false);
+  const filterAnchorRef = useRef<HTMLButtonElement>(null);
 
   return (
     <>
       {/* Status Tabs */}
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 2, pt: 2 }}>
-        <Tabs
-          value={statusFilter}
-          onChange={handleStatusTabChange}
-          aria-label="status tabs"
-          sx={{
-            '& .MuiTabs-indicator': {
-              backgroundColor: tabColorMap[statusFilter],
-              height: 3
-            }
-          }}
-        >
-          {tabsConfig.map((tab) => (
-            <Tab
-              key={tab.value}
-              label={
-                <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <span>{tab.defaultLabel}</span>
-                  <Box
-                    component="span"
-                    sx={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      minWidth: 20,
-                      height: 20,
-                      px: 0.75,
-                      borderRadius: '10px',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      bgcolor: statusFilter === tab.value ? tabColorMap[tab.value] + '20' : 'action.hover',
-                      color: statusFilter === tab.value ? tabColorMap[tab.value] : 'text.secondary'
-                    }}
-                  >
-                    {tab.count}
-                  </Box>
-                </Box>
-              }
-              value={tab.value}
-              sx={{
-                textTransform: 'none',
-                fontWeight: statusFilter === tab.value ? 600 : 400,
-                '&.Mui-selected': {
-                  color: tabColorMap[tab.value] + ' !important'
-                },
-                '&:hover': {
-                  color: tabColorMap[tab.value]
-                }
-              }}
-            />
-          ))}
-        </Tabs>
-      </Box>
+      <StatusTabs table={table} statusFilter={statusFilter} onStatusFilterChange={onStatusFilterChange} />
 
+      {/* Toolbar */}
       <Toolbar
         sx={{
           p: 2,
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
           ...(table.getFilteredSelectedRowModel().rows.length > 0 && {
             bgcolor: (theme) => (theme.palette.mode === 'dark' ? theme.palette.primary.dark + 20 : theme.palette.primary.light)
           })
         }}
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%' }}>
-          {/* Row Selection Badge */}
-          {enableRowSelection && (
-            <Box sx={{ position: 'relative' }}>
-              <RowSelection selected={table.getFilteredSelectedRowModel().rows.length} />
-            </Box>
-          )}
+          {enableRowSelection && <RowSelection selected={table.getFilteredSelectedRowModel().rows.length} />}
 
-          {/* Search Bar */}
           <TextField
             placeholder="Tìm kiếm theo mã, tên vùng trồng..."
             value={searchValue}
             onChange={(e) => onSearchChange?.(e.target.value)}
             size="medium"
             sx={{ minWidth: 300 }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchOutlined />
-                </InputAdornment>
-              )
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchOutlined />
+                  </InputAdornment>
+                )
+              }
             }}
           />
 
-          {/* Spacer */}
           <Box sx={{ flexGrow: 1 }} />
 
-          {/* Filter Button */}
           <Tooltip title={intl.formatMessage({ id: 'filter' })}>
             <IconButton
               ref={filterAnchorRef}
               size="medium"
               color={columnFilters.length > 0 ? 'primary' : 'default'}
-              onClick={() => setFilterDialogOpen(true)}
+              onClick={filterPopover.onTrue}
               sx={{
                 ...(columnFilters.length > 0 && {
                   bgcolor: (theme) => (theme.palette.mode === 'dark' ? theme.palette.primary.dark + 20 : theme.palette.primary.light)
@@ -216,10 +314,8 @@ const ForestAreaTableHeader = ({
             </IconButton>
           </Tooltip>
 
-          {/* CSV Export */}
           {enableCSVExport && csvData.length > 0 && <CSVExport data={csvData} filename={csvFilename} headers={csvHeadersData} />}
 
-          {/* Column Visibility Control */}
           {enableColumnVisibility && (
             <SelectColumnVisibility
               getVisibleLeafColumns={table.getVisibleLeafColumns}
@@ -232,11 +328,10 @@ const ForestAreaTableHeader = ({
       </Toolbar>
 
       {/* Filter Popover */}
-      <ForestAreaFilter
-        open={filterDialogOpen}
-        onClose={() => setFilterDialogOpen(false)}
+      <FilterPopover
+        open={filterPopover.value}
+        onClose={filterPopover.onFalse}
         anchorEl={filterAnchorRef.current}
-        table={table}
         columnFilters={columnFilters}
         onFilterChange={onFilterChange}
       />
