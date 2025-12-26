@@ -1,25 +1,23 @@
-import { Link, useLocation, matchPath } from 'react-router-dom';
-
-// material-ui
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { FormattedMessage } from 'react-intl';
+import { Link, useLocation, matchPath } from 'react-router-dom';
 
 // project imports
+import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
 import Dot from 'components/@extended/Dot';
 import IconButton from 'components/@extended/IconButton';
 
 // third-party
-import { FormattedMessage } from 'react-intl';
 
 import { MenuOrientation, ThemeMode, NavActionType } from 'config';
 import useConfig from 'hooks/useConfig';
-import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
 
 // types
 import { LinkTarget, NavItemType } from 'types/menu';
@@ -53,9 +51,8 @@ export default function NavItem({ item, level, isParents = false, setSelectedID 
     }
   };
 
-  const Icon = item.icon!;
   const itemIcon = item.icon ? (
-    <Icon
+    <item.icon
       style={{
         fontSize: drawerOpen ? '1rem' : '1.25rem',
         ...(menuOrientation === MenuOrientation.HORIZONTAL && isParents && { fontSize: 20, stroke: '1.5' })
@@ -66,7 +63,7 @@ export default function NavItem({ item, level, isParents = false, setSelectedID 
   );
 
   const { pathname } = useLocation();
-  const isSelected = !!matchPath({ path: item?.link ? item.link : item.url!, end: false }, pathname);
+  const isSelected = !!matchPath({ path: item?.link ? item.link : item.url || '', end: true }, pathname);
 
   const textColor = mode === ThemeMode.DARK ? 'grey.400' : 'text.primary';
   const iconSelectedColor = mode === ThemeMode.DARK && drawerOpen ? 'text.primary' : 'primary.main';
@@ -77,7 +74,7 @@ export default function NavItem({ item, level, isParents = false, setSelectedID 
         <Box sx={{ position: 'relative' }}>
           <ListItemButton
             component={Link}
-            to={item.url!}
+            to={item.url || ''}
             target={itemTarget}
             disabled={item.disabled}
             selected={isSelected}
@@ -148,12 +145,12 @@ export default function NavItem({ item, level, isParents = false, setSelectedID 
           </ListItemButton>
           {(drawerOpen || (!drawerOpen && level !== 1)) &&
             item?.actions &&
-            item?.actions.map((action, index) => {
-              const ActionIcon = action.icon!;
+            item?.actions.map((action, actionIndex) => {
+              const ActionIcon = action.icon;
               const callAction = action?.function;
               return (
                 <IconButton
-                  key={index}
+                  key={`${action.url}-${action.type}-${actionIndex}`}
                   {...(action.type === NavActionType.FUNCTION && {
                     onClick: (event) => {
                       event.stopPropagation();
@@ -181,7 +178,7 @@ export default function NavItem({ item, level, isParents = false, setSelectedID 
                     '&:hover': { borderColor: isSelected ? 'primary.main' : 'secondary.main' }
                   }}
                 >
-                  <ActionIcon style={{ fontSize: '0.625rem' }} />
+                  {ActionIcon && <ActionIcon style={{ fontSize: '0.625rem' }} />}
                 </IconButton>
               );
             })}
@@ -189,7 +186,7 @@ export default function NavItem({ item, level, isParents = false, setSelectedID 
       ) : (
         <ListItemButton
           component={Link}
-          to={item.url!}
+          to={item.url || ''}
           target={itemTarget}
           disabled={item.disabled}
           selected={isSelected}

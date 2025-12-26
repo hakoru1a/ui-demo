@@ -18,7 +18,20 @@ export type { ForestAreaFormData, ForestAreaMapFormData } from './form';
 export type { AreaRange, ForestAreaFilters } from './filters';
 
 // Export map types
-export type { MapLayer, MapViewConfig, MapEditMode, MapAction } from './map';
+export type {
+  MapLayer,
+  MapViewConfig,
+  MapEditMode,
+  MapAction,
+  MapViewState,
+  ForestAreaMapData,
+  ForestAreaMapFormData as ForestAreaMapEditFormData,
+  UseForestAreaMapReturn,
+  PolygonCalculation
+} from './map';
+
+// Export map constants
+export { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM, DEFAULT_MAP_VIEW_STATE, DEFAULT_MAP_LAYERS } from './map';
 
 // Export constants
 export { OWNERSHIP_TYPE_OPTIONS, CERTIFICATE_OPTIONS, TREE_TYPE_OPTIONS, CURRENT_YEAR, MIN_PLANTING_YEAR } from './constants';
