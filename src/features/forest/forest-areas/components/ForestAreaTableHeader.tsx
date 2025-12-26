@@ -123,8 +123,11 @@ function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsPro
                     borderRadius: '10px',
                     fontSize: '0.75rem',
                     fontWeight: 600,
-                    bgcolor: statusFilter === tab.value ? tabColorMap[tab.value] + '20' : 'action.hover',
-                    color: statusFilter === tab.value ? tabColorMap[tab.value] : 'text.secondary'
+                    bgcolor: tabColorMap[tab.value] + '20',
+                    color: tabColorMap[tab.value],
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                 >
                   {tab.count}
@@ -133,7 +136,7 @@ function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsPro
             }
             sx={{
               textTransform: 'none',
-              fontWeight: statusFilter === tab.value ? 600 : 400,
+              fontWeight: 600,
               '&.Mui-selected': { color: tabColorMap[tab.value] + ' !important' },
               '&:hover': { color: tabColorMap[tab.value] }
             }}
@@ -277,15 +280,10 @@ const ForestAreaTableHeader = ({
       {/* Toolbar */}
       <Toolbar
         sx={{
-          p: 2,
-          ...(table.getFilteredSelectedRowModel().rows.length > 0 && {
-            bgcolor: (theme) => (theme.palette.mode === 'dark' ? theme.palette.primary.dark + 20 : theme.palette.primary.light)
-          })
+          p: 2
         }}
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%' }}>
-          {enableRowSelection && <RowSelection selected={table.getFilteredSelectedRowModel().rows.length} />}
-
           <TextField
             placeholder="Tìm kiếm theo mã, tên vùng trồng..."
             value={searchValue}
@@ -302,6 +300,12 @@ const ForestAreaTableHeader = ({
               }
             }}
           />
+
+          {enableRowSelection && (
+            <Box sx={{ minWidth: 120 }}>
+              <RowSelection selected={table.getFilteredSelectedRowModel().rows.length} />
+            </Box>
+          )}
 
           <Box sx={{ flexGrow: 1 }} />
 

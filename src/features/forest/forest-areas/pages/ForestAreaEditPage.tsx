@@ -1,5 +1,6 @@
 import { SaveOutlined, CloseOutlined } from '@ant-design/icons';
 import { Stack, Button, Box, CircularProgress, Alert } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { Formik, Form } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import MainCard from 'components/MainCard';
 
 import ForestAreaForm from '../components/ForestAreaForm';
+import ForestAreaSingleMapViewer from '../components/ForestAreaSingleMapViewer';
 import { mockForestAreas } from '../mock/forestAreas';
 import type { ForestAreaFormData, ForestArea } from '../types';
 import { FOREST_AREA_URLS } from '../types/constants';
@@ -70,18 +72,22 @@ const ForestAreaEditPage = () => {
   // Handle form submission (mock)
   const handleSubmit = useCallback(
     async (values: ForestAreaFormData) => {
-      console.log('Updating forest area:', values);
+      console.warn('Updating forest area:', values);
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       alert('Cập nhật vùng trồng thành công! (Mock)');
-      navigate(FOREST_AREA_URLS.DETAIL(id!));
+      if (id) {
+        navigate(FOREST_AREA_URLS.DETAIL(id));
+      }
     },
     [navigate, id]
   );
 
   // Handle cancel
   const handleCancel = useCallback(() => {
-    navigate(FOREST_AREA_URLS.DETAIL(id!));
+    if (id) {
+      navigate(FOREST_AREA_URLS.DETAIL(id));
+    }
   }, [navigate, id]);
 
   // Loading state
@@ -118,7 +124,7 @@ const ForestAreaEditPage = () => {
       validateOnChange
       validateOnBlur
     >
-      {({ isSubmitting, dirty }) => (
+      {({ isSubmitting, dirty, values }) => (
         <Form>
           <MainCard
             title={`Chỉnh sửa: ${originalData?.name || ''}`}
@@ -133,9 +139,14 @@ const ForestAreaEditPage = () => {
               </Stack>
             }
           >
-            <Box sx={{ p: 1 }}>
-              <ForestAreaForm mode="edit" />
-            </Box>
+            <Grid container spacing={3} sx={{ p: 1 }}>
+              <Grid size={12}>
+                <ForestAreaForm mode="edit" />
+              </Grid>
+              <Grid size={12}>
+                <ForestAreaSingleMapViewer forestArea={originalData} formData={values} height={500} />
+              </Grid>
+            </Grid>
           </MainCard>
         </Form>
       )}

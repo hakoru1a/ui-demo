@@ -74,7 +74,6 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
           placeholder="Nhập tên vùng trồng"
           fullWidth
           required
-          disabled={isReadOnly}
           error={!!getError('name')}
           helperText={getError('name')}
           slotProps={{
@@ -82,6 +81,7 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
               readOnly: isReadOnly
             }
           }}
+          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
         />
       </Grid>
 
@@ -95,7 +95,6 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
           label="Loại sở hữu"
           fullWidth
           required
-          disabled={isReadOnly}
           error={!!getError('ownershipType')}
           helperText={getError('ownershipType')}
           options={OWNERSHIP_TYPE_OPTIONS}
@@ -104,6 +103,7 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
               readOnly: isReadOnly
             }
           }}
+          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
         />
       </Grid>
 
@@ -122,7 +122,7 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
                 options={PARTNER_OPTIONS}
                 getOptionLabel={(option) => option.label}
                 isOptionEqualToValue={(option, val) => option.value === val.value}
-                disabled={isReadOnly}
+                readOnly={isReadOnly}
                 renderInput={(params) => (
                   <MuiTextField
                     {...params}
@@ -130,8 +130,13 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
                     placeholder="Chọn đối tác"
                     error={!!getError('ownerId')}
                     helperText={getError('ownerId')}
+                    InputProps={{
+                      ...params.InputProps,
+                      readOnly: isReadOnly
+                    }}
                   />
                 )}
+                sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
               />
             )}
           </Field>
@@ -149,7 +154,6 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
           placeholder="Nhập diện tích"
           fullWidth
           required
-          disabled={isReadOnly}
           error={!!getError('area')}
           helperText={getError('area')}
           slotProps={{
@@ -162,6 +166,7 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
               step: 0.1
             }
           }}
+          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
         />
       </Grid>
 
@@ -179,7 +184,7 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
               options={PROVINCE_OPTIONS}
               getOptionLabel={(option) => option.label}
               isOptionEqualToValue={(option, val) => option.value === val.value}
-              disabled={isReadOnly}
+              readOnly={isReadOnly}
               renderInput={(params) => (
                 <MuiTextField
                   {...params}
@@ -188,8 +193,13 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
                   required
                   error={!!getError('province')}
                   helperText={getError('province')}
+                  InputProps={{
+                    ...params.InputProps,
+                    readOnly: isReadOnly
+                  }}
                 />
               )}
+              sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
             />
           )}
         </Field>
@@ -211,7 +221,6 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
           onBlur={handleBlur}
           label="Loại cây trồng"
           fullWidth
-          disabled={isReadOnly}
           error={!!getError('treeType')}
           helperText={getError('treeType')}
           options={TREE_TYPE_OPTIONS}
@@ -220,6 +229,7 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
               readOnly: isReadOnly
             }
           }}
+          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
         />
       </Grid>
 
@@ -233,7 +243,6 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
           label="Năm trồng"
           placeholder="Nhập năm trồng"
           fullWidth
-          disabled={isReadOnly}
           error={!!getError('plantingYear')}
           helperText={getError('plantingYear')}
           slotProps={{
@@ -245,6 +254,7 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
               max: new Date().getFullYear()
             }
           }}
+          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
         />
       </Grid>
 
@@ -258,7 +268,6 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
           label="Trạng thái"
           fullWidth
           required
-          disabled={isReadOnly}
           error={!!getError('status')}
           helperText={getError('status')}
           options={STATUS_OPTIONS}
@@ -267,6 +276,7 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
               readOnly: isReadOnly
             }
           }}
+          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
         />
       </Grid>
 
@@ -287,19 +297,12 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
               options={CERTIFICATE_OPTIONS}
               getOptionLabel={(option) => option.label}
               isOptionEqualToValue={(option, val) => option.value === val.value}
-              disabled={isReadOnly}
+              readOnly={isReadOnly}
               renderTags={(tagValue, getTagProps) =>
                 tagValue.map((option, index) => {
                   const { key, ...tagProps } = getTagProps({ index });
                   return (
-                    <Chip
-                      key={key}
-                      label={option.label}
-                      size="small"
-                      color={option.value === 'FSC' ? 'success' : 'info'}
-                      {...tagProps}
-                      disabled={isReadOnly}
-                    />
+                    <Chip key={key} label={option.label} size="small" color={option.value === 'FSC' ? 'success' : 'info'} {...tagProps} />
                   );
                 })
               }
@@ -310,8 +313,13 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
                   placeholder="Chọn chứng chỉ"
                   error={!!getError('certificates')}
                   helperText={getError('certificates')}
+                  InputProps={{
+                    ...params.InputProps,
+                    readOnly: isReadOnly
+                  }}
                 />
               )}
+              sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
             />
           )}
         </Field>
@@ -329,7 +337,6 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
           fullWidth
           multiline
           rows={3}
-          disabled={isReadOnly}
           error={!!getError('notes')}
           helperText={getError('notes')}
           slotProps={{
@@ -337,6 +344,7 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
               readOnly: isReadOnly
             }
           }}
+          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
         />
       </Grid>
 

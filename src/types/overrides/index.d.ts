@@ -14,12 +14,14 @@ declare module '@mui/material' {
 declare module '@tanstack/react-table' {
   export interface ColumnMeta {
     className?: string;
+    hidden?: boolean;
+    align?: 'left' | 'center' | 'right';
   }
 
   export interface TableMeta {
     updateData: (rowIndex: number, columnId: string, value: unknown) => void;
     revertData?: (rowIndex: number, revert: unknown) => void;
-    selectedRow?: any;
-    setSelectedRow?: any;
+    selectedRow?: unknown;
+    setSelectedRow?: unknown;
   }
 }

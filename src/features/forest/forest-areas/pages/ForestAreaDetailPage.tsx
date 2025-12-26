@@ -1,5 +1,6 @@
 import { EditOutlined, DeleteOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { Stack, Button, Box, CircularProgress, Alert, Chip } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { Formik, Form } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import MainCard from 'components/MainCard';
 
 import ForestAreaForm from '../components/ForestAreaForm';
+import ForestAreaSingleMapViewer from '../components/ForestAreaSingleMapViewer';
 import { mockForestAreas } from '../mock/forestAreas';
 import type { ForestAreaFormData, ForestArea } from '../types';
 import { FOREST_AREA_URLS } from '../types/constants';
@@ -69,7 +71,9 @@ const ForestAreaDetailPage = () => {
 
   // Handle edit navigation
   const handleEdit = useCallback(() => {
-    navigate(FOREST_AREA_URLS.EDIT(id!));
+    if (id) {
+      navigate(FOREST_AREA_URLS.EDIT(id));
+    }
   }, [navigate, id]);
 
   // Handle delete (mock)
@@ -144,9 +148,14 @@ const ForestAreaDetailPage = () => {
             </Stack>
           }
         >
-          <Box sx={{ p: 1 }}>
-            <ForestAreaForm mode="view" />
-          </Box>
+          <Grid container spacing={3} sx={{ p: 1 }}>
+            <Grid size={12}>
+              <ForestAreaForm mode="view" />
+            </Grid>
+            <Grid size={12}>
+              <ForestAreaSingleMapViewer forestArea={data} height={500} />
+            </Grid>
+          </Grid>
         </MainCard>
       </Form>
     </Formik>

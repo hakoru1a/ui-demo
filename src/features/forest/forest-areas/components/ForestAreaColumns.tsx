@@ -2,13 +2,14 @@
 
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import EditOutlined from '@ant-design/icons/EditOutlined';
+import EnvironmentOutlined from '@ant-design/icons/EnvironmentOutlined';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import { IconButton, Stack, Tooltip } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { type ColumnDef } from '@tanstack/react-table';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // assets
@@ -33,13 +34,26 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
   const navigate = useNavigate();
   const statusColorMap = getStatusColorMap(theme);
 
-  const handleView = (id: string) => {
-    navigate(FOREST_AREA_URLS.DETAIL(id));
-  };
+  const handleView = useCallback(
+    (id: string) => {
+      navigate(FOREST_AREA_URLS.DETAIL(id));
+    },
+    [navigate]
+  );
 
-  const handleEdit = (id: string) => {
-    navigate(FOREST_AREA_URLS.EDIT(id));
-  };
+  const handleEdit = useCallback(
+    (id: string) => {
+      navigate(FOREST_AREA_URLS.EDIT(id));
+    },
+    [navigate]
+  );
+
+  const handleViewMap = useCallback(
+    (id: string) => {
+      navigate(`${FOREST_AREA_URLS.MAP}?areaId=${id}`);
+    },
+    [navigate]
+  );
 
   return useMemo<ColumnDef<ForestArea>[]>(
     () => [
@@ -90,7 +104,9 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
         cell: ({ getValue }) => {
           const value = getValue<number>();
           return (
-            <Typography variant="body2">{value.toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</Typography>
+            <Typography align="right" variant="body2">
+              {value.toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
+            </Typography>
           );
         }
       },
@@ -132,9 +148,11 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
         header: 'Hành động',
         enableSorting: false,
         enableColumnFilter: false,
+        meta: {
+          align: 'center' as const
+        },
         cell: ({ row }) => {
           const forestArea = row.original;
-
           return (
             <Stack direction="row" spacing={0.5} alignItems="center" justifyContent="center" sx={{ width: '100%' }}>
               <Tooltip title="Xem chi tiết">
@@ -171,6 +189,23 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
                   <EditOutlined />
                 </IconButton>
               </Tooltip>
+              <Tooltip title="Xem bản đồ">
+                <IconButton
+                  size="small"
+                  color="success"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleViewMap(forestArea.id);
+                  }}
+                  sx={{
+                    '&:hover': {
+                      bgcolor: 'success.lighter'
+                    }
+                  }}
+                >
+                  <EnvironmentOutlined />
+                </IconButton>
+              </Tooltip>
               {onDisable && (
                 <Tooltip title="Vô hiệu hóa">
                   <IconButton
@@ -195,6 +230,6 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
         }
       }
     ],
-    [statusColorMap, onDisable, navigate]
+    [statusColorMap, onDisable, handleEdit, handleView, handleViewMap]
   );
 }

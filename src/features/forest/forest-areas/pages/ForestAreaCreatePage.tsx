@@ -1,5 +1,6 @@
 import { SaveOutlined, CloseOutlined } from '@ant-design/icons';
-import { Stack, Button, Box } from '@mui/material';
+import { Stack, Button } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { Formik, Form } from 'formik';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import MainCard from 'components/MainCard';
 
 import ForestAreaForm from '../components/ForestAreaForm';
+import ForestAreaSingleMapViewer from '../components/ForestAreaSingleMapViewer';
 import type { ForestAreaFormData } from '../types';
 import { FOREST_AREA_URLS } from '../types/constants';
 import { forestAreaSchema, forestAreaDefaultValues } from '../validation';
@@ -27,7 +29,7 @@ const ForestAreaCreatePage = () => {
   const handleSubmit = useCallback(
     async (values: ForestAreaFormData) => {
       // Mock API call - simulate network delay
-      console.log('Creating forest area:', values);
+      console.warn('Creating forest area:', values);
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Mock: Generate a new ID and navigate to detail page
@@ -45,7 +47,7 @@ const ForestAreaCreatePage = () => {
 
   return (
     <Formik initialValues={initialValues} validationSchema={forestAreaSchema} onSubmit={handleSubmit} validateOnChange validateOnBlur>
-      {({ isSubmitting, dirty }) => (
+      {({ isSubmitting, dirty, values }) => (
         <Form>
           <MainCard
             title="Tạo vùng trồng mới"
@@ -60,9 +62,14 @@ const ForestAreaCreatePage = () => {
               </Stack>
             }
           >
-            <Box sx={{ p: 1 }}>
-              <ForestAreaForm mode="create" />
-            </Box>
+            <Grid container spacing={3} sx={{ p: 1 }}>
+              <Grid size={12}>
+                <ForestAreaForm mode="create" />
+              </Grid>
+              <Grid size={12}>
+                <ForestAreaSingleMapViewer formData={values} height={500} />
+              </Grid>
+            </Grid>
           </MainCard>
         </Form>
       )}
