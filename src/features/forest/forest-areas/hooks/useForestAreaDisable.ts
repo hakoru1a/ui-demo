@@ -1,6 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
+import { openSnackbar } from 'api/snackbar';
 import useBoolean from 'hooks/useBoolean';
+import type { SnackbarProps } from 'types/snackbar';
 
 import { forestAreaService } from '../api';
 import type { ForestArea } from '../types';
@@ -9,14 +11,14 @@ import type { ForestArea } from '../types';
 
 /**
  * Hook to manage disable/delete action for forest areas
- * Handles dialog state, confirmation, and API call
+ * Handles dialog state, confirmation, and API call with notifications
  */
 export function useForestAreaDisable(onSuccess?: (disabledArea: ForestArea) => void) {
   const confirmDialog = useBoolean(false);
   const [selectedForestArea, setSelectedForestArea] = useState<ForestArea | null>(null);
   const [isDisabling, setIsDisabling] = useState(false);
 
-  // Handle disable action
+  // Handle disable action - opens confirmation dialog
   const handleDisable = useCallback(
     (forestArea: ForestArea) => {
       setSelectedForestArea(forestArea);
@@ -25,7 +27,7 @@ export function useForestAreaDisable(onSuccess?: (disabledArea: ForestArea) => v
     [confirmDialog]
   );
 
-  // Confirm disable action
+  // Confirm disable action - calls API and shows notification
   const handleConfirmDisable = useCallback(async () => {
     if (!selectedForestArea) return;
 
@@ -39,25 +41,51 @@ export function useForestAreaDisable(onSuccess?: (disabledArea: ForestArea) => v
         const disabledArea = { ...selectedForestArea, status: 'inactive' as const };
         confirmDialog.onFalse();
         setSelectedForestArea(null);
+
+        // Show success notification
+        openSnackbar({
+          open: true,
+          message: `Vô hiệu hóa khu rừng "${disabledArea.name}" thành công`,
+          variant: 'alert',
+          alert: { color: 'success' }
+        } as SnackbarProps);
+
         onSuccess?.(disabledArea);
-        // TODO: Show success notification
       } else {
-        // TODO: Show error notification
-        console.error('Failed to disable forest area:', response.error);
+        // Show error notification for failed response
+        openSnackbar({
+          open: true,
+          message: 'Có lỗi xảy ra khi vô hiệu hóa khu rừng',
+          variant: 'alert',
+          alert: { color: 'error' }
+        } as SnackbarProps);
       }
     } catch (error) {
-      // TODO: Show error notification
       console.error('Error disabling forest area:', error);
+      // Show error notification for exception
+      openSnackbar({
+        open: true,
+        message: 'Có lỗi xảy ra khi vô hiệu hóa khu rừng',
+        variant: 'alert',
+        alert: { color: 'error' }
+      } as SnackbarProps);
     } finally {
       setIsDisabling(false);
     }
   }, [selectedForestArea, confirmDialog, onSuccess]);
+
+  // Cancel disable action
+  const handleCancelDisable = useCallback(() => {
+    confirmDialog.onFalse();
+    setSelectedForestArea(null);
+  }, [confirmDialog]);
 
   return {
     confirmDialog,
     selectedForestArea,
     isDisabling,
     handleDisable,
-    handleConfirmDisable
+    handleConfirmDisable,
+    handleCancelDisable
   };
 }

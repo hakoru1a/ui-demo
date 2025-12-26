@@ -4,20 +4,12 @@ import { Box, Grid, Stack, Typography } from '@mui/material';
 // types
 import { ForestArea } from '../types';
 import { CERTIFICATE_OPTIONS, TREE_TYPE_OPTIONS } from '../types/constants';
+import { getLabelFromOptions } from '../utils';
 
 // ==============================|| FOREST AREA EXPANDED ROW ||============================== //
 
 interface ForestAreaExpandedRowProps {
   forestArea: ForestArea;
-}
-
-/**
- * Get label from options array
- */
-function getLabelFromOptions<T extends string>(value: T | undefined, options: { value: T; label: string }[]): string {
-  if (!value) return '-';
-  const option = options.find((opt) => opt.value === value);
-  return option?.label || value;
 }
 
 const ForestAreaExpandedRow = ({ forestArea }: ForestAreaExpandedRowProps) => {

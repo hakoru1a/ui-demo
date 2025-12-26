@@ -88,13 +88,7 @@ const ForestAreaTable = ({ table, data, loading = false, initialPageSize = 10 }:
 
               return (
                 <Fragment key={row.id}>
-                  <TableRow
-                    key={row.id}
-                    hover
-                    selected={row.getIsSelected()}
-                    onClick={() => row.toggleExpanded()}
-                    sx={{ cursor: 'pointer' }}
-                  >
+                  <TableRow hover selected={row.getIsSelected()} onClick={() => row.toggleExpanded()} sx={{ cursor: 'pointer' }}>
                     <TableCell>
                       <IconButton
                         size="small"

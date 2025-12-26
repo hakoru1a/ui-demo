@@ -21,8 +21,7 @@ import {
   useTheme
 } from '@mui/material';
 import type { ColumnFiltersState, Table } from '@tanstack/react-table';
-import { useRef } from 'react';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
 
 // project imports

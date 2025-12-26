@@ -25,7 +25,7 @@ const ForestAreasListPage = () => {
     setForestAreas((prev) => prev.map((area) => (area.id === disabledArea.id ? disabledArea : area)));
   }, []);
 
-  const { confirmDialog, selectedForestArea, isDisabling, handleDisable, handleConfirmDisable } =
+  const { confirmDialog, selectedForestArea, isDisabling, handleDisable, handleConfirmDisable, handleCancelDisable } =
     useForestAreaDisable(handleDisableSuccess);
 
   // Table setup - all table logic consolidated
@@ -59,7 +59,7 @@ const ForestAreasListPage = () => {
       {/* Confirm Disable Dialog */}
       <ConfirmDialog
         open={confirmDialog.value}
-        onClose={confirmDialog.onFalse}
+        onClose={handleCancelDisable}
         onConfirm={handleConfirmDisable}
         title="Xác nhận vô hiệu hóa"
         message="Bạn có chắc chắn muốn vô hiệu hóa vùng trồng này?"

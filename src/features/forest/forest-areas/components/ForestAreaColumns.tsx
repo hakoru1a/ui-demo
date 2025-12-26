@@ -16,15 +16,7 @@ import { getStatusColorMap } from 'utils/getStatusColor';
 
 import type { ForestArea } from '../types';
 import { OWNERSHIP_TYPE_OPTIONS } from '../types/constants';
-
-/**
- * Get label from options array
- */
-function getLabelFromOptions<T extends string>(value: T | undefined, options: { value: T; label: string }[]): string {
-  if (!value) return '-';
-  const option = options.find((opt) => opt.value === value);
-  return option?.label || value;
-}
+import { getLabelFromOptions } from '../utils';
 
 /**
  * Forest Area Table Columns Definition
