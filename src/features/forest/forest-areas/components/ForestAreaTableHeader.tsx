@@ -3,6 +3,7 @@
 
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
 import FilterOutlined from '@ant-design/icons/FilterOutlined';
+import PlusOutlined from '@ant-design/icons/PlusOutlined';
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
 import {
   Box,
@@ -23,6 +24,7 @@ import {
 import type { ColumnFiltersState, Table } from '@tanstack/react-table';
 import { useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 
 // project imports
 import Transitions from 'components/@extended/Transitions';
@@ -35,6 +37,7 @@ import { STATUS_OPTIONS, StatusFilter } from 'types/status';
 import { getStatusColorMap } from 'utils/getStatusColor';
 
 import type { ForestArea } from '../types';
+import { FOREST_AREA_URLS } from '../types/constants';
 
 // ==============================|| TYPES ||============================== //
 
@@ -221,13 +224,13 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                 </Box>
                 <Divider />
                 <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ p: 2.5 }}>
-                  <Button onClick={onClose} color="inherit" size="small">
+                  <Button onClick={onClose} color="inherit" size="medium">
                     Hủy
                   </Button>
-                  <Button onClick={handleReset} color="error" variant="outlined" size="small">
+                  <Button onClick={handleReset} color="error" variant="outlined" size="medium">
                     Đặt lại
                   </Button>
-                  <Button onClick={handleApply} variant="contained" size="small">
+                  <Button onClick={handleApply} variant="contained" size="medium">
                     Áp dụng
                   </Button>
                 </Stack>
@@ -258,8 +261,13 @@ const ForestAreaTableHeader = ({
   enableColumnVisibility = true
 }: ForestAreaTableHeaderProps) => {
   const intl = useIntl();
+  const navigate = useNavigate();
   const filterPopover = useBoolean(false);
   const filterAnchorRef = useRef<HTMLButtonElement>(null);
+
+  const handleCreateNew = () => {
+    navigate(FOREST_AREA_URLS.NEW);
+  };
 
   return (
     <>
@@ -323,6 +331,10 @@ const ForestAreaTableHeader = ({
               getAllColumns={table.getAllColumns}
             />
           )}
+
+          <Button variant="contained" color="primary" startIcon={<PlusOutlined />} onClick={handleCreateNew}>
+            Tạo mới
+          </Button>
         </Stack>
       </Toolbar>
 

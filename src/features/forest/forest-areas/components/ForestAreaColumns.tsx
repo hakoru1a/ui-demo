@@ -1,12 +1,15 @@
 // ==============================|| FOREST AREA TABLE COLUMNS ||============================== //
 
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
+import EditOutlined from '@ant-design/icons/EditOutlined';
+import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import { IconButton, Stack, Tooltip } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { type ColumnDef } from '@tanstack/react-table';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // assets
 
@@ -15,7 +18,7 @@ import { STATUS_OPTIONS, StatusFilter } from 'types/status';
 import { getStatusColorMap } from 'utils/getStatusColor';
 
 import type { ForestArea } from '../types';
-import { OWNERSHIP_TYPE_OPTIONS } from '../types/constants';
+import { FOREST_AREA_URLS, OWNERSHIP_TYPE_OPTIONS } from '../types/constants';
 import { getLabelFromOptions } from '../utils';
 
 /**
@@ -27,7 +30,16 @@ interface UseForestAreaColumnsProps {
 
 export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = {}): ColumnDef<ForestArea>[] {
   const theme = useTheme();
+  const navigate = useNavigate();
   const statusColorMap = getStatusColorMap(theme);
+
+  const handleView = (id: string) => {
+    navigate(FOREST_AREA_URLS.DETAIL(id));
+  };
+
+  const handleEdit = (id: string) => {
+    navigate(FOREST_AREA_URLS.EDIT(id));
+  };
 
   return useMemo<ColumnDef<ForestArea>[]>(
     () => [
@@ -125,6 +137,40 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
 
           return (
             <Stack direction="row" spacing={0.5} alignItems="center" justifyContent="center" sx={{ width: '100%' }}>
+              <Tooltip title="Xem chi tiết">
+                <IconButton
+                  size="small"
+                  color="info"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleView(forestArea.id);
+                  }}
+                  sx={{
+                    '&:hover': {
+                      bgcolor: 'info.lighter'
+                    }
+                  }}
+                >
+                  <EyeOutlined />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Chỉnh sửa">
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEdit(forestArea.id);
+                  }}
+                  sx={{
+                    '&:hover': {
+                      bgcolor: 'primary.lighter'
+                    }
+                  }}
+                >
+                  <EditOutlined />
+                </IconButton>
+              </Tooltip>
               {onDisable && (
                 <Tooltip title="Vô hiệu hóa">
                   <IconButton
@@ -149,6 +195,6 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
         }
       }
     ],
-    [statusColorMap, onDisable]
+    [statusColorMap, onDisable, navigate]
   );
 }
