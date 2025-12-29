@@ -1,4 +1,4 @@
-// ==============================|| HARVEST PLAN TABLE HEADER ||============================== //
+// ==============================|| HARVEST ORDER TABLE HEADER ||============================== //
 // Combines: StatusTabs + Toolbar + FilterPopover
 
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
@@ -35,23 +35,24 @@ import { CSVExport, RowSelection, SelectColumnVisibility } from 'components/thir
 import { useTableFilterDialog } from 'hooks/table';
 import useBoolean from 'hooks/useBoolean';
 
-import type { HarvestPlan } from '../types';
-import { HARVEST_PLAN_STATUS, HARVEST_PLAN_STATUS_OPTIONS, HARVEST_PLAN_URLS, HarvestPlanStatusFilter } from '../types/constants';
+import { HARVEST_ORDER_STATUS_OPTIONS, HARVEST_ORDER_URLS } from '../types/constants';
+import { HARVEST_ORDER_STATUS } from '../types/enums';
+import type { HarvestOrder } from '../types/index';
 
 // ==============================|| TYPES ||============================== //
 
-interface HarvestPlanTableHeaderProps {
-  table: Table<HarvestPlan>;
+interface HarvestOrderTableHeaderProps {
+  table: Table<HarvestOrder>;
   // CSV Export
-  csvData: HarvestPlan[];
+  csvData: HarvestOrder[];
   csvHeadersData: Array<{ label: string; key: string }>;
   csvFilename?: string;
   // Filter
   columnFilters: ColumnFiltersState;
   onFilterChange: (filters: ColumnFiltersState) => void;
   // Status
-  statusFilter?: HarvestPlanStatusFilter;
-  onStatusFilterChange?: (status: HarvestPlanStatusFilter) => void;
+  statusFilter?: string;
+  onStatusFilterChange?: (event: React.SyntheticEvent, newValue: string) => void;
   // Search
   searchValue?: string;
   onSearchChange?: (value: string) => void;
@@ -60,55 +61,54 @@ interface HarvestPlanTableHeaderProps {
   enableCSVExport?: boolean;
   enableColumnVisibility?: boolean;
   // Actions
-  onBulkDelete?: (selectedPlans: HarvestPlan[]) => void;
-  onViewMap?: () => void;
+  onBulkDelete?: (selectedOrders: HarvestOrder[]) => void;
 }
 
 // ==============================|| STATUS TABS ||============================== //
 
 interface StatusTabsProps {
-  table: Table<HarvestPlan>;
-  statusFilter: HarvestPlanStatusFilter;
-  onStatusFilterChange?: (status: HarvestPlanStatusFilter) => void;
+  table: Table<HarvestOrder>;
+  statusFilter: string;
+  onStatusFilterChange?: (event: React.SyntheticEvent, newValue: string) => void;
 }
 
 function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsProps) {
   const theme = useTheme();
 
-  // Custom color map for harvest plan status
-  const tabColorMap: Record<HarvestPlanStatusFilter, string> = {
-    [HarvestPlanStatusFilter.ALL]: theme.palette.primary.main,
-    [HarvestPlanStatusFilter.DRAFT]: theme.palette.grey[600],
-    [HarvestPlanStatusFilter.ACTIVE]: theme.palette.success.main,
-    [HarvestPlanStatusFilter.COMPLETED]: theme.palette.info.main
+  // Custom color map for harvest order status
+  const tabColorMap: Record<string, string> = {
+    all: theme.palette.primary.main,
+    new: theme.palette.info.main,
+    in_progress: theme.palette.warning.main,
+    completed: theme.palette.success.main
   };
 
   const statusCounts = useMemo(() => {
     const allRows = table.getPreFilteredRowModel().rows;
     return {
       all: allRows.length,
-      draft: allRows.filter((row) => row.original.status === HARVEST_PLAN_STATUS.DRAFT).length,
-      active: allRows.filter((row) => row.original.status === HARVEST_PLAN_STATUS.ACTIVE).length,
-      completed: allRows.filter((row) => row.original.status === HARVEST_PLAN_STATUS.COMPLETED).length
+      new: allRows.filter((row) => row.original.status === HARVEST_ORDER_STATUS.NEW).length,
+      in_progress: allRows.filter((row) => row.original.status === HARVEST_ORDER_STATUS.IN_PROGRESS).length,
+      completed: allRows.filter((row) => row.original.status === HARVEST_ORDER_STATUS.COMPLETED).length
     };
   }, [table]);
 
   const tabsConfig = useMemo(
     () => [
-      { value: HarvestPlanStatusFilter.ALL, label: 'Tất cả', count: statusCounts.all },
+      { value: 'all', label: 'Tất cả', count: statusCounts.all },
       {
-        value: HarvestPlanStatusFilter.DRAFT,
-        label: HARVEST_PLAN_STATUS_OPTIONS.find((opt) => opt.value === HARVEST_PLAN_STATUS.DRAFT)?.label || 'Bản nháp',
-        count: statusCounts.draft
+        value: HARVEST_ORDER_STATUS.NEW,
+        label: HARVEST_ORDER_STATUS_OPTIONS.find((opt) => opt.value === HARVEST_ORDER_STATUS.NEW)?.label || 'Mới',
+        count: statusCounts.new
       },
       {
-        value: HarvestPlanStatusFilter.ACTIVE,
-        label: HARVEST_PLAN_STATUS_OPTIONS.find((opt) => opt.value === HARVEST_PLAN_STATUS.ACTIVE)?.label || 'Đang thực hiện',
-        count: statusCounts.active
+        value: HARVEST_ORDER_STATUS.IN_PROGRESS,
+        label: HARVEST_ORDER_STATUS_OPTIONS.find((opt) => opt.value === HARVEST_ORDER_STATUS.IN_PROGRESS)?.label || 'Đang khai thác',
+        count: statusCounts.in_progress
       },
       {
-        value: HarvestPlanStatusFilter.COMPLETED,
-        label: HARVEST_PLAN_STATUS_OPTIONS.find((opt) => opt.value === HARVEST_PLAN_STATUS.COMPLETED)?.label || 'Hoàn thành',
+        value: HARVEST_ORDER_STATUS.COMPLETED,
+        label: HARVEST_ORDER_STATUS_OPTIONS.find((opt) => opt.value === HARVEST_ORDER_STATUS.COMPLETED)?.label || 'Hoàn thành',
         count: statusCounts.completed
       }
     ],
@@ -119,8 +119,11 @@ function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsPro
     <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 2, pt: 2 }}>
       <Tabs
         value={statusFilter}
-        onChange={(_, value) => onStatusFilterChange?.(value)}
-        sx={{ '& .MuiTabs-indicator': { backgroundColor: tabColorMap[statusFilter], height: 3 } }}
+        onChange={onStatusFilterChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        aria-label="harvest order status tabs"
+        sx={{ '& .MuiTabs-indicator': { backgroundColor: tabColorMap[statusFilter] || tabColorMap.all, height: 3 } }}
       >
         {tabsConfig.map((tab) => (
           <Tab
@@ -138,8 +141,8 @@ function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsPro
                     borderRadius: '10px',
                     fontSize: '0.75rem',
                     fontWeight: 600,
-                    bgcolor: tabColorMap[tab.value] + '20',
-                    color: tabColorMap[tab.value],
+                    bgcolor: (tabColorMap[tab.value] || tabColorMap.all) + '20',
+                    color: tabColorMap[tab.value] || tabColorMap.all,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -152,8 +155,8 @@ function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsPro
             sx={{
               textTransform: 'none',
               fontWeight: 600,
-              '&.Mui-selected': { color: tabColorMap[tab.value] + ' !important' },
-              '&:hover': { color: tabColorMap[tab.value] }
+              '&.Mui-selected': { color: (tabColorMap[tab.value] || tabColorMap.all) + ' !important' },
+              '&:hover': { color: tabColorMap[tab.value] || tabColorMap.all }
             }}
           />
         ))}
@@ -236,7 +239,7 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                 }
               >
                 <Divider />
-                {/* TODO: Add filter fields here based on HarvestPlanFilters type */}
+                {/* TODO: Add filter fields here based on HarvestOrderFilters type */}
                 <Box sx={{ p: 2.5, minHeight: 100 }}>
                   <Box sx={{ color: 'text.secondary', textAlign: 'center' }}>Thêm các trường lọc tại đây</Box>
                 </Box>
@@ -263,23 +266,22 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
 
 // ==============================|| MAIN COMPONENT ||============================== //
 
-const HarvestPlanTableHeader = ({
+const HarvestOrderTableHeader = ({
   table,
   csvData,
   csvHeadersData,
-  csvFilename = 'harvest-plans',
+  csvFilename = 'harvest-orders',
   columnFilters,
   onFilterChange,
-  statusFilter = HarvestPlanStatusFilter.ALL,
+  statusFilter = 'all',
   onStatusFilterChange,
   searchValue = '',
   onSearchChange,
   enableRowSelection = false,
   enableCSVExport = true,
   enableColumnVisibility = true,
-  onBulkDelete,
-  onViewMap
-}: HarvestPlanTableHeaderProps) => {
+  onBulkDelete
+}: HarvestOrderTableHeaderProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const filterPopover = useBoolean(false);
@@ -290,13 +292,13 @@ const HarvestPlanTableHeader = ({
   const hasSelection = selectedCount > 0;
 
   const handleCreateNew = () => {
-    navigate(HARVEST_PLAN_URLS.NEW);
+    navigate(HARVEST_ORDER_URLS.CREATE);
   };
 
   const handleBulkDelete = () => {
     if (onBulkDelete && hasSelection) {
-      const selectedPlans = selectedRows.map((row) => row.original);
-      onBulkDelete(selectedPlans);
+      const selectedOrders = selectedRows.map((row) => row.original);
+      onBulkDelete(selectedOrders);
     }
   };
 
@@ -313,7 +315,7 @@ const HarvestPlanTableHeader = ({
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%' }}>
           <TextField
-            placeholder="Tìm kiếm theo mã, tên vùng trồng..."
+            placeholder="Tìm kiếm theo mã lệnh, kế hoạch, khu vực..."
             value={searchValue}
             onChange={(e) => onSearchChange?.(e.target.value)}
             size="medium"
@@ -364,16 +366,16 @@ const HarvestPlanTableHeader = ({
             />
           )}
 
-          {/* Xóa nhiều vùng - Secondary, Conditional (when ≥1 selected) */}
+          {/* Xóa nhiều - Secondary, Conditional (when ≥1 selected) */}
           {hasSelection && onBulkDelete && (
             <Button variant="outlined" color="error" startIcon={<DeleteOutlined />} onClick={handleBulkDelete}>
-              Xóa nhiều vùng ({selectedCount})
+              Xóa nhiều ({selectedCount})
             </Button>
           )}
 
-          {/* Tạo vùng trồng - Primary, Always */}
+          {/* Tạo lệnh khai thác - Primary, Always */}
           <Button variant="contained" color="primary" startIcon={<PlusOutlined />} onClick={handleCreateNew}>
-            Tạo vùng trồng
+            Tạo lệnh khai thác
           </Button>
         </Stack>
       </Toolbar>
@@ -390,4 +392,4 @@ const HarvestPlanTableHeader = ({
   );
 };
 
-export default HarvestPlanTableHeader;
+export default HarvestOrderTableHeader;

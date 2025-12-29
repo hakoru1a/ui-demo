@@ -1,0 +1,80 @@
+import type { HarvestOrder } from '../types/index';
+
+export const mockHarvestOrders: HarvestOrder[] = [
+  {
+    id: '1',
+    code: 'HO-2024-001',
+    planId: '1',
+    planName: 'Kế hoạch khai thác Q1/2024 - Khu vực A',
+    forestAreaId: 'FA001',
+    forestAreaName: 'Khu vực rừng 1 - Lô A1',
+    startDate: '2024-01-15',
+    actualYield: 0,
+    status: 'new',
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01')
+  },
+  {
+    id: '2',
+    code: 'HO-2024-002',
+    planId: '1',
+    planName: 'Kế hoạch khai thác Q1/2024 - Khu vực A',
+    forestAreaId: 'FA001',
+    forestAreaName: 'Khu vực rừng 1 - Lô A2',
+    startDate: '2024-01-16',
+    actualYield: 0,
+    status: 'in_progress',
+    executorType: 'internal_team',
+    executorName: 'Đội khai thác số 1',
+    startedAt: new Date('2024-01-16'),
+    createdAt: new Date('2024-01-02'),
+    updatedAt: new Date('2024-01-16')
+  },
+  {
+    id: '3',
+    code: 'HO-2024-003',
+    planId: '2',
+    planName: 'Kế hoạch khai thác Q1/2024 - Khu vực B',
+    forestAreaId: 'FA002',
+    forestAreaName: 'Khu vực rừng 2 - Lô B1',
+    startDate: '2024-01-20',
+    actualYield: 150.5,
+    status: 'completed',
+    executorType: 'contractor',
+    executorName: 'Công ty Lâm nghiệp XYZ',
+    startedAt: new Date('2024-01-20'),
+    completedAt: new Date('2024-02-10'),
+    endDate: '2024-02-10',
+    createdAt: new Date('2024-01-05'),
+    updatedAt: new Date('2024-02-10')
+  },
+  {
+    id: '4',
+    code: 'HO-2024-004',
+    planId: '2',
+    planName: 'Kế hoạch khai thác Q1/2024 - Khu vực B',
+    forestAreaId: 'FA002',
+    forestAreaName: 'Khu vực rừng 2 - Lô B2',
+    startDate: '2024-02-15',
+    actualYield: 0,
+    status: 'new',
+    createdAt: new Date('2024-02-01'),
+    updatedAt: new Date('2024-02-01')
+  },
+  {
+    id: '5',
+    code: 'HO-2024-005',
+    planId: '3',
+    planName: 'Kế hoạch khai thác Q2/2024 - Khu vực C',
+    forestAreaId: 'FA003',
+    forestAreaName: 'Khu vực rừng 3 - Lô C1',
+    startDate: '2024-03-01',
+    actualYield: 45.2,
+    status: 'in_progress',
+    executorType: 'internal_team',
+    executorName: 'Đội khai thác số 2',
+    startedAt: new Date('2024-03-01'),
+    createdAt: new Date('2024-02-20'),
+    updatedAt: new Date('2024-03-01')
+  }
+];

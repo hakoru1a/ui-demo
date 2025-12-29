@@ -9,9 +9,9 @@ import DashboardLayout from 'layout/Dashboard';
 const HarvestOrdersListPage = Loadable(lazy(() => import('./pages/HarvestOrdersListPage')));
 const HarvestOrderDetailPage = Loadable(lazy(() => import('./pages/HarvestOrderDetailPage')));
 const HarvestOrderCreatePage = Loadable(lazy(() => import('./pages/HarvestOrderCreatePage')));
-const HarvestOrderExecutionPage = Loadable(lazy(() => import('./pages/HarvestOrderExecutionPage')));
+const HarvestOrderEditPage = Loadable(lazy(() => import('./pages/HarvestOrderEditPage')));
 
-const HarvestordersRoutes = {
+const HarvestOrdersRoutes = {
   path: '/harvest-orders',
   element: <DashboardLayout />,
   children: [
@@ -28,10 +28,10 @@ const HarvestordersRoutes = {
       element: <HarvestOrderCreatePage />
     },
     {
-      path: ':id/execution',
-      element: <HarvestOrderExecutionPage />
+      path: ':id/edit',
+      element: <HarvestOrderEditPage />
     }
   ]
 };
 
-export default HarvestordersRoutes;
+export default HarvestOrdersRoutes;

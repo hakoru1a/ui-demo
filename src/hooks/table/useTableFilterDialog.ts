@@ -32,12 +32,12 @@ interface UseTableFilterDialogProps {
  */
 export function useTableFilterDialog({ columnFilters, onFilterChange, onClose, open }: UseTableFilterDialogProps) {
   // Local state for filter values (before applying)
-  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filters, setFilters] = useState<Record<string, unknown>>({});
 
   // Initialize filters from columnFilters when dialog opens
   useEffect(() => {
     if (open) {
-      const initialFilters: Record<string, any> = {};
+      const initialFilters: Record<string, unknown> = {};
       columnFilters.forEach((filter) => {
         initialFilters[filter.id] = filter.value;
       });
@@ -46,7 +46,7 @@ export function useTableFilterDialog({ columnFilters, onFilterChange, onClose, o
   }, [columnFilters, open]);
 
   // Update filter value
-  const handleFilterChange = (columnId: string, value: any) => {
+  const handleFilterChange = (columnId: string, value: unknown) => {
     setFilters((prev) => ({
       ...prev,
       [columnId]: value
