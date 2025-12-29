@@ -144,7 +144,7 @@ const ForestAreaEditPage = () => {
                 <ForestAreaForm mode="edit" />
               </Grid>
               <Grid size={12}>
-                <ForestAreaSingleMapViewer forestArea={originalData} formData={values} height={500} />
+                <ForestAreaSingleMapViewer forestArea={originalData ?? undefined} formData={values} height={500} />
               </Grid>
             </Grid>
           </MainCard>

@@ -153,7 +153,7 @@ const ForestAreaDetailPage = () => {
               <ForestAreaForm mode="view" />
             </Grid>
             <Grid size={12}>
-              <ForestAreaSingleMapViewer forestArea={data} height={500} />
+              <ForestAreaSingleMapViewer forestArea={data ?? undefined} height={500} />
             </Grid>
           </Grid>
         </MainCard>

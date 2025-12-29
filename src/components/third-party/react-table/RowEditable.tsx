@@ -82,7 +82,10 @@ export default function RowEditable<T extends RowData>({ getValue: initialValue,
       break;
   }
 
-  const isEditable = tableMeta?.selectedRow[row.id];
+  const isEditable =
+    tableMeta?.selectedRow && typeof tableMeta.selectedRow === 'object' && tableMeta.selectedRow !== null
+      ? (tableMeta.selectedRow as Record<string | number, unknown>)[row.id]
+      : false;
 
   switch (columnDef.dataType) {
     case 'text':
