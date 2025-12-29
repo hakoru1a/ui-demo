@@ -2,13 +2,14 @@
 
 import { FileTextOutlined, UploadOutlined } from '@ant-design/icons';
 import { Grid, Typography, Box, Button, Link } from '@mui/material';
-import dayjs, { type Dayjs } from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import { useFormikContext, Field, FieldProps } from 'formik';
 
 // project imports
 import DatePickerField from 'components/fields/DatePickerField';
 import SelectField from 'components/fields/SelectField';
 import TextField from 'components/fields/TextField';
+import dateHelper from 'utils/dateHelper';
 
 import type { LegalCertificateFormData } from '../types';
 import { CERTIFICATE_TYPE_OPTIONS } from '../types';
@@ -130,7 +131,7 @@ const LegalCertificateForm = ({ mode }: LegalCertificateFormProps) => {
         <Field name="issueDate">
           {({ field, meta }: FieldProps) => {
             // Convert to dayjs for DatePicker
-            const dayjsValue = field.value ? dayjs(field.value instanceof Date ? field.value : new Date(field.value)) : null;
+            const dayjsValue = dateHelper.normalizeDateValue(field.value);
             return (
               <DatePickerField
                 label="Ngày cấp"
@@ -162,7 +163,7 @@ const LegalCertificateForm = ({ mode }: LegalCertificateFormProps) => {
         <Field name="expiryDate">
           {({ field, meta }: FieldProps) => {
             // Convert to dayjs for DatePicker
-            const dayjsValue = field.value ? dayjs(field.value instanceof Date ? field.value : new Date(field.value)) : null;
+            const dayjsValue = dateHelper.normalizeDateValue(field.value);
             return (
               <DatePickerField
                 label="Ngày hết hạn"

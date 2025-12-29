@@ -16,13 +16,14 @@ import {
   Typography,
   Alert
 } from '@mui/material';
-import dayjs, { type Dayjs } from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import { Formik, Form, Field, FieldProps } from 'formik';
 import { useState } from 'react';
 
 // project imports
 import DatePickerField from 'components/fields/DatePickerField';
 import TextField from 'components/fields/TextField';
+import dateHelper from 'utils/dateHelper';
 
 import type { CertificateRenewalFormData } from '../types';
 import { certificateRenewalSchema, certificateRenewalDefaultValues } from '../validation';
@@ -125,14 +126,12 @@ const CertificateRenewalWorkflow = ({ certificateId, currentExpiryDate, onComple
                   {({ isSubmitting, setFieldValue, values }) => (
                     <Form>
                       <Stack spacing={3} sx={{ mt: 2 }}>
-                        <Alert severity="info">Ngày hết hạn hiện tại: {new Date(currentExpiryDate).toLocaleDateString('vi-VN')}</Alert>
+                        <Alert severity="info">Ngày hết hạn hiện tại: {dateHelper.formatDate(currentExpiryDate)}</Alert>
 
                         <Field name="newExpiryDate">
                           {({ field, meta }: FieldProps) => {
                             // Convert to dayjs for DatePicker
-                            const dayjsValue = field.value
-                              ? dayjs(field.value instanceof Date ? field.value : new Date(field.value))
-                              : null;
+                            const dayjsValue = dateHelper.normalizeDateValue(field.value);
                             return (
                               <DatePickerField
                                 label="Ngày hết hạn mới"
@@ -311,7 +310,7 @@ const CertificateRenewalWorkflow = ({ certificateId, currentExpiryDate, onComple
                     </Typography>
                     <Typography variant="body2">
                       Chứng chỉ đã được gia hạn thành công. Ngày hết hạn mới:{' '}
-                      {formData?.newExpiryDate ? new Date(formData.newExpiryDate).toLocaleDateString('vi-VN') : '-'}
+                      {formData?.newExpiryDate ? dateHelper.formatDate(formData.newExpiryDate) : '-'}
                     </Typography>
                   </Alert>
                   <Chip label="Đã hoàn thành" color="success" sx={{ mt: 2 }} />
