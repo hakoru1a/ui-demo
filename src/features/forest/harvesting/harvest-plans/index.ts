@@ -22,8 +22,7 @@ export type {
 } from './types';
 
 // Export constants
-export { OWNERSHIP_TYPE_OPTIONS, CERTIFICATE_OPTIONS, STATUS_OPTIONS, PROVINCE_OPTIONS, PARTNER_OPTIONS } from './types';
-export { HARVEST_PLAN_PATHS, HARVEST_PLAN_URLS } from './types';
+export { HARVEST_PLAN_PATHS, HARVEST_PLAN_URLS, FOREST_AREA_OPTIONS, HARVEST_PLAN_STATUS_OPTIONS } from './types';
 
 // Export API service (if needed by other features)
 // export { harvestPlanService } from './api';

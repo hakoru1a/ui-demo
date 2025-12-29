@@ -2,7 +2,6 @@
 
 import { FileTextOutlined, UploadOutlined } from '@ant-design/icons';
 import { Grid, Typography, Box, Button, Link } from '@mui/material';
-import type { Dayjs } from 'dayjs';
 import { useFormikContext, Field, FieldProps } from 'formik';
 
 // project imports
@@ -136,9 +135,8 @@ const LegalCertificateForm = ({ mode }: LegalCertificateFormProps) => {
               <DatePickerField
                 label="Ngày cấp"
                 value={dayjsValue}
-                onChange={(date: Dayjs | null) => {
-                  // Convert dayjs back to Date/string for form
-                  setFieldValue('issueDate', date ? date.toDate() : null);
+                onChange={(newValue) => {
+                  setFieldValue('issueDate', newValue ? newValue.toDate() : null);
                 }}
                 error={!!(meta.touched && meta.error)}
                 helperText={meta.touched && meta.error ? meta.error : ''}
@@ -168,9 +166,8 @@ const LegalCertificateForm = ({ mode }: LegalCertificateFormProps) => {
               <DatePickerField
                 label="Ngày hết hạn"
                 value={dayjsValue}
-                onChange={(date: Dayjs | null) => {
-                  // Convert dayjs back to Date/string for form
-                  setFieldValue('expiryDate', date ? date.toDate() : null);
+                onChange={(newValue) => {
+                  setFieldValue('expiryDate', newValue ? newValue.toDate() : null);
                 }}
                 error={!!(meta.touched && meta.error)}
                 helperText={meta.touched && meta.error ? meta.error : ''}

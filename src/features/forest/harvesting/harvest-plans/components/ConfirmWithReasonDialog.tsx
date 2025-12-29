@@ -1,7 +1,10 @@
 // material-ui
 import WarningOutlined from '@ant-design/icons/WarningOutlined';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, TextField, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, Typography } from '@mui/material';
 import { useState, useEffect } from 'react';
+
+// project imports
+import Field from 'components/fields';
 
 // ==============================|| CONFIRM WITH REASON DIALOG ||============================== //
 
@@ -76,7 +79,7 @@ export default function ConfirmWithReasonDialog({
           {message}
         </DialogContentText>
 
-        <TextField
+        <Field.Text
           label={reasonLabel}
           placeholder={reasonPlaceholder}
           value={reason}

@@ -17,8 +17,6 @@ interface UseHarvestOrderColumnsProps {
   onDelete?: (order: HarvestOrder) => void;
 }
 
-// ... existing imports ...
-
 export function useHarvestOrderColumns({ onDelete }: UseHarvestOrderColumnsProps) {
   const navigate = useNavigate();
 

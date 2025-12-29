@@ -16,7 +16,6 @@ import {
   Typography,
   Alert
 } from '@mui/material';
-import type { Dayjs } from 'dayjs';
 import { Formik, Form, Field, FieldProps } from 'formik';
 import { useState } from 'react';
 
@@ -136,9 +135,8 @@ const CertificateRenewalWorkflow = ({ certificateId, currentExpiryDate, onComple
                               <DatePickerField
                                 label="Ngày hết hạn mới"
                                 value={dayjsValue}
-                                onChange={(date: Dayjs | null) => {
-                                  // Convert dayjs back to Date/string for form
-                                  setFieldValue('newExpiryDate', date ? date.toDate() : null);
+                                onChange={(newValue) => {
+                                  setFieldValue('newExpiryDate', newValue ? newValue.toDate() : null);
                                 }}
                                 error={!!(meta.touched && meta.error)}
                                 helperText={meta.touched && meta.error ? meta.error : ''}

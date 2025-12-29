@@ -1,10 +1,10 @@
 // ==============================|| HARVEST PLAN FORM COMPONENT ||============================== //
 
-import { Grid, InputAdornment, Box, Typography, Autocomplete, TextField as MuiTextField } from '@mui/material';
-import type { Dayjs } from 'dayjs';
+import { Grid, InputAdornment, Box, Typography, Autocomplete } from '@mui/material';
 import { useFormikContext, Field, FieldProps } from 'formik';
 
 // project imports
+import FieldComponents from 'components/fields';
 import DatePickerField from 'components/fields/DatePickerField';
 import NumberField from 'components/fields/NumberField';
 import SelectField from 'components/fields/SelectField';
@@ -99,16 +99,18 @@ const HarvestPlanForm = ({ mode, isApproved = false }: HarvestPlanFormProps) => 
               isOptionEqualToValue={(option, val) => option.value === val.value}
               readOnly={isReadOnly}
               renderInput={(params) => (
-                <MuiTextField
+                <FieldComponents.Text
                   {...params}
                   label="Khu vực rừng"
                   placeholder="Chọn khu vực rừng"
                   required
                   error={!!getError('forestAreaId')}
                   helperText={getError('forestAreaId') || 'Phải thuộc danh mục FSC'}
-                  InputProps={{
-                    ...params.InputProps,
-                    readOnly: isReadOnly
+                  slotProps={{
+                    input: {
+                      ...params.InputProps,
+                      readOnly: isReadOnly
+                    }
                   }}
                 />
               )}
@@ -154,13 +156,13 @@ const HarvestPlanForm = ({ mode, isApproved = false }: HarvestPlanFormProps) => 
               <DatePickerField
                 label="Thời gian bắt đầu"
                 value={dayjsValue}
-                onChange={(date: Dayjs | null) => {
-                  setFieldValue('startDate', date ? date.toDate() : null);
+                onChange={(newValue) => {
+                  setFieldValue('startDate', newValue ? newValue.toDate() : null);
                   // Update endDate if it's before startDate
-                  if (date && values.endDate) {
+                  if (newValue && values.endDate) {
                     const endDate = dateHelper.normalizeDateValue(values.endDate);
-                    if (endDate && endDate.isBefore(date)) {
-                      setFieldValue('endDate', date.toDate());
+                    if (endDate && endDate.isBefore(newValue)) {
+                      setFieldValue('endDate', newValue.toDate());
                     }
                   }
                 }}
@@ -192,8 +194,8 @@ const HarvestPlanForm = ({ mode, isApproved = false }: HarvestPlanFormProps) => 
               <DatePickerField
                 label="Thời gian kết thúc"
                 value={dayjsValue}
-                onChange={(date: Dayjs | null) => {
-                  setFieldValue('endDate', date ? date.toDate() : null);
+                onChange={(newValue) => {
+                  setFieldValue('endDate', newValue ? newValue.toDate() : null);
                 }}
                 minDate={startDate || undefined}
                 error={!!(meta.touched && meta.error)}

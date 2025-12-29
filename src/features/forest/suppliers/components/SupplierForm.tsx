@@ -1,41 +1,33 @@
-// ==============================|| FOREST AREA FORM COMPONENT ||============================== //
+// ==============================|| SUPPLIER FORM COMPONENT ||============================== //
 
-import { Grid, InputAdornment, Chip, Box, Typography, Autocomplete } from '@mui/material';
+import { Grid, Chip, Box, Typography, Autocomplete } from '@mui/material';
 import { useFormikContext, Field, FieldProps } from 'formik';
 
 // project imports
 import FieldComponents from 'components/fields';
-import NumberField from 'components/fields/NumberField';
 import SelectField from 'components/fields/SelectField';
 import TextField from 'components/fields/TextField';
 
-import type { ForestAreaFormData } from '../types';
-import {
-  OWNERSHIP_TYPE_OPTIONS,
-  TREE_TYPE_OPTIONS,
-  STATUS_OPTIONS,
-  CERTIFICATE_OPTIONS,
-  PROVINCE_OPTIONS,
-  PARTNER_OPTIONS
-} from '../types/constants';
+import { SUPPLIER_TYPE_OPTIONS, STATUS_OPTIONS, CERTIFICATE_OPTIONS, REGION_OPTIONS } from '../types/constants';
+import type { SupplierFormData } from '../types/form';
 
 // ==============================|| FORM MODE TYPE ||============================== //
 
 export type FormMode = 'create' | 'edit' | 'view';
 
-export interface ForestAreaFormProps {
+export interface SupplierFormProps {
   mode: FormMode;
 }
 
-// ==============================|| FOREST AREA FORM ||============================== //
+// ==============================|| SUPPLIER FORM ||============================== //
 
-const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
-  const { values, errors, touched, handleChange, handleBlur, setFieldValue } = useFormikContext<ForestAreaFormData>();
+const SupplierForm = ({ mode }: SupplierFormProps) => {
+  const { values, errors, touched, handleChange, handleBlur, setFieldValue } = useFormikContext<SupplierFormData>();
 
   const isReadOnly = mode === 'view';
-  const ownershipType = values.ownershipType;
+  const supplierType = values.type;
 
-  const getError = (field: keyof ForestAreaFormData) => touched[field] && errors[field];
+  const getError = (field: keyof SupplierFormData) => touched[field] && errors[field];
 
   return (
     <Grid container spacing={3}>
@@ -46,12 +38,12 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
         </Typography>
       </Grid>
 
-      {/* Mã vùng trồng - Auto-generated, always read-only */}
+      {/* Mã nhà cung cấp - Auto-generated, always read-only */}
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <TextField
           name="code"
           value={values.code}
-          label="Mã vùng trồng"
+          label="Mã nhà cung cấp"
           placeholder="Tự động tạo"
           fullWidth
           disabled
@@ -64,15 +56,15 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
         />
       </Grid>
 
-      {/* Tên vùng trồng */}
+      {/* Tên nhà cung cấp */}
       <Grid size={{ xs: 12, sm: 6, md: 8 }}>
         <TextField
           name="name"
           value={values.name}
           onChange={handleChange}
           onBlur={handleBlur}
-          label="Tên vùng trồng"
-          placeholder="Nhập tên vùng trồng"
+          label="Tên nhà cung cấp"
+          placeholder="Nhập tên nhà cung cấp"
           fullWidth
           required
           error={!!getError('name')}
@@ -86,19 +78,19 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
         />
       </Grid>
 
-      {/* Loại sở hữu */}
+      {/* Loại nhà cung cấp */}
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <SelectField
-          name="ownershipType"
-          value={values.ownershipType}
+          name="type"
+          value={values.type}
           onChange={handleChange}
           onBlur={handleBlur}
-          label="Loại sở hữu"
+          label="Loại nhà cung cấp"
           fullWidth
           required
-          error={!!getError('ownershipType')}
-          helperText={getError('ownershipType')}
-          options={OWNERSHIP_TYPE_OPTIONS}
+          error={!!getError('type')}
+          helperText={getError('type')}
+          options={SUPPLIER_TYPE_OPTIONS}
           slotProps={{
             input: {
               readOnly: isReadOnly
@@ -108,94 +100,119 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
         />
       </Grid>
 
-      {/* Chủ sở hữu / Đối tác - Hiển thị khi ownershipType = 'partner' */}
-      {ownershipType === 'partner' && (
+      {/* Người đại diện - Hiển thị khi type = 'business' */}
+      {supplierType === 'business' && (
         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-          <Field name="ownerId">
-            {({ field }: FieldProps) => (
-              <Autocomplete
-                {...field}
-                value={PARTNER_OPTIONS.find((opt) => opt.value === field.value) || null}
-                onChange={(_, newValue) => {
-                  const value = Array.isArray(newValue) ? newValue[0]?.value : newValue?.value;
-                  setFieldValue('ownerId', value || '');
-                }}
-                options={PARTNER_OPTIONS}
-                getOptionLabel={(option) => option.label}
-                isOptionEqualToValue={(option, val) => option.value === val.value}
-                readOnly={isReadOnly}
-                renderInput={(params) => (
-                  <FieldComponents.Text
-                    {...params}
-                    label="Chủ sở hữu / Đối tác"
-                    placeholder="Chọn đối tác"
-                    error={!!getError('ownerId')}
-                    helperText={getError('ownerId')}
-                    slotProps={{
-                      input: {
-                        ...params.InputProps,
-                        readOnly: isReadOnly
-                      }
-                    }}
-                  />
-                )}
-                sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
-              />
-            )}
-          </Field>
+          <TextField
+            name="representative"
+            value={values.representative || ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            label="Người đại diện"
+            placeholder="Nhập tên người đại diện"
+            fullWidth
+            required
+            error={!!getError('representative')}
+            helperText={getError('representative')}
+            slotProps={{
+              input: {
+                readOnly: isReadOnly
+              }
+            }}
+            sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
+          />
         </Grid>
       )}
 
-      {/* Diện tích */}
+      {/* Số điện thoại */}
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-        <NumberField
-          name="area"
-          value={values.area}
+        <TextField
+          name="phone"
+          value={values.phone}
           onChange={handleChange}
           onBlur={handleBlur}
-          label="Diện tích"
-          placeholder="Nhập diện tích"
+          label="Số điện thoại"
+          placeholder="Nhập số điện thoại"
           fullWidth
           required
-          error={!!getError('area')}
-          helperText={getError('area')}
+          error={!!getError('phone')}
+          helperText={getError('phone')}
           slotProps={{
             input: {
-              endAdornment: <InputAdornment position="end">ha</InputAdornment>,
               readOnly: isReadOnly
-            },
-            htmlInput: {
-              min: 0,
-              step: 0.1
             }
           }}
           sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
         />
       </Grid>
 
-      {/* Tỉnh / Khu vực */}
+      {/* Email */}
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-        <Field name="province">
+        <TextField
+          name="email"
+          value={values.email || ''}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          label="Email"
+          placeholder="Nhập email"
+          fullWidth
+          error={!!getError('email')}
+          helperText={getError('email')}
+          slotProps={{
+            input: {
+              readOnly: isReadOnly
+            }
+          }}
+          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
+        />
+      </Grid>
+
+      {/* Địa chỉ */}
+      <Grid size={12}>
+        <TextField
+          name="address"
+          value={values.address || ''}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          label="Địa chỉ"
+          placeholder="Nhập địa chỉ"
+          fullWidth
+          multiline
+          rows={2}
+          error={!!getError('address')}
+          helperText={getError('address')}
+          slotProps={{
+            input: {
+              readOnly: isReadOnly
+            }
+          }}
+          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
+        />
+      </Grid>
+
+      {/* Khu vực cung cấp */}
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <Field name="region">
           {({ field }: FieldProps) => (
             <Autocomplete
               {...field}
-              value={PROVINCE_OPTIONS.find((opt) => opt.value === field.value) || null}
+              value={REGION_OPTIONS.find((opt) => opt.value === field.value) || null}
               onChange={(_, newValue) => {
                 const value = Array.isArray(newValue) ? newValue[0]?.value : newValue?.value;
-                setFieldValue('province', value || '');
+                setFieldValue('region', value || '');
               }}
-              options={PROVINCE_OPTIONS}
+              options={REGION_OPTIONS}
               getOptionLabel={(option) => option.label}
               isOptionEqualToValue={(option, val) => option.value === val.value}
               readOnly={isReadOnly}
               renderInput={(params) => (
                 <FieldComponents.Text
                   {...params}
-                  label="Tỉnh / Khu vực"
-                  placeholder="Chọn tỉnh"
+                  label="Khu vực cung cấp"
+                  placeholder="Chọn khu vực"
                   required
-                  error={!!getError('province')}
-                  helperText={getError('province')}
+                  error={!!getError('region')}
+                  helperText={getError('region')}
                   slotProps={{
                     input: {
                       ...params.InputProps,
@@ -208,59 +225,6 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
             />
           )}
         </Field>
-      </Grid>
-
-      {/* Section: Thông tin chi tiết */}
-      <Grid size={12}>
-        <Typography variant="subtitle1" sx={{ mt: 2, mb: 1, fontWeight: 600 }}>
-          Thông tin chi tiết
-        </Typography>
-      </Grid>
-
-      {/* Loại cây trồng */}
-      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-        <SelectField
-          name="treeType"
-          value={values.treeType || ''}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          label="Loại cây trồng"
-          fullWidth
-          error={!!getError('treeType')}
-          helperText={getError('treeType')}
-          options={TREE_TYPE_OPTIONS}
-          slotProps={{
-            input: {
-              readOnly: isReadOnly
-            }
-          }}
-          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
-        />
-      </Grid>
-
-      {/* Năm trồng */}
-      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-        <NumberField
-          name="plantingYear"
-          value={values.plantingYear || ''}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          label="Năm trồng"
-          placeholder="Nhập năm trồng"
-          fullWidth
-          error={!!getError('plantingYear')}
-          helperText={getError('plantingYear')}
-          slotProps={{
-            input: {
-              readOnly: isReadOnly
-            },
-            htmlInput: {
-              min: 1900,
-              max: new Date().getFullYear()
-            }
-          }}
-          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
-        />
       </Grid>
 
       {/* Trạng thái */}
@@ -381,4 +345,4 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
   );
 };
 
-export default ForestAreaForm;
+export default SupplierForm;

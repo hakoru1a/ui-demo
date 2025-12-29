@@ -1,11 +1,11 @@
 // ==============================|| HARVEST ORDER FORM COMPONENT ||============================== //
 
-import { Grid, InputAdornment, Box, Typography, Autocomplete, TextField as MuiTextField } from '@mui/material';
-import type { Dayjs } from 'dayjs';
+import { Grid, InputAdornment, Box, Typography, Autocomplete } from '@mui/material';
 import { useFormikContext, Field, FieldProps } from 'formik';
 import { useMemo } from 'react';
 
 // project imports
+import FieldComponents from 'components/fields';
 import DatePickerField from 'components/fields/DatePickerField';
 import NumberField from 'components/fields/NumberField';
 import SelectField from 'components/fields/SelectField';
@@ -46,10 +46,12 @@ const HarvestOrderForm = ({ mode, isCreated = false }: HarvestOrderFormProps) =>
   }, []);
 
   // Handle plan change -> auto update forestAreaId
-  const handlePlanChange = (_: unknown, newValue: (typeof planOptions)[0] | null) => {
-    if (newValue) {
-      setFieldValue('planId', newValue.id);
-      setFieldValue('forestAreaId', newValue.forestAreaId);
+  const handlePlanChange = (_: React.SyntheticEvent, newValue: (typeof planOptions)[0] | (typeof planOptions)[0][] | null) => {
+    // Autocomplete without multiple prop returns single value, but TypeScript allows array
+    const singleValue = Array.isArray(newValue) ? newValue[0] || null : newValue;
+    if (singleValue) {
+      setFieldValue('planId', singleValue.id);
+      setFieldValue('forestAreaId', singleValue.forestAreaId);
     } else {
       setFieldValue('planId', '');
       setFieldValue('forestAreaId', '');
@@ -109,16 +111,18 @@ const HarvestOrderForm = ({ mode, isCreated = false }: HarvestOrderFormProps) =>
               readOnly={planDisabled}
               disabled={planDisabled}
               renderInput={(params) => (
-                <MuiTextField
+                <FieldComponents.Text
                   {...params}
                   label="Kế hoạch khai thác"
                   placeholder="Chọn kế hoạch khai thác"
                   required
                   error={!!getError('planId')}
                   helperText={getError('planId') || (isCreated ? 'Không đổi sau khi tạo' : undefined)}
-                  InputProps={{
-                    ...params.InputProps,
-                    readOnly: isReadOnly
+                  slotProps={{
+                    input: {
+                      ...params.InputProps,
+                      readOnly: isReadOnly
+                    }
                   }}
                 />
               )}
@@ -178,8 +182,8 @@ const HarvestOrderForm = ({ mode, isCreated = false }: HarvestOrderFormProps) =>
               <DatePickerField
                 label="Ngày khai thác"
                 value={dayjsValue}
-                onChange={(date: Dayjs | null) => {
-                  setFieldValue('startDate', date ? date.toDate() : null);
+                onChange={(newValue) => {
+                  setFieldValue('startDate', newValue ? newValue.toDate() : null);
                 }}
                 error={!!(meta.touched && meta.error)}
                 helperText={meta.touched && meta.error ? meta.error : ''}

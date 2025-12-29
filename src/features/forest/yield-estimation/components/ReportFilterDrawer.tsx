@@ -1,3 +1,5 @@
+// ==============================|| YIELD ESTIMATION REPORT FILTER DRAWER ||============================== //
+
 import { CloseOutlined } from '@ant-design/icons';
 import { Box, Button, Drawer, IconButton, Stack, Typography } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -8,33 +10,28 @@ import { useState } from 'react';
 import Field from 'components/fields';
 import dateHelper from 'utils/dateHelper';
 
-import { ReportFilter } from '../types/index';
-
-const FOREST_AREA_OPTIONS = [
-  { value: 'area-a', label: 'Khu A' },
-  { value: 'area-b', label: 'Khu B' },
-  { value: 'area-c', label: 'Khu C' }
-];
+import { YieldReportFilter } from '../types/report';
 
 interface ReportFilterDrawerProps {
   open: boolean;
   onClose: () => void;
-  onApply: (filter: ReportFilter) => void;
-  initialFilter: ReportFilter;
+  onApply: (filter: YieldReportFilter) => void;
+  initialFilter: YieldReportFilter;
+  supplierOptions: Array<{ value: string; label: string }>;
 }
 
-const ReportFilterDrawer = ({ open, onClose, onApply, initialFilter }: ReportFilterDrawerProps) => {
+const ReportFilterDrawer = ({ open, onClose, onApply, initialFilter, supplierOptions }: ReportFilterDrawerProps) => {
   const [startDate, setStartDate] = useState<Date | null>(initialFilter.startDate || null);
   const [endDate, setEndDate] = useState<Date | null>(initialFilter.endDate || null);
-  const [forestAreaIds, setForestAreaIds] = useState<string[]>(initialFilter.forestAreaIds);
+  const [supplierIds, setSupplierIds] = useState<string[]>(initialFilter.supplierIds);
 
-  const selectedForestAreas = FOREST_AREA_OPTIONS.filter((option) => forestAreaIds.includes(option.value));
+  const selectedSuppliers = supplierOptions.filter((option) => supplierIds.includes(option.value));
 
   const handleApply = () => {
     onApply({
       startDate,
       endDate,
-      forestAreaIds
+      supplierIds
     });
     onClose();
   };
@@ -42,11 +39,11 @@ const ReportFilterDrawer = ({ open, onClose, onApply, initialFilter }: ReportFil
   const handleReset = () => {
     setStartDate(null);
     setEndDate(null);
-    setForestAreaIds([]);
+    setSupplierIds([]);
   };
 
-  const handleForestAreaChange = (_: React.SyntheticEvent, newValue: typeof FOREST_AREA_OPTIONS) => {
-    setForestAreaIds(newValue.map((option) => option.value));
+  const handleSupplierChange = (_: React.SyntheticEvent, newValue: typeof supplierOptions) => {
+    setSupplierIds(newValue.map((option) => option.value));
   };
 
   return (
@@ -55,7 +52,7 @@ const ReportFilterDrawer = ({ open, onClose, onApply, initialFilter }: ReportFil
       open={open}
       onClose={onClose}
       PaperProps={{
-        sx: { width: 320 }
+        sx: { width: 400 }
       }}
     >
       <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -84,15 +81,15 @@ const ReportFilterDrawer = ({ open, onClose, onApply, initialFilter }: ReportFil
 
           <Field.Autocomplete
             multiple
-            options={FOREST_AREA_OPTIONS}
-            value={selectedForestAreas}
-            onChange={handleForestAreaChange}
+            options={supplierOptions}
+            value={selectedSuppliers}
+            onChange={handleSupplierChange}
             getOptionLabel={(option: { value: string; label: string }) => option.label}
             isOptionEqualToValue={(option: { value: string; label: string }, value: { value: string; label: string }) =>
               option.value === value.value
             }
-            label="Khu vực rừng"
-            placeholder="Chọn khu vực rừng"
+            label="Nhà cung cấp"
+            placeholder="Chọn nhà cung cấp"
           />
         </Stack>
 
