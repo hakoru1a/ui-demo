@@ -21,6 +21,7 @@ import {
   Tooltip,
   useTheme
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import type { ColumnFiltersState, Table } from '@tanstack/react-table';
 import { useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
@@ -28,6 +29,8 @@ import { useNavigate } from 'react-router-dom';
 
 // project imports
 import Transitions from 'components/@extended/Transitions';
+import CheckboxField from 'components/fields/CheckboxField';
+import SelectField from 'components/fields/SelectField';
 import TextField from 'components/fields/TextField';
 import MainCard from 'components/MainCard';
 import { CSVExport, RowSelection, SelectColumnVisibility } from 'components/third-party/react-table';
@@ -37,7 +40,7 @@ import { STATUS_OPTIONS, StatusFilter } from 'types/status';
 import { getStatusColorMap } from 'utils/getStatusColor';
 
 import type { ForestArea } from '../types';
-import { FOREST_AREA_URLS } from '../types/constants';
+import { FOREST_AREA_URLS, OWNERSHIP_TYPE_OPTIONS, CERTIFICATE_OPTIONS, PROVINCE_OPTIONS } from '../types/constants';
 
 // ==============================|| TYPES ||============================== //
 
@@ -165,14 +168,26 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
     open
   });
 
+  const getFilterValue = (id: string) => {
+    const filter = columnFilters.find((f) => f.id === id);
+    return filter?.value as string | undefined;
+  };
+
+  const handleFilterChange = (id: string, value: string | number | boolean | undefined) => {
+    const newFilters = columnFilters.filter((f) => f.id !== id);
+    if (value !== undefined && value !== null && value !== '') {
+      newFilters.push({ id, value });
+    }
+    onFilterChange(newFilters);
+  };
+
   return (
     <Popper
       placement="bottom-end"
       open={open}
       anchorEl={anchorEl}
       transition
-      disablePortal
-      sx={{ zIndex: 1300 }}
+      disablePortal={false}
       popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 9] } }] }}
     >
       {({ TransitionProps }) => (
@@ -181,13 +196,13 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
             elevation={8}
             sx={(theme) => ({
               boxShadow: theme.palette.mode === 'dark' ? '0px 8px 24px rgba(0, 0, 0, 0.4)' : '0px 8px 24px rgba(0, 0, 0, 0.12)',
-              width: { xs: 'calc(100vw - 32px)', sm: 400 },
+              width: { xs: 'calc(100vw - 32px)', sm: 800 },
               maxHeight: 'calc(100vh - 200px)',
               overflow: 'auto',
               borderRadius: 2
             })}
           >
-            <ClickAwayListener onClickAway={onClose}>
+            <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={onClose}>
               <MainCard
                 elevation={0}
                 border={false}
@@ -221,9 +236,106 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                 }
               >
                 <Divider />
-                {/* TODO: Add filter fields here based on ForestAreaFilters type */}
-                <Box sx={{ p: 2.5, minHeight: 100 }}>
-                  <Box sx={{ color: 'text.secondary', textAlign: 'center' }}>Thêm các trường lọc tại đây</Box>
+                <Box sx={{ p: 2.5 }}>
+                  <Grid container spacing={2}>
+                    {/* Tên vùng trồng */}
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <TextField
+                        label="Tên vùng trồng"
+                        value={getFilterValue('name') || ''}
+                        onChange={(e) => handleFilterChange('name', e.target.value)}
+                        fullWidth
+                        size="medium"
+                      />
+                    </Grid>
+
+                    {/* Mã vùng trồng */}
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <TextField
+                        label="Mã vùng trồng"
+                        value={getFilterValue('code') || ''}
+                        onChange={(e) => handleFilterChange('code', e.target.value)}
+                        fullWidth
+                        size="medium"
+                      />
+                    </Grid>
+
+                    {/* Loại sở hữu */}
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <SelectField
+                        label="Loại sở hữu"
+                        value={getFilterValue('ownershipType') || ''}
+                        onChange={(e) => handleFilterChange('ownershipType', e.target.value)}
+                        options={[{ value: '', label: 'Tất cả' }, ...OWNERSHIP_TYPE_OPTIONS]}
+                        fullWidth
+                        size="medium"
+                      />
+                    </Grid>
+
+                    {/* Tỉnh / Khu vực */}
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <SelectField
+                        label="Tỉnh / Khu vực"
+                        value={getFilterValue('province') || ''}
+                        onChange={(e) => handleFilterChange('province', e.target.value)}
+                        options={[{ value: '', label: 'Tất cả' }, ...PROVINCE_OPTIONS]}
+                        fullWidth
+                        size="medium"
+                      />
+                    </Grid>
+
+                    {/* Trạng thái */}
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <SelectField
+                        label="Trạng thái"
+                        value={getFilterValue('status') || ''}
+                        onChange={(e) => handleFilterChange('status', e.target.value)}
+                        options={[{ value: '', label: 'Tất cả' }, ...STATUS_OPTIONS]}
+                        fullWidth
+                        size="medium"
+                      />
+                    </Grid>
+
+                    {/* Diện tích (ha) - Range */}
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <TextField
+                          label="Min (ha)"
+                          value={getFilterValue('minArea') || ''}
+                          onChange={(e) => handleFilterChange('minArea', e.target.value)}
+                          fullWidth
+                          size="medium"
+                          type="number"
+                        />
+                        <Box>-</Box>
+                        <TextField
+                          label="Max (ha)"
+                          value={getFilterValue('maxArea') || ''}
+                          onChange={(e) => handleFilterChange('maxArea', e.target.value)}
+                          fullWidth
+                          size="medium"
+                          type="number"
+                        />
+                      </Stack>
+                    </Grid>
+
+                    {/* Chứng chỉ */}
+                    <Grid size={12}>
+                      <Box>
+                        <Box sx={{ mb: 1, fontSize: '0.875rem', fontWeight: 500 }}>Chứng chỉ</Box>
+                        <Stack direction="row" spacing={2}>
+                          {CERTIFICATE_OPTIONS.map((cert) => (
+                            <CheckboxField
+                              key={cert.value}
+                              label={cert.label}
+                              checked={getFilterValue(`certificates_${cert.value}`) === 'true'}
+                              onChange={(e) => handleFilterChange(`certificates_${cert.value}`, e.target.checked ? 'true' : undefined)}
+                            />
+                          ))}
+                        </Stack>
+                      </Box>
+                    </Grid>
+                  </Grid>
                 </Box>
                 <Divider />
                 <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ p: 2.5 }}>

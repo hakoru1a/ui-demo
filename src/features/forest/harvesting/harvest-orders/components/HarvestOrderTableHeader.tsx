@@ -22,6 +22,9 @@ import {
   Tooltip,
   useTheme
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { ColumnFiltersState, Table } from '@tanstack/react-table';
 import { useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
@@ -29,11 +32,14 @@ import { useNavigate } from 'react-router-dom';
 
 // project imports
 import Transitions from 'components/@extended/Transitions';
+import DatePickerField from 'components/fields/DatePickerField';
+import SelectField from 'components/fields/SelectField';
 import TextField from 'components/fields/TextField';
 import MainCard from 'components/MainCard';
 import { CSVExport, RowSelection, SelectColumnVisibility } from 'components/third-party/react-table';
 import { useTableFilterDialog } from 'hooks/table';
 import useBoolean from 'hooks/useBoolean';
+import dateHelper from 'utils/dateHelper';
 
 import { HARVEST_ORDER_STATUS_OPTIONS, HARVEST_ORDER_URLS } from '../types/constants';
 import { HARVEST_ORDER_STATUS } from '../types/enums';
@@ -183,14 +189,37 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
     open
   });
 
+  const getFilterValue = (id: string) => {
+    const filter = columnFilters.find((f) => f.id === id);
+    return filter?.value as string | undefined;
+  };
+
+  const handleFilterChange = (id: string, value: string | number | boolean | undefined) => {
+    const newFilters = columnFilters.filter((f) => f.id !== id);
+    if (value !== undefined && value !== null && value !== '') {
+      newFilters.push({ id, value });
+    }
+    onFilterChange(newFilters);
+  };
+
+  const startDate = getFilterValue('startDate') ? new Date(getFilterValue('startDate') as string) : null;
+  const endDate = getFilterValue('endDate') ? new Date(getFilterValue('endDate') as string) : null;
+
+  const handleStartDateChange = (date: Date | null) => {
+    handleFilterChange('startDate', date ? date.toISOString() : undefined);
+  };
+
+  const handleEndDateChange = (date: Date | null) => {
+    handleFilterChange('endDate', date ? date.toISOString() : undefined);
+  };
+
   return (
     <Popper
       placement="bottom-end"
       open={open}
       anchorEl={anchorEl}
       transition
-      disablePortal
-      sx={{ zIndex: 1300 }}
+      disablePortal={false}
       popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 9] } }] }}
     >
       {({ TransitionProps }) => (
@@ -199,13 +228,13 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
             elevation={8}
             sx={(theme) => ({
               boxShadow: theme.palette.mode === 'dark' ? '0px 8px 24px rgba(0, 0, 0, 0.4)' : '0px 8px 24px rgba(0, 0, 0, 0.12)',
-              width: { xs: 'calc(100vw - 32px)', sm: 400 },
+              width: { xs: 'calc(100vw - 32px)', sm: 800 },
               maxHeight: 'calc(100vh - 200px)',
               overflow: 'auto',
               borderRadius: 2
             })}
           >
-            <ClickAwayListener onClickAway={onClose}>
+            <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={onClose}>
               <MainCard
                 elevation={0}
                 border={false}
@@ -239,10 +268,76 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                 }
               >
                 <Divider />
-                {/* TODO: Add filter fields here based on HarvestOrderFilters type */}
-                <Box sx={{ p: 2.5, minHeight: 100 }}>
-                  <Box sx={{ color: 'text.secondary', textAlign: 'center' }}>Thêm các trường lọc tại đây</Box>
-                </Box>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Box sx={{ p: 2.5 }}>
+                    <Grid container spacing={2}>
+                      {/* Mã lệnh khai thác */}
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <TextField
+                          label="Mã lệnh khai thác"
+                          value={getFilterValue('code') || ''}
+                          onChange={(e) => handleFilterChange('code', e.target.value)}
+                          fullWidth
+                          size="medium"
+                        />
+                      </Grid>
+
+                      {/* Kế hoạch khai thác */}
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <TextField
+                          label="Kế hoạch khai thác"
+                          value={getFilterValue('planName') || ''}
+                          onChange={(e) => handleFilterChange('planName', e.target.value)}
+                          fullWidth
+                          size="medium"
+                          placeholder="Mã hoặc tên kế hoạch"
+                        />
+                      </Grid>
+
+                      {/* Khu vực rừng */}
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <TextField
+                          label="Khu vực rừng"
+                          value={getFilterValue('forestAreaName') || ''}
+                          onChange={(e) => handleFilterChange('forestAreaName', e.target.value)}
+                          fullWidth
+                          size="medium"
+                          placeholder="Mã hoặc tên khu vực"
+                        />
+                      </Grid>
+
+                      {/* Trạng thái lệnh */}
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <SelectField
+                          label="Trạng thái"
+                          value={getFilterValue('status') || ''}
+                          onChange={(e) => handleFilterChange('status', e.target.value)}
+                          options={[{ value: '', label: 'Tất cả' }, ...HARVEST_ORDER_STATUS_OPTIONS]}
+                          fullWidth
+                          size="medium"
+                        />
+                      </Grid>
+
+                      {/* Ngày thực hiện (Date Range) */}
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <DatePickerField
+                          label="Từ ngày"
+                          value={dateHelper.normalizeDateValue(startDate)}
+                          onChange={(newValue) => handleStartDateChange(newValue ? newValue.toDate() : null)}
+                          slotProps={{ textField: { fullWidth: true, size: 'small' } }}
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <DatePickerField
+                          label="Đến ngày"
+                          value={dateHelper.normalizeDateValue(endDate)}
+                          onChange={(newValue) => handleEndDateChange(newValue ? newValue.toDate() : null)}
+                          slotProps={{ textField: { fullWidth: true, size: 'small' } }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </LocalizationProvider>
                 <Divider />
                 <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ p: 2.5 }}>
                   <Button onClick={onClose} color="inherit" size="medium">

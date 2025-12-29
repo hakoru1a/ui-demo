@@ -22,6 +22,7 @@ import {
   Tooltip,
   useTheme
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import type { ColumnFiltersState, Table } from '@tanstack/react-table';
 import { useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
@@ -191,8 +192,7 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
       open={open}
       anchorEl={anchorEl}
       transition
-      disablePortal
-      sx={{ zIndex: 1300 }}
+      disablePortal={false}
       popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 9] } }] }}
     >
       {({ TransitionProps }) => (
@@ -201,13 +201,13 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
             elevation={8}
             sx={(theme) => ({
               boxShadow: theme.palette.mode === 'dark' ? '0px 8px 24px rgba(0, 0, 0, 0.4)' : '0px 8px 24px rgba(0, 0, 0, 0.12)',
-              width: { xs: 'calc(100vw - 32px)', sm: 400 },
+              width: { xs: 'calc(100vw - 32px)', sm: 800 },
               maxHeight: 'calc(100vh - 200px)',
               overflow: 'auto',
               borderRadius: 2
             })}
           >
-            <ClickAwayListener onClickAway={onClose}>
+            <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={onClose}>
               <MainCard
                 elevation={0}
                 border={false}
@@ -242,51 +242,82 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
               >
                 <Divider />
                 <Box sx={{ p: 2.5 }}>
-                  <Stack spacing={2}>
+                  <Grid container spacing={2}>
+                    {/* Tên nhà cung cấp */}
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <TextField
+                        label="Tên nhà cung cấp"
+                        value={getFilterValue('name') || ''}
+                        onChange={(e) => handleFilterChange('name', e.target.value)}
+                        fullWidth
+                        size="medium"
+                      />
+                    </Grid>
+
                     {/* Mã nhà cung cấp */}
-                    <TextField
-                      label="Mã nhà cung cấp"
-                      value={getFilterValue('code') || ''}
-                      onChange={(e) => handleFilterChange('code', e.target.value)}
-                      fullWidth
-                      size="small"
-                    />
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <TextField
+                        label="Mã nhà cung cấp"
+                        value={getFilterValue('code') || ''}
+                        onChange={(e) => handleFilterChange('code', e.target.value)}
+                        fullWidth
+                        size="medium"
+                      />
+                    </Grid>
 
                     {/* Loại nhà cung cấp */}
-                    <SelectField
-                      label="Loại nhà cung cấp"
-                      value={getFilterValue('type') || ''}
-                      onChange={(e) => handleFilterChange('type', e.target.value)}
-                      options={[{ value: '', label: 'Tất cả' }, ...SUPPLIER_TYPE_OPTIONS]}
-                      fullWidth
-                      size="small"
-                    />
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <SelectField
+                        label="Loại nhà cung cấp"
+                        value={getFilterValue('type') || ''}
+                        onChange={(e) => handleFilterChange('type', e.target.value)}
+                        options={[{ value: '', label: 'Tất cả' }, ...SUPPLIER_TYPE_OPTIONS]}
+                        fullWidth
+                        size="medium"
+                      />
+                    </Grid>
 
                     {/* Khu vực */}
-                    <SelectField
-                      label="Khu vực"
-                      value={getFilterValue('region') || ''}
-                      onChange={(e) => handleFilterChange('region', e.target.value)}
-                      options={[{ value: '', label: 'Tất cả' }, ...REGION_OPTIONS]}
-                      fullWidth
-                      size="small"
-                    />
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <SelectField
+                        label="Khu vực"
+                        value={getFilterValue('region') || ''}
+                        onChange={(e) => handleFilterChange('region', e.target.value)}
+                        options={[{ value: '', label: 'Tất cả' }, ...REGION_OPTIONS]}
+                        fullWidth
+                        size="medium"
+                      />
+                    </Grid>
+
+                    {/* Trạng thái */}
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <SelectField
+                        label="Trạng thái"
+                        value={getFilterValue('status') || ''}
+                        onChange={(e) => handleFilterChange('status', e.target.value)}
+                        options={[{ value: '', label: 'Tất cả' }, ...STATUS_OPTIONS]}
+                        fullWidth
+                        size="medium"
+                      />
+                    </Grid>
 
                     {/* Có chứng chỉ */}
-                    <Box>
-                      <Box sx={{ mb: 1, fontSize: '0.875rem', fontWeight: 500 }}>Có chứng chỉ</Box>
-                      <Stack direction="row" spacing={2}>
-                        {CERTIFICATE_OPTIONS.map((cert) => (
-                          <CheckboxField
-                            key={cert.value}
-                            label={cert.label}
-                            checked={getFilterValue(`certificates_${cert.value}`) === 'true'}
-                            onChange={(e) => handleFilterChange(`certificates_${cert.value}`, e.target.checked ? 'true' : undefined)}
-                          />
-                        ))}
-                      </Stack>
-                    </Box>
-                  </Stack>
+                    <Grid size={12}>
+                      <Box>
+                        <Box sx={{ mb: 1, fontSize: '0.875rem', fontWeight: 500 }}>Có chứng chỉ</Box>
+                        <Stack direction="row" spacing={2}>
+                          {CERTIFICATE_OPTIONS.map((cert) => (
+                            <CheckboxField
+                              key={cert.value}
+                              label={cert.label}
+                              checked={getFilterValue(`certificates_${cert.value}`) === 'true'}
+                              onChange={(e) => handleFilterChange(`certificates_${cert.value}`, e.target.checked ? 'true' : undefined)}
+                            />
+                          ))}
+                        </Stack>
+                      </Box>
+                    </Grid>
+                  </Grid>
                 </Box>
                 <Divider />
                 <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ p: 2.5 }}>
