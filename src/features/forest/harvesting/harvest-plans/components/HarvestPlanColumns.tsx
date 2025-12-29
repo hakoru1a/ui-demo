@@ -1,4 +1,4 @@
-// ==============================|| FOREST AREA TABLE COLUMNS ||============================== //
+// ==============================|| HARVEST PLAN TABLE COLUMNS ||============================== //
 
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import EditOutlined from '@ant-design/icons/EditOutlined';
@@ -6,66 +6,61 @@ import EnvironmentOutlined from '@ant-design/icons/EnvironmentOutlined';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import { IconButton, Stack, Tooltip } from '@mui/material';
 import Chip from '@mui/material/Chip';
-import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { type ColumnDef } from '@tanstack/react-table';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// assets
-
 // types
-import { STATUS_OPTIONS, StatusFilter } from 'types/status';
-import { getStatusColorMap } from 'utils/getStatusColor';
+import { FOREST_AREA_URLS } from 'features/forest/forest-areas/types/constants';
 
-import type { ForestArea } from '../types';
-import { FOREST_AREA_URLS, OWNERSHIP_TYPE_OPTIONS } from '../types/constants';
+import type { HarvestPlan } from '../types';
+import { HARVEST_PLAN_URLS, HARVEST_PLAN_STATUS_OPTIONS, HARVEST_PLAN_STATUS } from '../types/constants';
 import { getLabelFromOptions } from '../utils';
 
 /**
- * Forest Area Table Columns Definition
+ * Harvest Plan Table Columns Definition
  */
-interface UseForestAreaColumnsProps {
-  onDisable?: (forestArea: ForestArea) => void;
+interface UseHarvestPlanColumnsProps {
+  onDelete?: (harvestPlan: HarvestPlan) => void;
 }
 
-export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = {}): ColumnDef<ForestArea>[] {
-  const theme = useTheme();
+export function useHarvestPlanColumns({ onDelete }: UseHarvestPlanColumnsProps = {}): ColumnDef<HarvestPlan>[] {
   const navigate = useNavigate();
-  const statusColorMap = getStatusColorMap(theme);
 
   const handleView = useCallback(
     (id: string) => {
-      navigate(FOREST_AREA_URLS.DETAIL(id));
+      navigate(HARVEST_PLAN_URLS.DETAIL(id));
     },
     [navigate]
   );
 
   const handleEdit = useCallback(
     (id: string) => {
-      navigate(FOREST_AREA_URLS.EDIT(id));
+      navigate(HARVEST_PLAN_URLS.EDIT(id));
     },
     [navigate]
   );
 
   const handleViewMap = useCallback(
     (id: string) => {
+      // Navigate to forest-areas map page with areaId query param to highlight the area
       navigate(`${FOREST_AREA_URLS.MAP}?areaId=${id}`);
     },
     [navigate]
   );
 
-  return useMemo<ColumnDef<ForestArea>[]>(
+  return useMemo<ColumnDef<HarvestPlan>[]>(
     () => [
       {
         accessorKey: 'code',
-        header: 'Mã vùng trồng',
+        header: 'Mã vùng',
         enableSorting: true,
         enableColumnFilter: true,
         cell: ({ getValue, row }) => (
           <Typography
             variant="subtitle2"
-            sx={{ fontWeight: 600, cursor: 'pointer', '&:hover': { color: 'primary.main' } }}
+            sx={{ fontWeight: 600, color: 'primary.main', cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
             onClick={(e) => {
               e.stopPropagation();
               handleView(row.original.id);
@@ -77,30 +72,19 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
       },
       {
         accessorKey: 'name',
-        header: 'Tên vùng trồng',
+        header: 'Tên kế hoạch',
         enableSorting: true,
         enableColumnFilter: true,
         cell: ({ getValue }) => <Typography variant="body2">{getValue<string>()}</Typography>
       },
       {
-        accessorKey: 'ownershipType',
-        header: 'Loại sở hữu',
+        accessorKey: 'forestArea',
+        header: 'Khu vực rừng',
         enableSorting: true,
         enableColumnFilter: true,
         cell: ({ getValue }) => {
-          const value = getValue<'company' | 'partner'>();
-          const label = getLabelFromOptions(value, OWNERSHIP_TYPE_OPTIONS);
-          return <Typography variant="body2">{label}</Typography>;
-        }
-      },
-      {
-        accessorKey: 'ownerName',
-        header: 'Chủ sở hữu / Đối tác',
-        enableSorting: true,
-        enableColumnFilter: true,
-        cell: ({ getValue }) => {
-          const value = getValue<string | undefined>();
-          return <Typography variant="body2">{value || '-'}</Typography>;
+          const forestArea = getValue<HarvestPlan['forestArea']>();
+          return <Typography variant="body2">{forestArea?.name || '-'}</Typography>;
         }
       },
       {
@@ -108,6 +92,9 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
         header: 'Diện tích (ha)',
         enableSorting: true,
         enableColumnFilter: true,
+        meta: {
+          align: 'right' as const
+        },
         cell: ({ getValue }) => {
           const value = getValue<number>();
           return (
@@ -118,11 +105,14 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
         }
       },
       {
-        accessorKey: 'province',
-        header: 'Tỉnh / Khu vực',
+        accessorKey: 'fscStandard',
+        header: 'Chuẩn FSC',
         enableSorting: true,
         enableColumnFilter: true,
-        cell: ({ getValue }) => <Typography variant="body2">{getValue<string>()}</Typography>
+        cell: ({ getValue }) => {
+          const value = getValue<boolean>();
+          return <Chip label={value ? 'Có' : 'Không'} size="small" color={value ? 'success' : 'default'} variant="light" />;
+        }
       },
       {
         accessorKey: 'status',
@@ -130,10 +120,9 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
         enableSorting: true,
         enableColumnFilter: true,
         cell: ({ getValue }) => {
-          const value = getValue<'active' | 'inactive'>();
-          const label = getLabelFromOptions(value, STATUS_OPTIONS);
-          const statusFilter = value === 'active' ? StatusFilter.ACTIVE : StatusFilter.INACTIVE;
-          const chipColor = value === 'active' ? 'success' : 'error';
+          const value = getValue<HarvestPlan['status']>();
+          const label = getLabelFromOptions(value, HARVEST_PLAN_STATUS_OPTIONS);
+          const chipColor = value === HARVEST_PLAN_STATUS.ACTIVE ? 'success' : value === HARVEST_PLAN_STATUS.COMPLETED ? 'info' : 'default';
 
           return (
             <Chip
@@ -142,9 +131,7 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
               color={chipColor}
               variant="light"
               sx={{
-                minWidth: 100,
-                color: statusColorMap[statusFilter],
-                borderColor: statusColorMap[statusFilter]
+                minWidth: 100
               }}
             />
           );
@@ -159,7 +146,7 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
           align: 'center' as const
         },
         cell: ({ row }) => {
-          const forestArea = row.original;
+          const harvestPlan = row.original;
           return (
             <Stack direction="row" spacing={0.5} alignItems="center" justifyContent="center" sx={{ width: '100%' }}>
               <Tooltip title="Xem chi tiết">
@@ -168,7 +155,7 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
                   color="info"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleView(forestArea.id);
+                    handleView(harvestPlan.id);
                   }}
                   sx={{
                     '&:hover': {
@@ -185,7 +172,7 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
                   color="primary"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleEdit(forestArea.id);
+                    handleEdit(harvestPlan.id);
                   }}
                   sx={{
                     '&:hover': {
@@ -202,7 +189,7 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
                   color="success"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleViewMap(forestArea.id);
+                    handleViewMap(harvestPlan.id);
                   }}
                   sx={{
                     '&:hover': {
@@ -213,14 +200,14 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
                   <EnvironmentOutlined />
                 </IconButton>
               </Tooltip>
-              {onDisable && (
-                <Tooltip title="Vô hiệu hóa">
+              {onDelete && (
+                <Tooltip title="Xóa">
                   <IconButton
                     size="small"
                     color="error"
                     onClick={(e) => {
                       e.stopPropagation();
-                      onDisable(forestArea);
+                      onDelete(harvestPlan);
                     }}
                     sx={{
                       '&:hover': {
@@ -237,6 +224,6 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
         }
       }
     ],
-    [statusColorMap, onDisable, handleEdit, handleView, handleViewMap]
+    [onDelete, handleEdit, handleView, handleViewMap]
   );
 }
