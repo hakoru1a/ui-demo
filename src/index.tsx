@@ -12,6 +12,9 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'assets/third-party/apex-chart.css';
 import 'assets/third-party/react-table.css';
 
+// fullcalendar
+import 'assets/third-party/fullcalendar.css';
+
 // google-fonts
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -34,12 +37,16 @@ import '@fontsource/public-sans/600.css';
 import '@fontsource/public-sans/700.css';
 
 // project imports
-import App from './App';
 import { ConfigProvider } from 'contexts/ConfigContext';
+
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const container = document.getElementById('root');
-const root = createRoot(container!);
+if (!container) {
+  throw new Error('Root container not found');
+}
+const root = createRoot(container);
 
 // ==============================|| MAIN - REACT DOM RENDER ||============================== //
 

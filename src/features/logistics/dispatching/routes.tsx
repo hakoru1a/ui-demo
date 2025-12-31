@@ -4,12 +4,13 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
 
-// ==============================|| Dispatching ROUTING ||============================== //
+// ==============================|| DISPATCHING ROUTING ||============================== //
 
-const DispatchingListPage = Loadable(lazy(() => import('./pages/DispatchingListPage')));
+const DispatchOrdersListPage = Loadable(lazy(() => import('./pages/DispatchOrdersListPage')));
+const DispatchingSchedulePage = Loadable(lazy(() => import('./pages/DispatchingSchedulePage')));
 const DispatchOrderDetailPage = Loadable(lazy(() => import('./pages/DispatchOrderDetailPage')));
 const DispatchOrderCreatePage = Loadable(lazy(() => import('./pages/DispatchOrderCreatePage')));
-const DispatchingSchedulePage = Loadable(lazy(() => import('./pages/DispatchingSchedulePage')));
+const DispatchOrderEditPage = Loadable(lazy(() => import('./pages/DispatchOrderEditPage')));
 
 const DispatchingRoutes = {
   path: '/dispatching',
@@ -17,19 +18,23 @@ const DispatchingRoutes = {
   children: [
     {
       path: '',
-      element: <DispatchingListPage />
+      element: <DispatchOrdersListPage />
     },
     {
-      path: ':id',
-      element: <DispatchOrderDetailPage />
+      path: 'schedule',
+      element: <DispatchingSchedulePage />
     },
     {
       path: 'new',
       element: <DispatchOrderCreatePage />
     },
     {
-      path: 'schedule',
-      element: <DispatchingSchedulePage />
+      path: ':id',
+      element: <DispatchOrderDetailPage />
+    },
+    {
+      path: ':id/edit',
+      element: <DispatchOrderEditPage />
     }
   ]
 };

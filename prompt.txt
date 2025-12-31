@@ -1,0 +1,421 @@
+Implement màn hình mới với các trường dữ liệu tuân theo convention @src/features/forest/forset-area
+
+Yêu cầu:
+- Tuân theo cấu trúc và convention của các feature hiện có (suppliers, forest-areas)
+- Không tự ý tạo thêm folder, nếu cần thiết confirm trước khi tạo
+- Structure là Featurebase architecture với convention đã có sẵn
+- Luôn cố gắn hướng tới việc tách logic ra khỏi component (PureComponent)
+- UI width/height/size cố gắn giống nhất theo convention không tự ý thay đổi
+- Đảm bảo tiêu chí less code- dễ đọc, dễ bảo trì và đúng convention
+- Không dùng dayjs trực tiếp dùng dateHelper trong utils
+Convention cần tuân theo:
+
+1. TYPES:
+   - entity.ts: Định nghĩa interface cho entity chính (tương ứng với database model)
+   - form.ts: Định nghĩa interface cho form data (có thể khác entity, ví dụ: File vs string URL)
+   - enums.ts: Định nghĩa các enum types (dùng union type string literal)
+   - constants.ts: Định nghĩa options cho select, URLs, constants
+   - index.ts: Export tất cả types để các feature khác có thể import
+
+2. VALIDATION:
+   - Sử dụng Yup để tạo validation schema
+   - Định nghĩa defaultValues cho form
+   - Export schema và defaultValues
+
+3. COMPONENTS:
+   - Form component:
+     * Nhận prop `mode: 'create' | 'edit' | 'view'`
+     * Sử dụng useFormikContext để lấy values, errors, touched
+     * Sử dụng Grid container với spacing={3}
+     * Chia sections với Typography variant="subtitle1"
+     * Sử dụng FieldComponents từ 'components/fields'
+     * Xử lý file upload với SingleFileUpload từ 'components/third-party/dropzone'
+     * Convert file/string sang CustomFile[] cho dropzone
+   - Table component:
+     * Sử dụng react-table (tanstack/react-table)
+     * Sử dụng custom hook use[FeatureName]Table
+     * Hỗ trợ pagination, sorting, filtering, row selection
+
+4. PAGES:
+   - ListPage: Sử dụng MainCard, TableHeader, Table, ConfirmDialog
+   - CreatePage/EditPage: Sử dụng Formik với validation schema, MainCard với action buttons
+   - DetailPage: Hiển thị thông tin read-only, có button Edit
+
+5. API:
+   - Tạo service class extends BaseService
+   - Export singleton instance
+   - Các methods: getList, getById, create, update, delete, bulkDelete
+
+6. ROUTES:
+   - Sử dụng lazy loading với Loadable
+   - Cấu trúc routes: /feature-name, /feature-name/:id, /feature-name/new, /feature-name/:id/edit
+
+7. HOOKS:
+   - use[FeatureName]Table: Custom hook cho table logic, trả về table instance, filters, data
+
+8. NAMING CONVENTIONS:
+   - Folder: kebab-case (ví dụ: forest-areas)
+   - Component files: PascalCase (ví dụ: ForestAreaForm.tsx)
+   - Types: PascalCase (ví dụ: ForestArea, ForestAreaFormData)
+   - Constants: UPPER_SNAKE_CASE (ví dụ: STATUS_OPTIONS)
+   - Hooks: camelCase với prefix "use" (ví dụ: useForestAreasTable)
+
+9. COMMENTS:
+   - Mỗi file bắt đầu với comment header: // ==============================|| FEATURE NAME ||============================== //
+   - Sử dụng tiếng Việt cho labels, placeholders, messages
+   - Comment các field trong types với mô tả ngắn gọn
+
+10. FIELD TYPES:
+    - TextField: Cho text input
+    - NumberField: Cho số
+    - SelectField: Cho dropdown
+    - DatePickerField: Cho date picker
+    - AutocompleteField: Cho autocomplete
+    - CheckboxField: Cho checkbox
+    - ToggleField: Cho toggle switch
+    - SingleFileUpload: Cho file upload (hình ảnh, tài liệu)
+
+11. FORM SECTIONS:
+    - Chia form thành các sections với Typography variant="subtitle1"
+    - Mỗi section có Grid container spacing={3}
+    - Fields sử dụng Grid size={{ xs: 12, sm: 6, md: 4 }} hoặc tương tự
+
+12. STATUS & FILTERS:
+    - Sử dụng StatusFilter từ 'types/status'
+    - Hỗ trợ search, status filter, column filters
+    - Export CSV functionality
+    - FilterPopover component trong TableHeader:
+      * Tạo component FilterPopover trong TableHeader file
+      * Sử dụng Popper từ @mui/material để hiển thị popover
+      * Import useTableFilterDialog từ 'hooks/table' để quản lý filter state
+      * Import useBoolean từ 'hooks/useBoolean' để quản lý open/close state
+      * Import Transitions từ 'components/@extended/Transitions' cho animation
+      * Import ClickAwayListener từ @mui/material để đóng khi click outside
+      * Props: open, onClose, anchorEl, columnFilters, onFilterChange
+      * Sử dụng getFilterValue helper để lấy giá trị filter hiện tại
+      * Sử dụng handleFilterChange để update filter values
+      * Structure:
+        - Popper với placement="bottom-end", transition, offset
+        - Paper với elevation, shadow, responsive width
+        - MainCard với title hiển thị "Bộ lọc" + activeFilterCount badge
+        - Grid container với các filter fields (TextField, SelectField, CheckboxField, DatePickerField)
+        - Action buttons: Hủy, Đặt lại (handleReset), Áp dụng (handleApply)
+      * Filter fields:
+        - TextField cho text search (name, code, ...)
+        - SelectField cho dropdown (type, status, region, ...)
+        - CheckboxField cho multi-select (certificates, ...)
+        - NumberField hoặc TextField type="number" cho range (min/max area, ...)
+        - DatePickerField cho date range nếu cần
+      * Mỗi field có id tương ứng với column id trong table
+      * Options cho SelectField: [{ value: '', label: 'Tất cả' }, ...OPTIONS]
+      * Example structure:
+        ```typescript
+        interface FilterPopoverProps {
+          open: boolean;
+          onClose: () => void;
+          anchorEl: HTMLElement | null;
+          columnFilters: ColumnFiltersState;
+          onFilterChange: (filters: ColumnFiltersState) => void;
+        }
+
+        function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange }: FilterPopoverProps) {
+          const { handleApply, handleReset, activeFilterCount } = useTableFilterDialog({
+            columnFilters,
+            onFilterChange,
+            onClose,
+            open
+          });
+
+          const getFilterValue = (id: string) => {
+            const filter = columnFilters.find((f) => f.id === id);
+            return filter?.value as string | undefined;
+          };
+
+          const handleFilterChange = (id: string, value: string | number | boolean | undefined) => {
+            const newFilters = columnFilters.filter((f) => f.id !== id);
+            if (value !== undefined && value !== null && value !== '') {
+              newFilters.push({ id, value });
+            }
+            onFilterChange(newFilters);
+          };
+
+          return (
+            <Popper
+              placement="bottom-end"
+              open={open}
+              anchorEl={anchorEl}
+              transition
+              disablePortal={false}
+              popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 9] } }] }}
+            >
+              {({ TransitionProps }) => (
+                <Transitions type="grow" position="top-right" in={open} {...TransitionProps}>
+                  <Paper
+                    elevation={8}
+                    sx={(theme) => ({
+                      boxShadow: theme.palette.mode === 'dark' ? '0px 8px 24px rgba(0, 0, 0, 0.4)' : '0px 8px 24px rgba(0, 0, 0, 0.12)',
+                      width: { xs: 'calc(100vw - 32px)', sm: 800 },
+                      maxHeight: 'calc(100vh - 200px)',
+                      overflow: 'auto',
+                      borderRadius: 2
+                    })}
+                  >
+                    <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={onClose}>
+                      <MainCard
+                        elevation={0}
+                        border={false}
+                        content={false}
+                        title={
+                          <Stack direction="row" alignItems="center" justifyContent="space-between">
+                            <Stack direction="row" spacing={1} alignItems="center">
+                              <FilterOutlined />
+                              <span>Bộ lọc</span>
+                              {activeFilterCount > 0 && (
+                                <Box
+                                  component="span"
+                                  sx={{
+                                    px: 1,
+                                    py: 0.25,
+                                    borderRadius: 1,
+                                    bgcolor: 'primary.main',
+                                    color: 'primary.contrastText',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 600
+                                  }}
+                                >
+                                  {activeFilterCount}
+                                </Box>
+                              )}
+                            </Stack>
+                            <IconButton size="small" onClick={onClose}>
+                              <CloseOutlined />
+                            </IconButton>
+                          </Stack>
+                        }
+                      >
+                        <Divider />
+                        <Box sx={{ p: 2.5 }}>
+                          <Grid container spacing={2}>
+                            {/* Filter fields here */}
+                            <Grid size={{ xs: 12, sm: 4 }}>
+                              <TextField
+                                label="Tên"
+                                value={getFilterValue('name') || ''}
+                                onChange={(e) => handleFilterChange('name', e.target.value)}
+                                fullWidth
+                                size="medium"
+                              />
+                            </Grid>
+                            {/* More fields... */}
+                          </Grid>
+                        </Box>
+                        <Divider />
+                        <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ p: 2.5 }}>
+                          <Button onClick={onClose} color="inherit" size="medium">
+                            Hủy
+                          </Button>
+                          <Button onClick={handleReset} color="error" variant="outlined" size="medium">
+                            Đặt lại
+                          </Button>
+                          <Button onClick={handleApply} variant="contained" size="medium">
+                            Áp dụng
+                          </Button>
+                        </Stack>
+                      </MainCard>
+                    </ClickAwayListener>
+                  </Paper>
+                </Transitions>
+              )}
+            </Popper>
+          );
+        }
+        ```
+      * Trong TableHeader component:
+        - Sử dụng useBoolean() để quản lý filterPopover state
+        - Sử dụng useRef() để lưu filterAnchorRef (button element)
+        - Thêm IconButton với FilterOutlined icon trong Toolbar
+        - Render FilterPopover với props: open, onClose, anchorEl, columnFilters, onFilterChange
+    - StatusTabs component trong TableHeader:
+      * Tạo component StatusTabs trong TableHeader file
+      * Sử dụng Tabs và Tab từ @mui/material
+      * Import useTheme từ @mui/material/styles
+      * Tính toán statusCounts từ table.getPreFilteredRowModel().rows
+      * Mỗi tab hiển thị: label + count badge với màu tương ứng
+      * QUAN TRỌNG: Mỗi status phải có màu riêng biệt, không được trùng nhau
+      * Tab indicator có màu theo status (getTabColor(statusFilter))
+      * Tab selected và hover có màu theo status
+      * Count badge có background màu nhạt (color + '20') và text màu đậm
+      * Props: table, statusFilter, onStatusFilterChange
+      * Wrapper Box với borderBottom và padding
+      * Màu sắc StatusTabs:
+        - "Tất cả" (all): theme.palette.primary.main (màu primary)
+        - Status tích cực (active, ready, running): theme.palette.success.main hoặc theme.palette.info.main
+        - Status tiêu cực (inactive, maintenance): theme.palette.error.main hoặc theme.palette.warning.main
+        - Status trung tính (new, pending): theme.palette.grey[600] hoặc theme.palette.default.main
+        - Status hoàn thành (completed): theme.palette.success.main
+        - Mỗi status phải có màu khác nhau để dễ phân biệt
+      * Tạo hàm getTabColor để map status value sang màu tương ứng:
+        ```typescript
+        const getTabColor = (value: StatusFilter) => {
+          switch (value) {
+            case 'all':
+              return theme.palette.primary.main;
+            case 'active':
+              return theme.palette.success.main;
+            case 'inactive':
+              return theme.palette.error.main;
+            // ... các status khác với màu riêng
+            default:
+              return theme.palette.primary.main;
+          }
+        };
+        ```
+      * Example structure:
+        ```typescript
+        function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsProps) {
+          const theme = useTheme();
+
+          const statusCounts = useMemo(() => {
+            const allRows = table.getPreFilteredRowModel().rows;
+            return {
+              all: allRows.length,
+              active: allRows.filter((row) => row.original.status === 'active').length,
+              inactive: allRows.filter((row) => row.original.status === 'inactive').length
+            };
+          }, [table]);
+
+          // Get color for each status - MUST be different for each status
+          const getTabColor = (value: StatusFilter) => {
+            switch (value) {
+              case 'all':
+                return theme.palette.primary.main;
+              case 'active':
+                return theme.palette.success.main;
+              case 'inactive':
+                return theme.palette.error.main;
+              default:
+                return theme.palette.primary.main;
+            }
+          };
+
+          const tabsConfig = useMemo(
+            () => [
+              { value: StatusFilter.ALL, label: 'Tất cả', count: statusCounts.all },
+              { value: StatusFilter.ACTIVE, label: 'Hoạt động', count: statusCounts.active },
+              { value: StatusFilter.INACTIVE, label: 'Tạm ngưng', count: statusCounts.inactive }
+            ],
+            [statusCounts]
+          );
+
+          return (
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 2, pt: 2 }}>
+              <Tabs
+                value={statusFilter}
+                onChange={(_, value) => onStatusFilterChange?.(value)}
+                sx={{ '& .MuiTabs-indicator': { backgroundColor: getTabColor(statusFilter), height: 3 } }}
+              >
+                {tabsConfig.map((tab) => {
+                  const tabColor = getTabColor(tab.value);
+                  return (
+                    <Tab
+                      key={tab.value}
+                      value={tab.value}
+                      label={
+                        <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                          <span>{tab.label}</span>
+                          <Box
+                            component="span"
+                            sx={{
+                              minWidth: 20,
+                              height: 20,
+                              px: 0.75,
+                              borderRadius: '10px',
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              bgcolor: tabColor + '20',
+                              color: tabColor,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}
+                          >
+                            {tab.count}
+                          </Box>
+                        </Box>
+                      }
+                      sx={{
+                        textTransform: 'none',
+                        fontWeight: 600,
+                        '&.Mui-selected': { color: tabColor + ' !important' },
+                        '&:hover': { color: tabColor }
+                      }}
+                    />
+                  );
+                })}
+              </Tabs>
+            </Box>
+          );
+        }
+        ```
+      * Trong TableHeader component, render StatusTabs ở đầu (trước Toolbar)
+      * Pass statusFilter và onStatusFilterChange từ ListPage
+      * LƯU Ý: Mỗi status phải có màu riêng biệt, không được dùng cùng một màu cho nhiều status
+
+13. DIALOGS:
+    - Sử dụng ConfirmDialog từ 'components/dialogs/confirm-dialog'
+    - Cho delete, bulk delete, và các actions khác
+    - Delete actions:
+      * Single delete: Icon delete trong Actions column của mỗi row
+      * Bulk delete: Icon delete trong TableHeader toolbar (chỉ hiển thị khi có rows được chọn)
+      * Tạo hook use[FeatureName]Delete để quản lý delete state và API calls
+      * Hook trả về: confirmDialog, selectedItems, isDeleting, isBulkDelete, handleDelete, handleBulkDelete, handleConfirmDelete, handleCancelDelete
+      * Trong ListPage: Sử dụng ConfirmDialog với title/message khác nhau cho single vs bulk delete
+      * Hiển thị thông tin chi tiết trong dialog data (biển số, tên, v.v.)
+      * Sau khi delete thành công: Update local state, show snackbar notification
+
+14. NAVIGATION:
+    - Sử dụng useNavigate từ react-router-dom
+    - Định nghĩa URLs trong constants.ts
+    - Navigate sau khi create/edit thành công
+
+15. MOCK DATA:
+    - Có thể tạo mock data trong pages hoặc mock/ folder để test
+
+16. DELETE FUNCTIONALITY:
+    - Single Delete:
+      * Thêm DeleteOutlined icon trong Actions column
+      * Khi click: Gọi handleDelete(item) từ hook
+      * Mở ConfirmDialog với title "Xác nhận xóa [item name]"
+      * Hiển thị thông tin chi tiết item trong dialog
+      * Sau khi confirm: Gọi API delete, update state, show notification
+    - Bulk Delete:
+      * Thêm DeleteOutlined icon trong TableHeader toolbar
+      * Chỉ hiển thị khi có rows được chọn (selectedRows.length > 0)
+      * Khi click: Gọi handleBulkDelete(selectedRows) từ hook
+      * Mở ConfirmDialog với title "Xác nhận xóa nhiều [items]"
+      * Hiển thị số lượng và danh sách items trong dialog
+      * Sau khi confirm: Gọi API bulkDelete, update state, show notification
+    - Hook Pattern:
+      * Tạo use[FeatureName]Delete hook
+      * Quản lý state: confirmDialog, selectedItems, isDeleting, isBulkDelete
+      * Methods: handleDelete (single), handleBulkDelete (multiple), handleConfirmDelete, handleCancelDelete
+      * Callback onSuccess để update parent state sau khi delete thành công
+
+Lưu ý:
+- Tất cả imports phải đúng path
+- Sử dụng TypeScript strict mode
+- Export types để có thể share giữa các features
+- Follow existing patterns trong suppliers và forest-areas
+- Code phải clean, có comments rõ ràng
+- Sử dụng Material-UI components từ @mui/material
+- Icons từ @ant-design/icons
+- Chú ý table luôn có StatusTabs (theo trạng thái của entity)
+- Chú ý check các chức năng theo action:
+  * Create: Button "Thêm mới" trong TableHeader
+  * Edit: Icon Edit trong Actions column
+  * View: Icon Eye hoặc click vào row/code để xem chi tiết
+  * Delete: Icon Delete trong Actions column (single) và TableHeader toolbar (bulk)
+  * Disable/Inactive: Icon Delete hoặc button riêng tùy business logic
+  * Export: CSVExport component trong TableHeader
+  * Filter: FilterPopover với FilterOutlined icon
+  * Search: TextField với SearchOutlined icon trong Toolbar

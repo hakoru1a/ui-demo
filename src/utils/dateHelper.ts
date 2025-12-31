@@ -355,6 +355,19 @@ const dateHelper = {
    */
   subtractDays(date: Date, days: number): Dayjs {
     return dayjs(date).subtract(days, 'day');
+  },
+
+  /**
+   * Check if date is expired
+   * @param date - Date object
+   * @returns boolean
+   */
+  isExpired(date: Date): boolean {
+    return dayjs(date).isBefore(dayjs());
+  },
+
+  getToday(): Date {
+    return dayjs().toDate();
   }
 };
 

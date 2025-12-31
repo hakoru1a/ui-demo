@@ -1,24 +1,15 @@
-Field Name	Input Type	Required	Business Notes
+Lịch điều động vận chuyển
+Calendar
+Calendar View	Event Type	Event Display	Click Behavior	Notes
+Month / Week / Day	Lệnh vận chuyển	Màu theo trạng thái	View / Edit	Kéo thả đổi lịch
+Week / Day	Lệnh đang chạy	Icon xe	View detail	Read-only
 
-=== DANH SÁCH VÙNG TRỒNG ===
-Sản lượng TB/tháng (m³)	Number	No	Thêm mới
+Action Name	Action Type	Availability	Notes
+Tạo lệnh mới	Primary	Always
+Chuyển sang danh sách	Secondary	Always
+Lọc theo xe	Secondary	Always
 
-=== THÔNG TIN VÙNG TRỒNG (CREATE/UPDATE/VIEW) ===
-Lat - Long	Text	Yes	Thông tin để load ra bản đồ
-Mã chứng chỉ FSC/PEFC	Text	Yes
-Hình ảnh chứng chỉ	Image	Yes
-Sản lượng TB/tháng (m³)	Number	No
 
-=== DANH SÁCH NHÀ CUNG CẤP ===
-Sản lượng TB/tháng (m³)	-	-	Bỏ (xóa) trường này
-
-=== THÔNG TIN NHÀ CUNG CẤP ===
-Số CCCD/Passport	Text	Yes	Thêm mới
-Ngày cấp	Date	Yes	Thêm mới
-Nơi cấp	Text	Yes	Thêm mới
-Hình CCCD	Image	Yes	Thêm mới
-Hình ảnh sổ đỏ	Image	No	Thêm mới
-Trạng thái	Dropdown	Yes	Chờ duyệt/Hoạt động/Tạm ngưng/Từ chối (Sửa lại các trạng thái)
-
-=== ACTION ===
-Xem danh sách vùng trồng	Button (Secondary)	Always	Điều hướng đến danh sách vùng trồng
+=> Phải tuân theo convention
+=> Lịch điều phối nhưng là một Calendar lớn có thể filter có thể đổi UI show tháng show Tuần show năm, list
+=> Dùng FullCalendar

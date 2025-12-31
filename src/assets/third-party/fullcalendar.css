@@ -1,0 +1,229 @@
+/* FullCalendar v6 Basic Styles */
+.fc {
+  direction: ltr;
+  text-align: left;
+  font-family:
+    'Roboto',
+    'Inter',
+    'Poppins',
+    'Public Sans',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+}
+
+.fc-rtl {
+  text-align: right;
+}
+
+.fc,
+.fc *,
+.fc *::before,
+.fc *::after {
+  box-sizing: border-box;
+}
+
+.fc {
+  font-size: 1em;
+}
+
+.fc-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.fc-toolbar-title {
+  margin: 0;
+  font-size: 1.75em;
+  font-weight: 400;
+}
+
+.fc-button-group {
+  display: inline-flex;
+}
+
+.fc-button {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid transparent;
+  padding: 0.4em 0.65em;
+  font-size: 1em;
+  line-height: 1.5;
+  border-radius: 0.25em;
+  cursor: pointer;
+  background-color: #fff;
+  border-color: #ccc;
+  color: #373a3c;
+}
+
+.fc-button:hover {
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+
+.fc-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.fc-button-primary {
+  background-color: #fff;
+  border-color: #ccc;
+  color: #373a3c;
+}
+
+.fc-button-primary:hover {
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+
+.fc-button-primary:disabled {
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+.fc-button-active {
+  background-color: #fff;
+  border-color: #ccc;
+  color: #373a3c;
+}
+
+.fc-daygrid-day-frame {
+  position: relative;
+  min-height: 100px;
+}
+
+.fc-daygrid-day {
+  position: relative;
+}
+
+.fc-daygrid-day-top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.fc-daygrid-day-number {
+  padding: 4px;
+}
+
+.fc-daygrid-day-events {
+  margin-top: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+.fc-daygrid-event {
+  white-space: nowrap;
+  border-radius: 3px;
+  font-size: 0.85em;
+  cursor: pointer;
+  margin-bottom: 1px;
+  padding: 1px 4px;
+}
+
+.fc-event {
+  border: none;
+  background-color: #fff;
+  color: #373a3c;
+  display: block;
+  padding: 2px 4px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.fc-event:hover {
+  opacity: 1 !important;
+  background-color: inherit !important;
+  border-color: inherit !important;
+}
+
+.fc-event-title {
+  font-weight: 600;
+}
+
+.fc-timegrid-slot {
+  height: 2.5em;
+  border-bottom: 0;
+}
+
+.fc-timegrid-slot-label {
+  vertical-align: top;
+}
+
+.fc-timegrid-event {
+  border-radius: 3px;
+  padding: 2px 4px;
+  margin-bottom: 1px;
+}
+
+.fc-list-day-cushion {
+  padding: 4px 8px;
+  background-color: rgba(208, 208, 208, 0.3);
+}
+
+.fc-list-event {
+  cursor: pointer;
+  padding: 4px 8px;
+  width: 100% !important;
+}
+
+.fc-list-event:hover {
+  background-color: transparent !important;
+}
+
+/* Ensure list table and rows have full width */
+.fc-list-table {
+  width: 100% !important;
+  table-layout: auto;
+}
+
+.fc-list-event {
+  display: flex !important;
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+.fc-list-event-time,
+.fc-list-event-title {
+  display: inline-block;
+}
+
+.fc-list-event-time {
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.fc-list-event-title {
+  flex: 1;
+  width: auto;
+}
+
+/* Ensure list view container is full width */
+.fc-list-view {
+  width: 100% !important;
+}
+
+.fc-list-view .fc-scroller {
+  width: 100% !important;
+}
+
+/* Disable all hover effects for events - không đổi màu khi hover */
+.fc-event:hover,
+.fc-daygrid-event:hover,
+.fc-timegrid-event:hover,
+.fc-list-event:hover,
+.fc-event-selected:hover,
+.fc-event-mirror:hover {
+  opacity: 1 !important;
+  background-color: inherit !important;
+  border-color: inherit !important;
+  color: inherit !important;
+  transform: none !important;
+  box-shadow: none !important;
+}

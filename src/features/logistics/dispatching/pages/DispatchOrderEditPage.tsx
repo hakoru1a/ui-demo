@@ -8,37 +8,36 @@ import { useNavigate, useParams } from 'react-router-dom';
 // project imports
 import MainCard from 'components/MainCard';
 
-import VehicleForm from '../components/VehicleForm';
-import { mockVehicles } from '../mock/vehicles';
-import type { VehicleFormData, Vehicle } from '../types';
-import { FLEET_URLS } from '../types/constants';
-import { vehicleSchema, vehicleDefaultValues } from '../validation';
+import DispatchOrderForm from '../components/DispatchOrderForm';
+import { mockDispatchOrders } from '../mock/dispatchOrders';
+import type { DispatchOrderFormData, DispatchOrder } from '../types';
+import { DISPATCH_ORDER_URLS } from '../types/constants';
+import { dispatchOrderSchema, dispatchOrderDefaultValues } from '../validation';
 
 // ==============================|| HELPER: CONVERT ENTITY TO FORM DATA ||============================== //
 
-const entityToFormData = (entity: Vehicle): VehicleFormData => ({
-  licensePlate: entity.licensePlate,
-  vehicleType: entity.vehicleType,
-  maxLoad: entity.maxLoad,
+const entityToFormData = (entity: DispatchOrder): DispatchOrderFormData => ({
+  orderCode: entity.orderCode,
+  vehicleId: entity.vehicleId,
   driverName: entity.driverName,
-  driverPhone: entity.driverPhone,
-  driverLicenseNumber: entity.driverLicenseNumber,
-  driverLicenseExpiry: entity.driverLicenseExpiry,
-  vehicleStatus: entity.vehicleStatus,
-  driverStatus: entity.driverStatus,
+  origin: entity.origin,
+  destination: entity.destination,
+  departureTime: entity.departureTime,
+  estimatedDuration: entity.estimatedDuration,
+  status: entity.status,
   notes: entity.notes
 });
 
-// ==============================|| VEHICLE EDIT PAGE ||============================== //
+// ==============================|| DISPATCH ORDER EDIT PAGE ||============================== //
 
-const VehicleEditPage = () => {
+const DispatchOrderEditPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [initialValues, setInitialValues] = useState<VehicleFormData>(vehicleDefaultValues);
-  const [originalData, setOriginalData] = useState<Vehicle | null>(null);
+  const [initialValues, setInitialValues] = useState<DispatchOrderFormData>(dispatchOrderDefaultValues);
+  const [originalData, setOriginalData] = useState<DispatchOrder | null>(null);
 
   // Fetch data on mount (mock)
   useEffect(() => {
@@ -50,13 +49,13 @@ const VehicleEditPage = () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       // Find mock data by ID
-      const found = mockVehicles.find((item) => item.id === id);
+      const found = mockDispatchOrders.find((item) => item.id === id);
 
       if (found) {
         setOriginalData(found);
         setInitialValues(entityToFormData(found));
       } else {
-        setError('Không tìm thấy xe');
+        setError('Không tìm thấy lệnh điều động');
       }
 
       setIsLoading(false);
@@ -69,13 +68,13 @@ const VehicleEditPage = () => {
 
   // Handle form submission (mock)
   const handleSubmit = useCallback(
-    async (values: VehicleFormData) => {
-      console.warn('Updating vehicle:', values);
+    async (values: DispatchOrderFormData) => {
+      console.warn('Updating dispatch order:', values);
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      alert('Cập nhật xe & tài xế thành công! (Mock)');
+      alert('Cập nhật lệnh điều động thành công! (Mock)');
       if (id) {
-        navigate(FLEET_URLS.DETAIL(id));
+        navigate(DISPATCH_ORDER_URLS.DETAIL(id));
       }
     },
     [navigate, id]
@@ -84,14 +83,14 @@ const VehicleEditPage = () => {
   // Handle cancel
   const handleCancel = useCallback(() => {
     if (id) {
-      navigate(FLEET_URLS.DETAIL(id));
+      navigate(DISPATCH_ORDER_URLS.DETAIL(id));
     }
   }, [navigate, id]);
 
   // Loading state
   if (isLoading) {
     return (
-      <MainCard title="Chỉnh sửa xe & tài xế">
+      <MainCard title="Chỉnh sửa lệnh điều động">
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 300 }}>
           <CircularProgress />
         </Box>
@@ -102,11 +101,11 @@ const VehicleEditPage = () => {
   // Error state
   if (error) {
     return (
-      <MainCard title="Chỉnh sửa xe & tài xế">
+      <MainCard title="Chỉnh sửa lệnh điều động">
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
-        <Button variant="outlined" onClick={() => navigate(FLEET_URLS.LIST)}>
+        <Button variant="outlined" onClick={() => navigate(DISPATCH_ORDER_URLS.LIST)}>
           Quay lại danh sách
         </Button>
       </MainCard>
@@ -116,7 +115,7 @@ const VehicleEditPage = () => {
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={vehicleSchema}
+      validationSchema={dispatchOrderSchema}
       onSubmit={handleSubmit}
       enableReinitialize
       validateOnChange
@@ -125,7 +124,7 @@ const VehicleEditPage = () => {
       {({ isSubmitting, dirty }) => (
         <Form>
           <MainCard
-            title={`Chỉnh sửa: ${originalData?.licensePlate || ''}`}
+            title={`Chỉnh sửa: ${originalData?.orderCode || ''}`}
             secondary={
               <Stack direction="row" spacing={1}>
                 <Button variant="outlined" color="secondary" startIcon={<CloseOutlined />} onClick={handleCancel} disabled={isSubmitting}>
@@ -139,7 +138,7 @@ const VehicleEditPage = () => {
           >
             <Grid container spacing={3} sx={{ p: 1 }}>
               <Grid size={12}>
-                <VehicleForm mode="edit" />
+                <DispatchOrderForm mode="edit" />
               </Grid>
             </Grid>
           </MainCard>
@@ -149,4 +148,4 @@ const VehicleEditPage = () => {
   );
 };
 
-export default VehicleEditPage;
+export default DispatchOrderEditPage;
