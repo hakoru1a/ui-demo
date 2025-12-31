@@ -77,21 +77,6 @@ export function useExportOrderColumns({ onEdit, onDelete }: UseExportOrderColumn
     return EXPORT_ORDER_STATUS_OPTIONS.find((opt) => opt.value === status)?.label || status;
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'draft':
-        return theme.palette.grey[600];
-      case 'confirmed':
-        return theme.palette.info.main;
-      case 'delivering':
-        return theme.palette.warning.main;
-      case 'completed':
-        return theme.palette.success.main;
-      default:
-        return theme.palette.primary.main;
-    }
-  };
-
   const getIncotermsLabel = (incoterms: string) => {
     return INCOTERMS_OPTIONS.find((opt) => opt.value === incoterms)?.label || incoterms;
   };
