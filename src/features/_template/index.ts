@@ -8,7 +8,7 @@
  */
 
 // Export types
-export type { FeatureName, FeatureNameFormData } from './types';
+export type { FeatureName, FeatureNameFormData } from './typess/types';
 
 // Export hooks (if needed by other features)
 // export { useFeatureName } from './hooks/useFeatureName';

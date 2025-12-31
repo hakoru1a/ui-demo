@@ -20,6 +20,7 @@ export interface Supplier {
   idCardImage?: string | File; // Hình CCCD
   landCertificateImage?: string | File; // Hình ảnh sổ đỏ
   notes?: string; // Ghi chú
+  averageMonthlyYield?: number; // Sản lượng trung bình hàng tháng (m³)
   createdAt?: Date | string; // Ngày tạo
   updatedAt?: Date | string; // Ngày cập nhật
 }
