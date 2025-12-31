@@ -477,7 +477,7 @@ const SupplierForm = ({ mode }: SupplierFormProps) => {
       </Grid>
 
       {/* Trạng thái */}
-      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+      <Grid size={{ xs: 12, sm: 6, md: 6 }}>
         <SelectField
           name="status"
           value={values.status}
@@ -499,7 +499,7 @@ const SupplierForm = ({ mode }: SupplierFormProps) => {
       </Grid>
 
       {/* Chứng chỉ */}
-      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+      <Grid size={{ xs: 12, sm: 6, md: 6 }}>
         <Field name="certificates">
           {({ field }: FieldProps) => (
             <Autocomplete
