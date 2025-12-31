@@ -1,15 +1,72 @@
-Lịch điều động vận chuyển
-Calendar
-Calendar View	Event Type	Event Display	Click Behavior	Notes
-Month / Week / Day	Lệnh vận chuyển	Màu theo trạng thái	View / Edit	Kéo thả đổi lịch
-Week / Day	Lệnh đang chạy	Icon xe	View detail	Read-only
+Danh sách đơn hàng xuất khẩu
+Filter
+Field Name	Input Type	Optional / Required	Notes
+Order No. – Mã đơn hàng	Text	Optional
+Khách hàng	Dropdown	Optional	Khách hàng quốc tế
+Quốc gia	Dropdown	Optional
+Ngày đơn hàng	Date Range	Optional
+Incoterms	Dropdown	Optional	FOB / CIF / EXW…
+Trạng thái đơn	Dropdown	Optional	Nháp / Đã xác nhận / Đang giao / Hoàn tất
+
+Column Name	Display Type	Sortable	Clickable	Notes
+Mã đơn hàng	Text	Yes	View
+Ngày đơn	Text	Yes	No	dd/mm/yyyy
+Khách hàng	Text	Yes	View
+Quốc gia	Text	Yes	No
+Tổng giá trị	Number	Yes	No	Theo ngoại tệ
+Incoterms	Badge	Yes	No
+Trạng thái	Status	Yes	No	Màu theo trạng thái
+Hành động	Action Button	No	Edit	View / Edit / Delete
 
 Action Name	Action Type	Availability	Notes
-Tạo lệnh mới	Primary	Always
-Chuyển sang danh sách	Secondary	Always
-Lọc theo xe	Secondary	Always
+Tạo đơn hàng xuất khẩu	Primary	Always
+Export Excel	Secondary	Always
+Export PDF	Secondary	Always
 
+Danh sách đơn hàng xuất khẩu(VIEW)
+Filter
+Field Name	Input Type	Optional / Required	Notes
+Order No. – Mã đơn hàng	Text	Optional
+Khách hàng	Dropdown	Optional	Khách hàng quốc tế
+Quốc gia	Dropdown	Optional
+Ngày đơn hàng	Date Range	Optional
+Incoterms	Dropdown	Optional	FOB / CIF / EXW…
+Trạng thái đơn	Dropdown	Optional	Nháp / Đã xác nhận / Đang giao / Hoàn tất
 
-=> Phải tuân theo convention
-=> Lịch điều phối nhưng là một Calendar lớn có thể filter có thể đổi UI show tháng show Tuần show năm, list
-=> Dùng FullCalendar
+Column Name	Display Type	Sortable	Clickable	Notes
+Mã đơn hàng	Text	Yes	View
+Ngày đơn	Text	Yes	No	dd/mm/yyyy
+Khách hàng	Text	Yes	View
+Quốc gia	Text	Yes	No
+Tổng giá trị	Number	Yes	No	Theo ngoại tệ
+Incoterms	Badge	Yes	No
+Trạng thái	Status	Yes	No	Màu theo trạng thái
+Hành động	Action Button	No	Edit	View / Edit / Delete
+
+Action Name	Action Type	Availability	Notes
+Tạo đơn hàng xuất khẩu	Primary	Always
+Export Excel	Secondary	Always
+Export PDF	Secondary	Always
+
+SE-1-2: Quản lý hồ sơ khách hàng (CRM)
+
+Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
+Customer Code – Mã KH	Text	Yes	Auto-generate	Read-only
+Company Name – Tên công ty	Text	Yes
+Country – Quốc gia	Dropdown	Yes
+Address – Địa chỉ	Textarea	Yes
+Tax Code – Mã thuế	Text	No		Theo quốc gia
+Contact Person – Người liên hệ	Text	Yes
+Email	Text	Yes		Validate format
+Phone	Text	No
+Currency – Tiền tệ giao dịch	Dropdown	Yes	USD
+Payment Terms – Điều khoản TT	Dropdown	No		T/T, L/C…
+Credit Limit – Hạn mức tín dụng	Number	No
+Status – Trạng thái	Dropdown	Yes	Active	Active / Inactive
+Notes – Ghi chú	Textarea	No
+
+Action Name	Action Type	Availability	Notes
+Lưu hồ sơ	Primary	Edit mode	Validate
+Chỉnh sửa	Secondary	View mode
+Xem đơn hàng liên quan	Secondary	Always	Điều hướng SE-1-1
+Quay lại	Secondary	Always
