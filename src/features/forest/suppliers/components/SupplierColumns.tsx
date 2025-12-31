@@ -12,11 +12,11 @@ import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // types
-import { STATUS_OPTIONS, StatusFilter } from 'types/status';
+import { StatusFilter } from 'types/status';
 import { getStatusColorMap } from 'utils/getStatusColor';
 
 import type { Supplier } from '../types';
-import { SUPPLIER_URLS, SUPPLIER_TYPE_OPTIONS } from '../types/constants';
+import { SUPPLIER_URLS, SUPPLIER_TYPE_OPTIONS, STATUS_OPTIONS } from '../types/constants';
 import { getLabelFromOptions } from '../utils';
 
 /**
@@ -117,32 +117,26 @@ export function useSupplierColumns({ onEdit, onDelete }: UseSupplierColumnsProps
         cell: ({ getValue }) => <Typography variant="body2">{getValue<string>()}</Typography>
       },
       {
-        accessorKey: 'averageMonthlyYield',
-        header: 'Sản lượng TB/tháng (m³)',
-        enableSorting: true,
-        enableColumnFilter: true,
-        cell: ({ getValue }) => {
-          const value = getValue<number | undefined>();
-          return (
-            <Typography align="right" variant="body2">
-              {value ? value.toLocaleString('vi-VN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-'}
-            </Typography>
-          );
-        },
-        meta: {
-          align: 'right' as const
-        }
-      },
-      {
         accessorKey: 'status',
         header: 'Trạng thái',
         enableSorting: true,
         enableColumnFilter: true,
         cell: ({ getValue }) => {
-          const value = getValue<'active' | 'inactive'>();
+          const value = getValue<'pending' | 'active' | 'inactive' | 'rejected'>();
           const label = getLabelFromOptions(value, STATUS_OPTIONS);
-          const statusFilter = value === 'active' ? StatusFilter.ACTIVE : StatusFilter.INACTIVE;
-          const chipColor = value === 'active' ? 'success' : 'error';
+          let chipColor: 'default' | 'primary' | 'success' | 'warning' | 'error' = 'default';
+          let statusFilter = StatusFilter.INACTIVE;
+
+          if (value === 'active') {
+            chipColor = 'success';
+            statusFilter = StatusFilter.ACTIVE;
+          } else if (value === 'pending') {
+            chipColor = 'warning';
+          } else if (value === 'rejected') {
+            chipColor = 'error';
+          } else {
+            chipColor = 'default';
+          }
 
           return (
             <Chip

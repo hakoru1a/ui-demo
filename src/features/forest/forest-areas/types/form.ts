@@ -16,6 +16,10 @@ export interface ForestAreaFormData {
   plantingYear?: number; // Năm trồng
   status: EntityStatus; // Trạng thái - Required, Default: 'active'
   certificates: CertificateType[]; // Chứng chỉ
+  latLong?: string; // Lat - Long (Text) - Required, Thông tin để load ra bản đồ
+  certificateCode?: string; // Mã chứng chỉ FSC/PEFC - Required
+  certificateImage?: string | File; // Hình ảnh chứng chỉ - Required
+  averageMonthlyYield?: number; // Sản lượng TB/tháng (m³)
   notes?: string; // Ghi chú
 }
 

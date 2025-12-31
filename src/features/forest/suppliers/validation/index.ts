@@ -47,12 +47,22 @@ export const supplierSchema = yup.object<SupplierFormData>().shape({
 
   region: yup.string().required('Khu vực cung cấp là bắt buộc'),
 
-  status: yup.string().oneOf(['active', 'inactive'], 'Trạng thái không hợp lệ').required('Trạng thái là bắt buộc'),
+  status: yup.string().oneOf(['pending', 'active', 'inactive', 'rejected'], 'Trạng thái không hợp lệ').required('Trạng thái là bắt buộc'),
 
   certificates: yup
     .array()
     .of(yup.string().oneOf(['FSC', 'PEFC']))
     .default([]),
+
+  idCardNumber: yup.string().required('Số CCCD/Passport là bắt buộc'),
+
+  idCardIssueDate: yup.date().required('Ngày cấp là bắt buộc').nullable(),
+
+  idCardIssuePlace: yup.string().required('Nơi cấp là bắt buộc'),
+
+  idCardImage: yup.mixed<File | string>().required('Hình CCCD là bắt buộc'),
+
+  landCertificateImage: yup.mixed<File | string>().optional(),
 
   notes: yup.string().max(1000, 'Ghi chú không được quá 1000 ký tự').optional()
 });
@@ -69,8 +79,13 @@ export const supplierDefaultValues: SupplierFormData = {
   email: undefined,
   address: undefined,
   region: '',
-  status: 'active',
+  status: 'pending',
   certificates: [],
+  idCardNumber: '',
+  idCardIssueDate: undefined,
+  idCardIssuePlace: '',
+  idCardImage: undefined,
+  landCertificateImage: undefined,
   notes: ''
 };
 

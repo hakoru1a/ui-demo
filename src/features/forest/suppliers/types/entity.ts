@@ -1,8 +1,6 @@
 // ==============================|| SUPPLIERS ENTITY ||============================== //
 
-import type { EntityStatus } from 'types/status';
-
-import type { SupplierType, CertificateType, TransactionType, TransactionStatus } from './enums';
+import type { SupplierType, CertificateType, TransactionType, TransactionStatus, SupplierStatus } from './enums';
 
 export interface Supplier {
   id: string; // ID nhà cung cấp
@@ -14,9 +12,13 @@ export interface Supplier {
   email?: string; // Email
   address?: string; // Địa chỉ
   region: string; // Khu vực cung cấp (Tỉnh / Vùng)
-  status: EntityStatus; // Trạng thái: Hoạt động / Ngưng hợp tác
+  status: SupplierStatus; // Trạng thái: Chờ duyệt / Hoạt động / Tạm ngưng / Từ chối
   certificates: CertificateType[]; // Chứng chỉ: FSC / PEFC
-  averageMonthlyYield?: number; // Sản lượng TB/tháng (m³)
+  idCardNumber?: string; // Số CCCD/Passport
+  idCardIssueDate?: Date | string; // Ngày cấp
+  idCardIssuePlace?: string; // Nơi cấp
+  idCardImage?: string | File; // Hình CCCD
+  landCertificateImage?: string | File; // Hình ảnh sổ đỏ
   notes?: string; // Ghi chú
   createdAt?: Date | string; // Ngày tạo
   updatedAt?: Date | string; // Ngày cập nhật

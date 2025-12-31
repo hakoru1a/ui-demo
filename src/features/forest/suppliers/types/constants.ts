@@ -1,8 +1,6 @@
 // ==============================|| SUPPLIERS CONSTANTS ||============================== //
 
-import type { EntityStatus } from 'types/status';
-
-import type { SupplierType, CertificateType, TransactionType, TransactionStatus } from './enums';
+import type { SupplierType, CertificateType, TransactionType, TransactionStatus, SupplierStatus } from './enums';
 
 export const SUPPLIER_TYPE_OPTIONS: { value: SupplierType; label: string }[] = [
   { value: 'individual', label: 'Cá nhân' },
@@ -14,9 +12,11 @@ export const CERTIFICATE_OPTIONS: { value: CertificateType; label: string }[] = 
   { value: 'PEFC', label: 'PEFC' }
 ]; // Option cho checkbox Chứng chỉ
 
-export const STATUS_OPTIONS: { value: EntityStatus; label: string }[] = [
+export const STATUS_OPTIONS: { value: SupplierStatus; label: string }[] = [
+  { value: 'pending', label: 'Chờ duyệt' },
   { value: 'active', label: 'Hoạt động' },
-  { value: 'inactive', label: 'Ngưng hợp tác' }
+  { value: 'inactive', label: 'Tạm ngưng' },
+  { value: 'rejected', label: 'Từ chối' }
 ]; // Option cho dropdown Trạng thái
 
 export const REGION_OPTIONS: { value: string; label: string }[] = [

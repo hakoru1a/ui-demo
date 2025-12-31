@@ -1,4 +1,4 @@
-import { EditOutlined, ArrowLeftOutlined, HistoryOutlined, BarChartOutlined } from '@ant-design/icons';
+import { EditOutlined, ArrowLeftOutlined, HistoryOutlined, BarChartOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import { Stack, Button, Box, Alert, Chip } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Formik, Form } from 'formik';
@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CircularLoader from 'components/CircularLoader';
 import MainCard from 'components/MainCard';
 
+import { FOREST_AREA_URLS } from '../../forest-areas/types/constants';
 import SupplierForm from '../components/SupplierForm';
 import type { Supplier, SupplierFormData } from '../types';
 import { SUPPLIER_URLS } from '../types/constants';
@@ -49,6 +50,11 @@ const entityToFormData = (entity: Supplier): SupplierFormData => ({
   region: entity.region,
   status: entity.status,
   certificates: entity.certificates,
+  idCardNumber: entity.idCardNumber,
+  idCardIssueDate: entity.idCardIssueDate,
+  idCardIssuePlace: entity.idCardIssuePlace,
+  idCardImage: entity.idCardImage,
+  landCertificateImage: entity.landCertificateImage,
   notes: entity.notes
 });
 
@@ -110,6 +116,11 @@ const SupplierDetailPage = () => {
     navigate(`/yield-estimation${id ? `?supplierId=${id}` : ''}`);
   }, [navigate, id]);
 
+  // Handle view forest areas list
+  const handleViewForestAreas = useCallback(() => {
+    navigate(FOREST_AREA_URLS.LIST);
+  }, [navigate]);
+
   // Handle back
   const handleBack = useCallback(() => {
     navigate(SUPPLIER_URLS.LIST);
@@ -152,8 +163,24 @@ const SupplierDetailPage = () => {
             <Stack direction="row" alignItems="center" spacing={2}>
               <span>{data?.name}</span>
               <Chip
-                label={data?.status === 'active' ? 'Hoạt động' : 'Ngưng hợp tác'}
-                color={data?.status === 'active' ? 'success' : 'default'}
+                label={
+                  data?.status === 'active'
+                    ? 'Hoạt động'
+                    : data?.status === 'pending'
+                      ? 'Chờ duyệt'
+                      : data?.status === 'rejected'
+                        ? 'Từ chối'
+                        : 'Tạm ngưng'
+                }
+                color={
+                  data?.status === 'active'
+                    ? 'success'
+                    : data?.status === 'pending'
+                      ? 'warning'
+                      : data?.status === 'rejected'
+                        ? 'error'
+                        : 'default'
+                }
                 size="small"
               />
             </Stack>
@@ -162,6 +189,9 @@ const SupplierDetailPage = () => {
             <Stack direction="row" spacing={1}>
               <Button variant="outlined" color="secondary" startIcon={<ArrowLeftOutlined />} onClick={handleBack}>
                 Quay lại danh sách
+              </Button>
+              <Button variant="outlined" color="secondary" startIcon={<EnvironmentOutlined />} onClick={handleViewForestAreas}>
+                Xem danh sách vùng trồng
               </Button>
               <Button variant="outlined" color="info" startIcon={<HistoryOutlined />} onClick={handleViewTransactionHistory}>
                 Xem lịch sử giao dịch

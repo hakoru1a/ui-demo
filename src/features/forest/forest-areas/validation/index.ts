@@ -49,6 +49,18 @@ export const forestAreaSchema = yup.object<ForestAreaFormData>().shape({
     .of(yup.string().oneOf(['FSC', 'PEFC']))
     .default([]),
 
+  latLong: yup.string().required('Lat - Long là bắt buộc'),
+
+  certificateCode: yup.string().required('Mã chứng chỉ FSC/PEFC là bắt buộc'),
+
+  certificateImage: yup.mixed<File | string>().required('Hình ảnh chứng chỉ là bắt buộc'),
+
+  averageMonthlyYield: yup
+    .number()
+    .optional()
+    .min(0, 'Sản lượng TB/tháng phải lớn hơn hoặc bằng 0')
+    .max(1000000, 'Sản lượng TB/tháng không được vượt quá 1,000,000 m³'),
+
   notes: yup.string().max(1000, 'Ghi chú không được quá 1000 ký tự').optional()
 });
 
@@ -66,6 +78,10 @@ export const forestAreaDefaultValues: ForestAreaFormData = {
   plantingYear: undefined,
   status: 'active',
   certificates: [],
+  latLong: '',
+  certificateCode: '',
+  certificateImage: undefined,
+  averageMonthlyYield: undefined,
   notes: ''
 };
 

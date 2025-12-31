@@ -28,6 +28,10 @@ export interface ForestArea {
   plantingYear?: number; // Năm trồng
   status: EntityStatus; // Trạng thái: Hoạt động / Tạm ngưng
   certificates: CertificateType[]; // Chứng chỉ: FSC / PEFC
+  latLong?: string; // Lat - Long (Text) - Thông tin để load ra bản đồ
+  certificateCode?: string; // Mã chứng chỉ FSC/PEFC
+  certificateImage?: string | File; // Hình ảnh chứng chỉ
+  averageMonthlyYield?: number; // Sản lượng TB/tháng (m³)
   notes?: string; // Ghi chú
   boundary?: ForestAreaBoundary; // Ranh giới vùng trồng (polygon)
   coordinates?: Coordinates; // Tọa độ địa lý (legacy, dùng boundary thay thế)

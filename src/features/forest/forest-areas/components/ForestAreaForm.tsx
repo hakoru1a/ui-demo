@@ -8,6 +8,8 @@ import FieldComponents from 'components/fields';
 import NumberField from 'components/fields/NumberField';
 import SelectField from 'components/fields/SelectField';
 import TextField from 'components/fields/TextField';
+import SingleFileUpload from 'components/third-party/dropzone/SingleFile';
+import type { CustomFile } from 'types/dropzone';
 
 import type { ForestAreaFormData } from '../types';
 import {
@@ -36,6 +38,39 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
   const ownershipType = values.ownershipType;
 
   const getError = (field: keyof ForestAreaFormData) => touched[field] && errors[field];
+
+  // Convert file/string to CustomFile array for dropzone
+  const getFileArray = (file: string | File | undefined): CustomFile[] | null => {
+    if (!file) return null;
+    if (typeof file === 'string') {
+      // If it's a URL string, create a mock file object
+      return [
+        {
+          name: file.split('/').pop() || 'File',
+          preview: file,
+          size: 0,
+          type: 'image/*'
+        } as CustomFile
+      ];
+    }
+    // If it's a File, convert to CustomFile with preview
+    return [
+      Object.assign(file, {
+        preview: URL.createObjectURL(file)
+      }) as CustomFile
+    ];
+  };
+
+  // Wrapper for setFieldValue to map 'files' to actual field name
+  const createSetFieldValueWrapper = (fieldName: string) => (field: string, value: any) => {
+    if (field === 'files') {
+      // Extract the first file from the array
+      const file = value && value.length > 0 ? value[0] : null;
+      setFieldValue(fieldName, file);
+    } else {
+      setFieldValue(field, value);
+    }
+  };
 
   return (
     <Grid container spacing={3}>
@@ -285,6 +320,32 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
         />
       </Grid>
 
+      {/* Sản lượng TB/tháng (m³) */}
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <NumberField
+          name="averageMonthlyYield"
+          value={values.averageMonthlyYield || ''}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          label="Sản lượng TB/tháng (m³)"
+          placeholder="Nhập sản lượng"
+          fullWidth
+          error={!!getError('averageMonthlyYield')}
+          helperText={getError('averageMonthlyYield')}
+          slotProps={{
+            input: {
+              endAdornment: <InputAdornment position="end">m³</InputAdornment>,
+              readOnly: isReadOnly
+            },
+            htmlInput: {
+              min: 0,
+              step: 0.1
+            }
+          }}
+          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
+        />
+      </Grid>
+
       {/* Chứng chỉ */}
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <Field name="certificates">
@@ -328,6 +389,123 @@ const ForestAreaForm = ({ mode }: ForestAreaFormProps) => {
               )}
               sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
             />
+          )}
+        </Field>
+      </Grid>
+
+      {/* Section: Thông tin chứng chỉ */}
+      <Grid size={12}>
+        <Typography variant="subtitle1" sx={{ mt: 2, mb: 1, fontWeight: 600 }}>
+          Thông tin chứng chỉ
+        </Typography>
+      </Grid>
+
+      {/* Lat - Long */}
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <TextField
+          name="latLong"
+          value={values.latLong || ''}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          label="Lat - Long"
+          placeholder="Ví dụ: 12.345678, 108.123456"
+          fullWidth
+          required
+          error={!!getError('latLong')}
+          helperText={getError('latLong') || 'Thông tin để load ra bản đồ'}
+          slotProps={{
+            input: {
+              readOnly: isReadOnly
+            }
+          }}
+          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
+        />
+      </Grid>
+
+      {/* Mã chứng chỉ FSC/PEFC */}
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <TextField
+          name="certificateCode"
+          value={values.certificateCode || ''}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          label="Mã chứng chỉ FSC/PEFC"
+          placeholder="Nhập mã chứng chỉ"
+          fullWidth
+          required
+          error={!!getError('certificateCode')}
+          helperText={getError('certificateCode')}
+          slotProps={{
+            input: {
+              readOnly: isReadOnly
+            }
+          }}
+          sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
+        />
+      </Grid>
+
+      {/* Section: Hình ảnh chứng chỉ */}
+      <Grid size={12}>
+        <Typography variant="subtitle1" sx={{ mt: 2, mb: 1, fontWeight: 600 }}>
+          Hình ảnh chứng chỉ
+        </Typography>
+      </Grid>
+
+      {/* Hình ảnh chứng chỉ */}
+      <Grid size={12}>
+        <Field name="certificateImage">
+          {({ field, meta }: FieldProps) => (
+            <Box>
+              {isReadOnly ? (
+                <Box>
+                  {values.certificateImage ? (
+                    <Box
+                      component="img"
+                      src={
+                        typeof values.certificateImage === 'string' ? values.certificateImage : URL.createObjectURL(values.certificateImage)
+                      }
+                      alt="Hình ảnh chứng chỉ"
+                      sx={{
+                        width: '100%',
+                        maxHeight: 300,
+                        borderRadius: 1,
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        objectFit: 'contain'
+                      }}
+                    />
+                  ) : (
+                    <Box
+                      sx={{
+                        p: 3,
+                        border: '1px dashed',
+                        borderColor: 'divider',
+                        borderRadius: 1,
+                        textAlign: 'center',
+                        bgcolor: 'grey.50'
+                      }}
+                    >
+                      <Typography variant="body2" color="text.secondary">
+                        Chưa có hình ảnh
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+              ) : (
+                <SingleFileUpload
+                  file={getFileArray(values.certificateImage)}
+                  setFieldValue={createSetFieldValueWrapper('certificateImage')}
+                  error={!!(meta.touched && meta.error)}
+                  accept={{ 'image/*': ['.jpg', '.jpeg', '.png', '.gif', '.webp'] }}
+                  maxSize={10 * 1024 * 1024} // 10MB
+                />
+              )}
+              {meta.touched && meta.error && (
+                <Typography variant="caption" color="error" sx={{ display: 'block', mt: 0.5 }}>
+                  {meta.error}
+                </Typography>
+              )}
+            </Box>
           )}
         </Field>
       </Grid>

@@ -125,6 +125,23 @@ export function useForestAreaColumns({ onDisable }: UseForestAreaColumnsProps = 
         cell: ({ getValue }) => <Typography variant="body2">{getValue<string>()}</Typography>
       },
       {
+        accessorKey: 'averageMonthlyYield',
+        header: 'Sản lượng TB/tháng (m³)',
+        enableSorting: true,
+        enableColumnFilter: true,
+        cell: ({ getValue }) => {
+          const value = getValue<number | undefined>();
+          return (
+            <Typography align="right" variant="body2">
+              {value ? value.toLocaleString('vi-VN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-'}
+            </Typography>
+          );
+        },
+        meta: {
+          align: 'right' as const
+        }
+      },
+      {
         accessorKey: 'status',
         header: 'Trạng thái',
         enableSorting: true,
