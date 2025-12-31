@@ -9,6 +9,7 @@ import DashboardLayout from 'layout/Dashboard';
 const ExportOrdersListPage = Loadable(lazy(() => import('./pages/ExportOrdersListPage')));
 const ExportOrderDetailPage = Loadable(lazy(() => import('./pages/ExportOrderDetailPage')));
 const ExportOrderCreatePage = Loadable(lazy(() => import('./pages/ExportOrderCreatePage')));
+const ExportOrderEditPage = Loadable(lazy(() => import('./pages/ExportOrderEditPage')));
 const ExportOrderFulfillmentPage = Loadable(lazy(() => import('./pages/ExportOrderFulfillmentPage')));
 
 const ExportordersRoutes = {
@@ -20,12 +21,16 @@ const ExportordersRoutes = {
       element: <ExportOrdersListPage />
     },
     {
+      path: 'new',
+      element: <ExportOrderCreatePage />
+    },
+    {
       path: ':id',
       element: <ExportOrderDetailPage />
     },
     {
-      path: 'new',
-      element: <ExportOrderCreatePage />
+      path: ':id/edit',
+      element: <ExportOrderEditPage />
     },
     {
       path: ':id/fulfillment',

@@ -1,5 +1,6 @@
-import { EditOutlined, ArrowLeftOutlined } from '@ant-design/icons';
-import { Stack, Button, Grid } from '@mui/material';
+import { SaveOutlined, CloseOutlined } from '@ant-design/icons';
+import { Stack, Button } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { Formik, Form } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -31,9 +32,9 @@ const getMockOrderById = (id: string): ExportOrder | null => {
   return mockOrders.find((o) => o.id === id) || null;
 };
 
-// ==============================|| EXPORT ORDER DETAIL PAGE ||============================== //
+// ==============================|| EXPORT ORDER EDIT PAGE ||============================== //
 
-const ExportOrderDetailPage = () => {
+const ExportOrderEditPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [order, setOrder] = useState<ExportOrder | null>(null);
@@ -66,21 +67,33 @@ const ExportOrderDetailPage = () => {
   // Initial form values
   const initialValues: ExportOrderFormData = order ? entityToFormData(order) : exportOrderDefaultValues;
 
-  // Handle edit
-  const handleEdit = useCallback(() => {
+  // Handle form submission (mock)
+  const handleSubmit = useCallback(
+    async (values: ExportOrderFormData) => {
+      if (!id) return;
+
+      // Mock API call - simulate network delay
+      console.warn('Updating export order:', values);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      alert('Cập nhật đơn hàng xuất khẩu thành công! (Mock)');
+      navigate(EXPORT_ORDER_URLS.DETAIL(id));
+    },
+    [navigate, id]
+  );
+
+  // Handle cancel
+  const handleCancel = useCallback(() => {
     if (id) {
-      navigate(EXPORT_ORDER_URLS.EDIT(id));
+      navigate(EXPORT_ORDER_URLS.DETAIL(id));
+    } else {
+      navigate(EXPORT_ORDER_URLS.LIST);
     }
   }, [navigate, id]);
 
-  // Handle back
-  const handleBack = useCallback(() => {
-    navigate(EXPORT_ORDER_URLS.LIST);
-  }, [navigate]);
-
   if (isLoading) {
     return (
-      <MainCard title="Chi tiết đơn hàng xuất khẩu">
+      <MainCard title="Chỉnh sửa đơn hàng xuất khẩu">
         <div>Đang tải...</div>
       </MainCard>
     );
@@ -88,7 +101,7 @@ const ExportOrderDetailPage = () => {
 
   if (!order) {
     return (
-      <MainCard title="Chi tiết đơn hàng xuất khẩu">
+      <MainCard title="Chỉnh sửa đơn hàng xuất khẩu">
         <div>Không tìm thấy đơn hàng xuất khẩu</div>
       </MainCard>
     );
@@ -98,34 +111,36 @@ const ExportOrderDetailPage = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={exportOrderSchema}
-      onSubmit={() => {}}
-      validateOnChange={false}
-      validateOnBlur={false}
+      onSubmit={handleSubmit}
+      validateOnChange
+      validateOnBlur
       enableReinitialize
     >
-      <Form>
-        <MainCard
-          title="Chi tiết đơn hàng xuất khẩu"
-          secondary={
-            <Stack direction="row" spacing={1}>
-              <Button variant="outlined" color="secondary" startIcon={<ArrowLeftOutlined />} onClick={handleBack}>
-                Quay lại
-              </Button>
-              <Button variant="contained" color="primary" startIcon={<EditOutlined />} onClick={handleEdit}>
-                Chỉnh sửa
-              </Button>
-            </Stack>
-          }
-        >
-          <Grid container spacing={3} sx={{ p: 1 }}>
-            <Grid size={12}>
-              <ExportOrderForm mode="view" />
+      {({ isSubmitting, dirty }) => (
+        <Form>
+          <MainCard
+            title="Chỉnh sửa đơn hàng xuất khẩu"
+            secondary={
+              <Stack direction="row" spacing={1}>
+                <Button variant="outlined" color="secondary" startIcon={<CloseOutlined />} onClick={handleCancel} disabled={isSubmitting}>
+                  Hủy
+                </Button>
+                <Button type="submit" variant="contained" color="primary" startIcon={<SaveOutlined />} disabled={isSubmitting || !dirty}>
+                  {isSubmitting ? 'Đang lưu...' : 'Lưu'}
+                </Button>
+              </Stack>
+            }
+          >
+            <Grid container spacing={3} sx={{ p: 1 }}>
+              <Grid size={12}>
+                <ExportOrderForm mode="edit" />
+              </Grid>
             </Grid>
-          </Grid>
-        </MainCard>
-      </Form>
+          </MainCard>
+        </Form>
+      )}
     </Formik>
   );
 };
 
-export default ExportOrderDetailPage;
+export default ExportOrderEditPage;
