@@ -1,8 +1,9 @@
-import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import ArrowRightOutlined from '@ant-design/icons/ArrowRightOutlined';
+import WindowsOutlined from '@ant-design/icons/WindowsOutlined';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 // material-ui
-import Button from '@mui/material/Button';
 import CardMedia from '@mui/material/CardMedia';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grid from '@mui/material/Grid';
@@ -15,22 +16,21 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // project imports
-import MainCard from 'components/MainCard';
+
+// assets
+
+import backgroundVector from 'assets/images/mega-menu/back.svg';
+import imageChart from 'assets/images/mega-menu/chart.svg';
+import AnimateButton from 'components/@extended/AnimateButton';
 import Dot from 'components/@extended/Dot';
 import IconButton from 'components/@extended/IconButton';
 import Transitions from 'components/@extended/Transitions';
-import AnimateButton from 'components/@extended/AnimateButton';
-
+import MainCard from 'components/MainCard';
 import { DRAWER_WIDTH } from 'config';
-
-// assets
-import ArrowRightOutlined from '@ant-design/icons/ArrowRightOutlined';
-import WindowsOutlined from '@ant-design/icons/WindowsOutlined';
-import backgroundVector from 'assets/images/mega-menu/back.svg';
-import imageChart from 'assets/images/mega-menu/chart.svg';
 
 // ==============================|| HEADER CONTENT - MEGA MENU SECTION ||============================== //
 

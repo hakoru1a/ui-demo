@@ -1,13 +1,13 @@
 // material-ui
+import Box from '@mui/material/Box';
 import { styled, Theme } from '@mui/material/styles';
 import MuiTooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
-import Box from '@mui/material/Box';
 
 // project imports
+import { ColorProps } from 'types/extended';
 import getColors from 'utils/getColors';
 
 // type
-import { ColorProps } from 'types/extended';
 
 // ==============================|| TOOLTIP - VARIANT ||============================== //
 

@@ -1,22 +1,22 @@
+import MenuFoldOutlined from '@ant-design/icons/MenuFoldOutlined';
+import MenuUnfoldOutlined from '@ant-design/icons/MenuUnfoldOutlined';
+import AppBar, { AppBarProps } from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { ReactNode, useMemo } from 'react';
 
 // material-ui
-import useMediaQuery from '@mui/material/useMediaQuery';
-import AppBar, { AppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 
 // project imports
+import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
+import IconButton from 'components/@extended/IconButton';
+import { MenuOrientation, DRAWER_WIDTH, MINI_DRAWER_WIDTH } from 'config';
+import useConfig from 'hooks/useConfig';
+
 import AppBarStyled from './AppBarStyled';
 import HeaderContent from './HeaderContent';
-import IconButton from 'components/@extended/IconButton';
-
-import useConfig from 'hooks/useConfig';
-import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
-import { MenuOrientation, DRAWER_WIDTH, MINI_DRAWER_WIDTH } from 'config';
 
 // assets
-import MenuFoldOutlined from '@ant-design/icons/MenuFoldOutlined';
-import MenuUnfoldOutlined from '@ant-design/icons/MenuUnfoldOutlined';
 
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 

@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-
 // material-ui
-import { styled } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import Collapse from '@mui/material/Collapse';
+import BorderOutlined from '@ant-design/icons/BorderOutlined';
+import DownOutlined from '@ant-design/icons/DownOutlined';
+import RightOutlined from '@ant-design/icons/RightOutlined';
+import UpOutlined from '@ant-design/icons/UpOutlined';
+import Box from '@mui/material/Box';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Collapse from '@mui/material/Collapse';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -13,32 +13,32 @@ import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
 // project imports
-import NavItem from './NavItem';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import React, { useEffect, useState, useMemo } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
+import { useGetMenuMaster } from 'api/menu';
 import Dot from 'components/@extended/Dot';
 import IconButton from 'components/@extended/IconButton';
-import SimpleBar from 'components/third-party/SimpleBar';
 import Transitions from 'components/@extended/Transitions';
+import SimpleBar from 'components/third-party/SimpleBar';
 import { MenuOrientation, ThemeMode } from 'config';
-
 import useConfig from 'hooks/useConfig';
 import useMenuCollapse from 'hooks/useMenuCollapse';
-import { useGetMenuMaster } from 'api/menu';
 
 // third-party
-import { FormattedMessage } from 'react-intl';
 
 // assets
-import BorderOutlined from '@ant-design/icons/BorderOutlined';
-import DownOutlined from '@ant-design/icons/DownOutlined';
-import UpOutlined from '@ant-design/icons/UpOutlined';
-import RightOutlined from '@ant-design/icons/RightOutlined';
 
 // types
 import { NavItemType } from 'types/menu';
+
+import NavItem from './NavItem';
 
 type VirtualElement = {
   getBoundingClientRect: () => DOMRect;

@@ -1,15 +1,15 @@
+import FullscreenExitOutlined from '@ant-design/icons/FullscreenExitOutlined';
+import FullscreenOutlined from '@ant-design/icons/FullscreenOutlined';
+import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 import { useCallback, useEffect, useState } from 'react';
 
 // material-ui
-import Tooltip from '@mui/material/Tooltip';
-import Box from '@mui/material/Box';
 
 // project imports
 import IconButton from 'components/@extended/IconButton';
 
 // assets
-import FullscreenOutlined from '@ant-design/icons/FullscreenOutlined';
-import FullscreenExitOutlined from '@ant-design/icons/FullscreenExitOutlined';
 
 // ==============================|| HEADER CONTENT - FULLSCREEN ||============================== //
 

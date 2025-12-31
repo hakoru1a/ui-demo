@@ -1,5 +1,3 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
-
 // material-ui
 import Button from '@mui/material/Button';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -10,13 +8,14 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 // third-party
-import * as Yup from 'yup';
 import { Formik } from 'formik';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import * as Yup from 'yup';
 
 // project imports
-import useAuth from 'hooks/useAuth';
-import AnimateButton from 'components/@extended/AnimateButton';
 import { openSnackbar } from 'api/snackbar';
+import AnimateButton from 'components/@extended/AnimateButton';
+import useAuth from 'hooks/useAuth';
 
 // types
 import { SnackbarProps } from 'types/snackbar';

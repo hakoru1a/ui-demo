@@ -1,16 +1,17 @@
+import Box from '@mui/material/Box';
+import { alpha, styled, Theme, useTheme } from '@mui/material/styles';
+import { MUIStyledCommonProps } from '@mui/system';
 import { ReactNode } from 'react';
 
 // material-ui
-import { alpha, styled, Theme, useTheme } from '@mui/material/styles';
-import { MUIStyledCommonProps } from '@mui/system';
-import Box from '@mui/material/Box';
 
 // project imports
+import { BrowserView, MobileView } from 'react-device-detect';
+import SimpleBar, { Props } from 'simplebar-react';
+
 import { ThemeDirection } from 'config';
 
 // third-party
-import SimpleBar, { Props } from 'simplebar-react';
-import { BrowserView, MobileView } from 'react-device-detect';
 
 // root style
 const RootStyle = styled(BrowserView)({

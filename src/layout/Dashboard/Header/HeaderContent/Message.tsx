@@ -1,32 +1,31 @@
-import { useRef, useState } from 'react';
-
 // material-ui
-import useMediaQuery from '@mui/material/useMediaQuery';
+import CloseOutlined from '@ant-design/icons/CloseOutlined';
+import MailOutlined from '@ant-design/icons/MailOutlined';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
 // project imports
-import MainCard from 'components/MainCard';
-import IconButton from 'components/@extended/IconButton';
-import Transitions from 'components/@extended/Transitions';
 
 // assets
-import MailOutlined from '@ant-design/icons/MailOutlined';
-import CloseOutlined from '@ant-design/icons/CloseOutlined';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useRef, useState } from 'react';
 
 import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
 import avatar5 from 'assets/images/users/avatar-5.png';
+import IconButton from 'components/@extended/IconButton';
+import Transitions from 'components/@extended/Transitions';
+import MainCard from 'components/MainCard';
 
 // sx styles
 const avatarSX = {

@@ -1,21 +1,16 @@
-import { useNavigate } from 'react-router-dom';
-
 // material-ui
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Button from '@mui/material/Button';
 import CardMedia from '@mui/material/CardMedia';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useNavigate } from 'react-router-dom';
 
 // project imports
-import { APP_AUTH, AuthProvider } from 'config';
 
 // assets
 import Jwt from 'assets/images/icons/jwt.svg';
-import Firebase from 'assets/images/icons/firebase.svg';
-import Auth0 from 'assets/images/icons/auth0.svg';
-import Aws from 'assets/images/icons/aws.svg';
-import Supabase from 'assets/images/icons/supabase.svg';
+import { APP_AUTH, AuthProvider } from 'config';
 
 interface LoginProps {
   currentLoginWith: string;
@@ -28,12 +23,10 @@ export default function LoginProvider({ currentLoginWith }: LoginProps) {
   const navigate = useNavigate();
 
   const loginHandlers = {
-    Jwt: () => navigate(APP_AUTH === AuthProvider.JWT ? '/login' : '/jwt/login?auth=jwt'),
+    Jwt: () => navigate(APP_AUTH === AuthProvider.JWT ? '/login' : '/jwt/login?auth=jwt')
   };
 
-  const buttonData = [
-    { name: 'jwt', icon: Jwt, handler: loginHandlers.Jwt },
-  ];
+  const buttonData = [{ name: 'jwt', icon: Jwt, handler: loginHandlers.Jwt }];
 
   const currentLoginExists = buttonData.some((button) => button.name === currentLoginWith);
 

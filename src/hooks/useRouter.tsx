@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const useRouter = () => {
   const navigate = useNavigate();
@@ -12,15 +12,15 @@ const useRouter = () => {
       push: (href: string, state?: DynamicObject) =>
         navigate(href, {
           state: {
-            ...state,
-          },
+            ...state
+          }
         }),
       replace: (href: string) => navigate(href, { replace: true }),
       search: (href: string, search: string) =>
         navigate({
           pathname: href,
-          search,
-        }),
+          search
+        })
     }),
     [navigate]
   );

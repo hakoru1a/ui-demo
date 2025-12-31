@@ -1,18 +1,18 @@
 // material-ui
-import { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import Box from '@mui/material/Box';
 import CardMedia from '@mui/material/CardMedia';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
+import { Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 // project imports
+import worldMap from 'assets/images/contact/worldMap.png';
 import MainCard from 'components/MainCard';
 import { ThemeDirection } from 'config';
 
 // assets
-import worldMap from 'assets/images/contact/worldMap.png';
 
 // ==============================|| CONTACT US - HEADER ||============================== //
 

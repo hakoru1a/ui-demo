@@ -2,11 +2,11 @@
 import { alpha, Theme } from '@mui/material/styles';
 
 // project imports
+import { ButtonVariantProps, ExtendedStyleProps } from 'types/extended';
 import getColors from 'utils/getColors';
 import getShadow from 'utils/getShadow';
 
 // types
-import { ButtonVariantProps, ExtendedStyleProps } from 'types/extended';
 
 // ==============================|| BUTTON - COLORS ||============================== //
 

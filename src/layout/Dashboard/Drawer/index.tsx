@@ -1,18 +1,18 @@
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useMemo } from 'react';
 
 // material-ui
-import { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import Drawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
 
 // project imports
-import DrawerHeader from './DrawerHeader';
-import DrawerContent from './DrawerContent';
-import MiniDrawerStyled from './MiniDrawerStyled';
-
-import { DRAWER_WIDTH } from 'config';
 import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
+import { DRAWER_WIDTH } from 'config';
+
+import DrawerContent from './DrawerContent';
+import DrawerHeader from './DrawerHeader';
+import MiniDrawerStyled from './MiniDrawerStyled';
 
 interface Props {
   window?: () => Window;

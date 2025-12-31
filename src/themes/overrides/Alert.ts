@@ -2,10 +2,10 @@
 import { alpha, Theme } from '@mui/material/styles';
 
 // project imports
+import { ExtendedStyleProps } from 'types/extended';
 import getColors from 'utils/getColors';
 
 // types
-import { ExtendedStyleProps } from 'types/extended';
 
 // ==============================|| ALERT - COLORS ||============================== //
 

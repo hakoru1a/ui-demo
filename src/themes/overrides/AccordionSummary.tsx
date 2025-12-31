@@ -1,8 +1,8 @@
 // material-ui
+import RightOutlined from '@ant-design/icons/RightOutlined';
 import { Theme } from '@mui/material/styles';
 
 // assets
-import RightOutlined from '@ant-design/icons/RightOutlined';
 
 // ==============================|| OVERRIDES - ALERT TITLE ||============================== //
 

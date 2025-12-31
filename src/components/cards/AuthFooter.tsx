@@ -1,8 +1,8 @@
 // material-ui
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 // ==============================|| FOOTER - AUTHENTICATION ||============================== //
 

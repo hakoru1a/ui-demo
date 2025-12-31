@@ -1,17 +1,17 @@
 // material-ui
-import { Theme } from '@mui/material/styles';
-import { CheckboxProps } from '@mui/material/Checkbox';
 
 // project imports
-import getColors from 'utils/getColors';
 
 // assets
 import BorderOutlined from '@ant-design/icons/BorderOutlined';
 import CheckSquareFilled from '@ant-design/icons/CheckSquareFilled';
 import MinusSquareFilled from '@ant-design/icons/MinusSquareFilled';
+import { CheckboxProps } from '@mui/material/Checkbox';
+import { Theme } from '@mui/material/styles';
 
 // types
 import { ExtendedStyleProps } from 'types/extended';
+import getColors from 'utils/getColors';
 
 // ==============================|| RADIO - COLORS ||============================== //
 

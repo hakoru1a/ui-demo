@@ -1,19 +1,18 @@
-import { Link } from 'react-router-dom';
-
 // material-ui
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { Link } from 'react-router-dom';
 
 // project imports
-import { APP_DEFAULT_PATH } from 'config';
 
 // assets
 import error404 from 'assets/images/maintenance/Error404.png';
 import TwoCone from 'assets/images/maintenance/TwoCone.png';
+import { APP_DEFAULT_PATH } from 'config';
 
 // ==============================|| ERROR 404 - MAIN ||============================== //
 

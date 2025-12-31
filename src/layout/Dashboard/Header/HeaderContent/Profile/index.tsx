@@ -1,36 +1,36 @@
-import { useRef, useState, ReactNode, SyntheticEvent } from 'react';
-import { useNavigate } from 'react-router';
+import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
+import SettingOutlined from '@ant-design/icons/SettingOutlined';
+import UserOutlined from '@ant-design/icons/UserOutlined';
+import Box from '@mui/material/Box';
+import ButtonBase from '@mui/material/ButtonBase';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
-import ButtonBase from '@mui/material/ButtonBase';
 import CardContent from '@mui/material/CardContent';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Stack from '@mui/material/Stack';
+import { useTheme } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { useRef, useState, ReactNode, SyntheticEvent } from 'react';
+import { useNavigate } from 'react-router';
 
 // project imports
-import ProfileTab from './ProfileTab';
-import SettingTab from './SettingTab';
+import avatar1 from 'assets/images/users/avatar-1.png';
 import Avatar from 'components/@extended/Avatar';
-import MainCard from 'components/MainCard';
-import Transitions from 'components/@extended/Transitions';
 import IconButton from 'components/@extended/IconButton';
-
+import Transitions from 'components/@extended/Transitions';
+import MainCard from 'components/MainCard';
 import useAuth from 'hooks/useAuth';
 
+import ProfileTab from './ProfileTab';
+import SettingTab from './SettingTab';
+
 // assets
-import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
-import SettingOutlined from '@ant-design/icons/SettingOutlined';
-import UserOutlined from '@ant-design/icons/UserOutlined';
-import avatar1 from 'assets/images/users/avatar-1.png';
 
 interface TabPanelProps {
   children?: ReactNode;

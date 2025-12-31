@@ -1,8 +1,8 @@
 // material-ui
-import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 // ==============================|| PROGRESS - LINEAR WITH LABEL ||============================== //
 

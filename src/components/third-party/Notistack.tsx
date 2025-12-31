@@ -1,18 +1,19 @@
 //material-ui
-import { styled } from '@mui/material/styles';
 
 // third-party
-import { SnackbarProvider } from 'notistack';
 
 // project imports
-import Loader from 'components/Loader';
-import { useGetSnackbar } from 'api/snackbar';
 
 // assets
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 import WarningOutlined from '@ant-design/icons/WarningOutlined';
+import { styled } from '@mui/material/styles';
+import { SnackbarProvider } from 'notistack';
+
+import { useGetSnackbar } from 'api/snackbar';
+import Loader from 'components/Loader';
 
 // custom styles
 const StyledSnackbarProvider = styled(SnackbarProvider)(({ theme }) => ({

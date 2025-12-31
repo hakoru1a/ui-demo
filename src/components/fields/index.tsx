@@ -1,11 +1,11 @@
 import AutocompleteField from './AutocompleteField';
+import CheckboxField from './CheckboxField';
 import DatePickerField from './DatePickerField';
+import NumberField from './NumberField';
+import RichField from './RichField';
 import SelectField from './SelectField';
 import TextField from './TextField';
-import RichField from './RichField';
-import NumberField from './NumberField';
 import ToggleField from './ToggleField';
-import CheckboxField from './CheckboxField';
 
 const Field = {
   Autocomplete: AutocompleteField,
@@ -15,7 +15,7 @@ const Field = {
   Rich: RichField,
   Number: NumberField,
   Toggle: ToggleField,
-  Checkbox: CheckboxField,
+  Checkbox: CheckboxField
 };
 
 export default Field;

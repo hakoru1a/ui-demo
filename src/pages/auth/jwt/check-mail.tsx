@@ -1,14 +1,14 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 // material-ui
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { Link, useSearchParams } from 'react-router-dom';
 
 // project imports
-import useAuth from 'hooks/useAuth';
 import AnimateButton from 'components/@extended/AnimateButton';
+import useAuth from 'hooks/useAuth';
 import AuthWrapper from 'sections/auth/AuthWrapper';
 
 // ================================|| JWT - CHECK MAIL ||================================ //

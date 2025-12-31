@@ -1,11 +1,10 @@
-import { CSSProperties, ReactNode, Ref } from 'react';
-
 // material-ui
 import Card, { CardProps } from '@mui/material/Card';
 import CardContent, { CardContentProps } from '@mui/material/CardContent';
 import CardHeader, { CardHeaderProps } from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import { CSSProperties, ReactNode, Ref } from 'react';
 
 // // project imports
 // import Highlighter from './third-party/Highlighter';

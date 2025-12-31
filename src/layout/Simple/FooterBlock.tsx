@@ -1,38 +1,36 @@
 // material-ui
-import { styled } from '@mui/material/styles';
+import DiscordFilled from '@ant-design/icons/DiscordFilled';
+import DribbbleSquareFilled from '@ant-design/icons/DribbbleSquareFilled';
+import FacebookFilled from '@ant-design/icons/FacebookFilled';
+import GithubFilled from '@ant-design/icons/GithubFilled';
+import InstagramFilled from '@ant-design/icons/InstagramFilled';
+import LinkedinFilled from '@ant-design/icons/LinkedinFilled';
+import SendOutlined from '@ant-design/icons/SendOutlined';
+import XOutlined from '@ant-design/icons/XOutlined';
+import YoutubeFilled from '@ant-design/icons/YoutubeFilled';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
 import CardMedia from '@mui/material/CardMedia';
+import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
 // third-party
 import { motion } from 'framer-motion';
 
 // project imports
+import figma from 'assets/images/icons/figma.svg';
+import imgfooterlogo from 'assets/images/landing/codedthemes-logo.svg';
 import AnimateButton from 'components/@extended/AnimateButton';
-
-import useConfig from 'hooks/useConfig';
 import { ThemeDirection } from 'config';
+import useConfig from 'hooks/useConfig';
 import { getImageUrl, ImagePath } from 'utils/getImageUrl';
 
 // assets
-import DiscordFilled from '@ant-design/icons/DiscordFilled';
-import DribbbleSquareFilled from '@ant-design/icons/DribbbleSquareFilled';
-import GithubFilled from '@ant-design/icons/GithubFilled';
-import SendOutlined from '@ant-design/icons/SendOutlined';
-import FacebookFilled from '@ant-design/icons/FacebookFilled';
-import InstagramFilled from '@ant-design/icons/InstagramFilled';
-import LinkedinFilled from '@ant-design/icons/LinkedinFilled';
-import YoutubeFilled from '@ant-design/icons/YoutubeFilled';
-import XOutlined from '@ant-design/icons/XOutlined';
-
-import imgfooterlogo from 'assets/images/landing/codedthemes-logo.svg';
-import figma from 'assets/images/icons/figma.svg';
 
 // link - custom style
 const FooterLink = styled(Link)(({ theme }) => ({

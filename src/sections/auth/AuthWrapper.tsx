@@ -1,25 +1,25 @@
+import ExclamationCircleOutlined from '@ant-design/icons/ExclamationCircleOutlined';
+import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
 import { ReactElement } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 // material-ui
-import Grid from '@mui/material/Grid';
-import Alert from '@mui/material/Alert';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import Divider from '@mui/material/Divider';
-import Box from '@mui/material/Box';
 
 // project imports
 import AuthFooter from 'components/cards/AuthFooter';
 import Logo from 'components/logo';
+import useAuth from 'hooks/useAuth';
+
+import AuthBackground from './AuthBackground';
 import AuthCard from './AuthCard';
 import LoginProvider from './LoginProvider';
 
-import useAuth from 'hooks/useAuth';
-
 // assets
-import AuthBackground from './AuthBackground';
-import ExclamationCircleOutlined from '@ant-design/icons/ExclamationCircleOutlined';
 
 interface Props {
   children: ReactElement;

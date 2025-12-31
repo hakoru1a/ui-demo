@@ -1,18 +1,18 @@
+import { Chance } from 'chance';
+import { jwtDecode } from 'jwt-decode';
 import React, { createContext, useEffect, useReducer } from 'react';
 
 // third-party
-import { Chance } from 'chance';
-import { jwtDecode } from 'jwt-decode';
 
 // reducer - state management
+import Loader from 'components/Loader';
 import { LOGIN, LOGOUT } from 'contexts/auth-reducer/actions';
 import authReducer from 'contexts/auth-reducer/auth';
 
 // project imports
-import Loader from 'components/Loader';
-import axios from 'utils/axios';
-import { KeyedObject } from 'types/root';
 import { AuthProps, JWTContextType } from 'types/auth';
+import { KeyedObject } from 'types/root';
+import axios from 'utils/axios';
 
 const chance = new Chance();
 

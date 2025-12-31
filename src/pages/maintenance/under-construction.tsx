@@ -1,18 +1,18 @@
-import { Link } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 // material-ui
-import Button from '@mui/material/Button';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { Link } from 'react-router-dom';
 
 // project imports
+import construction from 'assets/images/maintenance/under-construction.svg';
 import { APP_DEFAULT_PATH } from 'config';
 
 // assets
-import construction from 'assets/images/maintenance/under-construction.svg';
 
 // ==============================|| UNDER CONSTRUCTION - MAIN ||============================== //
 

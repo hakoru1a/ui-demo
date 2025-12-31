@@ -1,6 +1,6 @@
 // material-ui
-import { styled, Theme, CSSObject } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
+import { styled, Theme, CSSObject } from '@mui/material/styles';
 
 // project imports
 import { DRAWER_WIDTH } from 'config';

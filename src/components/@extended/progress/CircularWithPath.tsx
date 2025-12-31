@@ -1,8 +1,8 @@
 // material-ui
-import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import CircularProgress, { CircularProgressProps, circularProgressClasses } from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 interface Props extends CircularProgressProps {
   showLabel?: boolean;

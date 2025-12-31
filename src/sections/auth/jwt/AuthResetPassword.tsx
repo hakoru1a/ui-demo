@@ -1,8 +1,9 @@
-import { useEffect, useState, SyntheticEvent } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
+import EyeOutlined from '@ant-design/icons/EyeOutlined';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 // material-ui
-import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import Grid from '@mui/material/Grid';
@@ -11,27 +12,26 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
 // third-party
-import * as Yup from 'yup';
 import { Formik } from 'formik';
+import { useEffect, useState, SyntheticEvent } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import * as Yup from 'yup';
 
 // project imports
-import useAuth from 'hooks/useAuth';
-import IconButton from 'components/@extended/IconButton';
-import AnimateButton from 'components/@extended/AnimateButton';
 
-import { strengthColor, strengthIndicator } from 'utils/password-strength';
 import { openSnackbar } from 'api/snackbar';
+import AnimateButton from 'components/@extended/AnimateButton';
+import IconButton from 'components/@extended/IconButton';
+import useAuth from 'hooks/useAuth';
+import { StringColorProps } from 'types/password';
+import { SnackbarProps } from 'types/snackbar';
+import { strengthColor, strengthIndicator } from 'utils/password-strength';
 
 // types
-import { SnackbarProps } from 'types/snackbar';
-import { StringColorProps } from 'types/password';
 
 // assets
-import EyeOutlined from '@ant-design/icons/EyeOutlined';
-import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 
 // ============================|| JWT - RESET PASSWORD ||============================ //
 

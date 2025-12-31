@@ -1,7 +1,8 @@
 // project imports
-import NavUser from './NavUser';
-import Navigation from './Navigation';
 import SimpleBar from 'components/third-party/SimpleBar';
+
+import Navigation from './Navigation';
+import NavUser from './NavUser';
 
 // ==============================|| DRAWER CONTENT ||============================== //
 

@@ -1,8 +1,8 @@
 import { lazy } from 'react';
 
 // project imports
-import AuthLayout from 'layout/Auth';
 import Loadable from 'components/Loadable';
+import AuthLayout from 'layout/Auth';
 
 // jwt auth
 const JwtAuthLogin = Loadable(lazy(() => import('pages/auth/jwt/login')));

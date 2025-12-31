@@ -1,7 +1,7 @@
 // material-ui
+import Box from '@mui/material/Box';
 import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
 // ==============================|| PROGRESS - CIRCULAR LABEL ||============================== //
 

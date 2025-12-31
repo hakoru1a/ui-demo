@@ -1,24 +1,24 @@
-import { useState } from 'react';
-
 // material-ui
-import { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
+import { Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useState } from 'react';
 
 // project imports
-import NavItem from './NavItem';
-import NavGroup from './NavGroup';
-import menuItems from 'menu-items';
-
-import useConfig from 'hooks/useConfig';
-import { HORIZONTAL_MAX_ITEM, MenuOrientation } from 'config';
 import { useGetMenuMaster } from 'api/menu';
+import { HORIZONTAL_MAX_ITEM, MenuOrientation } from 'config';
+import useConfig from 'hooks/useConfig';
+import menuItems from 'menu-items';
+import { NavItemType } from 'types/menu';
+
+import NavGroup from './NavGroup';
 
 // types
-import { NavItemType } from 'types/menu';
+
+import NavItem from './NavItem';
 
 // ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
 

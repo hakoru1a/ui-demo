@@ -9,6 +9,7 @@ import DashboardLayout from 'layout/Dashboard';
 const LogisticsCostingListPage = Loadable(lazy(() => import('./pages/LogisticsCostingListPage')));
 const LogisticsCostDetailPage = Loadable(lazy(() => import('./pages/LogisticsCostDetailPage')));
 const LogisticsCostCreatePage = Loadable(lazy(() => import('./pages/LogisticsCostCreatePage')));
+const LogisticsCostEditPage = Loadable(lazy(() => import('./pages/LogisticsCostEditPage')));
 
 const LogisticscostingRoutes = {
   path: '/logistics-costing',
@@ -19,12 +20,16 @@ const LogisticscostingRoutes = {
       element: <LogisticsCostingListPage />
     },
     {
+      path: 'new',
+      element: <LogisticsCostCreatePage />
+    },
+    {
       path: ':id',
       element: <LogisticsCostDetailPage />
     },
     {
-      path: 'new',
-      element: <LogisticsCostCreatePage />
+      path: ':id/edit',
+      element: <LogisticsCostEditPage />
     }
   ]
 };

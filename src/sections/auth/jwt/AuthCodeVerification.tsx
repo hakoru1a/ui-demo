@@ -1,15 +1,15 @@
 // material-ui
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
 import FormHelperText from '@mui/material/FormHelperText';
+import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
 // third-party
-import * as Yup from 'yup';
 import { Formik } from 'formik';
 import OtpInput from 'react-otp-input';
+import * as Yup from 'yup';
 
 // project imports
 import AnimateButton from 'components/@extended/AnimateButton';

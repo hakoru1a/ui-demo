@@ -1,15 +1,15 @@
 // material-ui
+import EditOutlined from '@ant-design/icons/EditOutlined';
+import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
+import ProfileOutlined from '@ant-design/icons/ProfileOutlined';
+import UserOutlined from '@ant-design/icons/UserOutlined';
+import WalletOutlined from '@ant-design/icons/WalletOutlined';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 // assets
-import EditOutlined from '@ant-design/icons/EditOutlined';
-import ProfileOutlined from '@ant-design/icons/ProfileOutlined';
-import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
-import UserOutlined from '@ant-design/icons/UserOutlined';
-import WalletOutlined from '@ant-design/icons/WalletOutlined';
 
 interface Props {
   handleLogout: () => void;

@@ -9,8 +9,9 @@ import DashboardLayout from 'layout/Dashboard';
 const ExportDocumentsListPage = Loadable(lazy(() => import('./pages/ExportDocumentsListPage')));
 const ExportDocumentDetailPage = Loadable(lazy(() => import('./pages/ExportDocumentDetailPage')));
 const ExportDocumentCreatePage = Loadable(lazy(() => import('./pages/ExportDocumentCreatePage')));
+const ExportDocumentEditPage = Loadable(lazy(() => import('./pages/ExportDocumentEditPage')));
 
-const ExportdocumentsRoutes = {
+const ExportDocumentsRoutes = {
   path: '/export-documents',
   element: <DashboardLayout />,
   children: [
@@ -19,14 +20,18 @@ const ExportdocumentsRoutes = {
       element: <ExportDocumentsListPage />
     },
     {
+      path: 'new',
+      element: <ExportDocumentCreatePage />
+    },
+    {
       path: ':id',
       element: <ExportDocumentDetailPage />
     },
     {
-      path: 'new',
-      element: <ExportDocumentCreatePage />
+      path: ':id/edit',
+      element: <ExportDocumentEditPage />
     }
   ]
 };
 
-export default ExportdocumentsRoutes;
+export default ExportDocumentsRoutes;

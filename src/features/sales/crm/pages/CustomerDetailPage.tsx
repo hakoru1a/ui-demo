@@ -8,9 +8,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 // project imports
 import MainCard from 'components/MainCard';
 
+import { EXPORT_ORDER_URLS } from '../../export-orders/types/constants';
 import CustomerForm from '../components/CustomerForm';
 import type { Customer, CustomerFormData } from '../types';
-import { CUSTOMER_URLS, EXPORT_ORDER_URLS } from '../types/constants';
+import { CUSTOMER_URLS } from '../types/constants';
 import { customerSchema, customerDefaultValues } from '../validation';
 
 // Mock function to get customer by ID - TODO: Replace with API call

@@ -1,11 +1,12 @@
+import { ChipProps } from '@mui/material/Chip';
 import { ReactNode } from 'react';
 
 // material-ui
-import { ChipProps } from '@mui/material/Chip';
 
 // project imports
-import { GenericCardProps } from './root';
 import { NavActionType } from 'config';
+
+import { GenericCardProps } from './root';
 
 // ==============================|| MENU TYPES ||============================== //
 

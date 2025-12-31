@@ -2,11 +2,11 @@
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 // project imports
-import DrawerHeaderStyled from './DrawerHeaderStyled';
 import Logo from 'components/logo';
-
-import useConfig from 'hooks/useConfig';
 import { MenuOrientation } from 'config';
+import useConfig from 'hooks/useConfig';
+
+import DrawerHeaderStyled from './DrawerHeaderStyled';
 
 interface Props {
   open: boolean;

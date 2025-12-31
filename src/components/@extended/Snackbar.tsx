@@ -1,22 +1,23 @@
-import { SyntheticEvent } from 'react';
+import CloseOutlined from '@ant-design/icons/CloseOutlined';
+import Alert from '@mui/material/Alert';
 
 // material-ui
-import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Fade from '@mui/material/Fade';
 import Grow from '@mui/material/Grow';
 import Slide, { SlideProps } from '@mui/material/Slide';
 import MuiSnackbar from '@mui/material/Snackbar';
+import { SyntheticEvent } from 'react';
 
 // project imports
-import IconButton from './IconButton';
 import { closeSnackbar, useGetSnackbar } from 'api/snackbar';
 
 // assets
-import CloseOutlined from '@ant-design/icons/CloseOutlined';
 
 // types
 import { KeyedObject } from 'types/root';
+
+import IconButton from './IconButton';
 
 // animation function
 function TransitionSlideLeft(props: SlideProps) {

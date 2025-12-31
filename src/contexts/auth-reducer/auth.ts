@@ -1,8 +1,9 @@
 // action - state management
+import { AuthProps, AuthActionProps } from 'types/auth';
+
 import { REGISTER, LOGIN, LOGOUT } from './actions';
 
 // types
-import { AuthProps, AuthActionProps } from 'types/auth';
 
 // initial state
 const initialState: AuthProps = {

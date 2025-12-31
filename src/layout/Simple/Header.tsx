@@ -1,13 +1,10 @@
-import * as React from 'react';
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import LineOutlined from '@ant-design/icons/LineOutlined';
+import MenuOutlined from '@ant-design/icons/MenuOutlined';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
-import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
 import Drawer from '@mui/material/Drawer';
@@ -17,21 +14,23 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
+import { useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
+import { useState } from 'react';
+import * as React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 // project imports
-import Logo from 'components/logo';
-import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
-
-import useAuth from 'hooks/useAuth';
+import IconButton from 'components/@extended/IconButton';
+import Logo from 'components/logo';
 import { APP_DEFAULT_PATH, ThemeMode } from 'config';
+import useAuth from 'hooks/useAuth';
 
 // assets
-import MenuOutlined from '@ant-design/icons/MenuOutlined';
-import LineOutlined from '@ant-design/icons/LineOutlined';
 
 // ==============================|| COMPONENTS - APP BAR ||============================== //
 

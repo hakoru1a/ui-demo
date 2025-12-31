@@ -1,25 +1,25 @@
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import { Theme } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
 // material-ui
-import { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import Container from '@mui/material/Container';
-import Toolbar from '@mui/material/Toolbar';
-import Box from '@mui/material/Box';
 
 // project imports
-import Drawer from './Drawer';
-import Header from './Header';
-import Footer from './Footer';
-import HorizontalBar from './Drawer/HorizontalBar';
-import Loader from 'components/Loader';
+import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
-import AuthGuard from 'utils/route-guard/AuthGuard';
-
+import Loader from 'components/Loader';
 import { MenuOrientation } from 'config';
 import useConfig from 'hooks/useConfig';
-import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
+import AuthGuard from 'utils/route-guard/AuthGuard';
+
+import Drawer from './Drawer';
+import HorizontalBar from './Drawer/HorizontalBar';
+import Footer from './Footer';
+import Header from './Header';
 
 // ==============================|| MAIN LAYOUT ||============================== //
 

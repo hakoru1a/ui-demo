@@ -6,17 +6,32 @@ import DashboardLayout from 'layout/Dashboard';
 
 // ==============================|| Vessel Tracking ROUTING ||============================== //
 
-const VesselTrackingPage = Loadable(lazy(() => import('./pages/VesselTrackingPage')));
+const VesselTrackingListPage = Loadable(lazy(() => import('./pages/VesselTrackingListPage')));
+const VesselTrackingDetailPage = Loadable(lazy(() => import('./pages/VesselTrackingDetailPage')));
+const VesselTrackingCreatePage = Loadable(lazy(() => import('./pages/VesselTrackingCreatePage')));
+const VesselTrackingEditPage = Loadable(lazy(() => import('./pages/VesselTrackingEditPage')));
 
-const VesseltrackingRoutes = {
+const VesselTrackingRoutes = {
   path: '/vessel-tracking',
   element: <DashboardLayout />,
   children: [
     {
       path: '',
-      element: <VesselTrackingPage />
+      element: <VesselTrackingListPage />
+    },
+    {
+      path: 'new',
+      element: <VesselTrackingCreatePage />
+    },
+    {
+      path: ':id',
+      element: <VesselTrackingDetailPage />
+    },
+    {
+      path: ':id/edit',
+      element: <VesselTrackingEditPage />
     }
   ]
 };
 
-export default VesseltrackingRoutes;
+export default VesselTrackingRoutes;

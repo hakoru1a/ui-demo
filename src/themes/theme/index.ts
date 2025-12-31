@@ -1,4 +1,10 @@
 // project imports
+import { PalettesProps } from '@ant-design/colors';
+
+import { ThemeMode } from 'config';
+import { PresetColor } from 'types/config';
+import { PaletteThemeProps } from 'types/theme';
+
 import Default from './default';
 import Theme1 from './theme1';
 import Theme2 from './theme2';
@@ -8,14 +14,10 @@ import Theme5 from './theme5';
 import Theme6 from './theme6';
 import Theme7 from './theme7';
 import Theme8 from './theme8';
-import { ThemeMode } from 'config';
 
 //assets
-import { PalettesProps } from '@ant-design/colors';
 
 // types
-import { PaletteThemeProps } from 'types/theme';
-import { PresetColor } from 'types/config';
 
 // ==============================|| PRESET THEME - THEME SELECTOR ||============================== //
 

@@ -1,20 +1,20 @@
-import { Link } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CardMedia from '@mui/material/CardMedia';
 
 // material-ui
-import { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
+import { Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { Link } from 'react-router-dom';
 
 // project imports
+import error500 from 'assets/images/maintenance/Error500.png';
 import { APP_DEFAULT_PATH } from 'config';
 
 // assets
-import error500 from 'assets/images/maintenance/Error500.png';
 
 // ==============================|| ERROR 500 - MAIN ||============================== //
 

@@ -1,22 +1,23 @@
-import { useEffect, useRef, useState } from 'react';
-
-// material-ui
+import MoreOutlined from '@ant-design/icons/MoreOutlined';
 import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Paper from '@mui/material/Paper';
+
+// material-ui
 import Popper from '@mui/material/Popper';
 import Toolbar from '@mui/material/Toolbar';
-import Box from '@mui/material/Box';
+import { useEffect, useRef, useState } from 'react';
 
 // project imports
-import Search from './Search';
-import Profile from './Profile';
-import Localization from './Localization';
 import IconButton from 'components/@extended/IconButton';
 import Transitions from 'components/@extended/Transitions';
 
+import Localization from './Localization';
+import Profile from './Profile';
+import Search from './Search';
+
 // assets
-import MoreOutlined from '@ant-design/icons/MoreOutlined';
 
 // ==============================|| HEADER CONTENT - MOBILE ||============================== //
 

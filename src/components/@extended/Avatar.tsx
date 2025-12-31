@@ -1,14 +1,14 @@
+import MuiAvatar, { AvatarProps } from '@mui/material/Avatar';
+import { styled } from '@mui/material/styles';
 import { ReactNode } from 'react';
 
 // material-ui
-import { styled } from '@mui/material/styles';
-import MuiAvatar, { AvatarProps } from '@mui/material/Avatar';
 
 // project imports
+import { AvatarTypeProps, ColorProps, ExtendedStyleProps, SizeProps } from 'types/extended';
 import getColors from 'utils/getColors';
 
 // types
-import { AvatarTypeProps, ColorProps, ExtendedStyleProps, SizeProps } from 'types/extended';
 
 // ==============================|| AVATAR - COLOR STYLE ||============================== //
 

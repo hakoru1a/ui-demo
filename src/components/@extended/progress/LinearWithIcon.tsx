@@ -1,9 +1,9 @@
+import Box from '@mui/material/Box';
+import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress';
+import Stack from '@mui/material/Stack';
 import { ReactNode } from 'react';
 
 // material-ui
-import Stack from '@mui/material/Stack';
-import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress';
-import Box from '@mui/material/Box';
 
 // ==============================|| PROGRESS - LINEAR ICON ||============================== //
 

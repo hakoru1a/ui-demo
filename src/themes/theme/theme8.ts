@@ -1,11 +1,11 @@
 // material-ui
+import { PalettesProps } from '@ant-design/colors';
 import { PaletteColorOptions } from '@mui/material/styles';
 
 //project-import
 import { ThemeMode } from 'config';
 
 //assets
-import { PalettesProps } from '@ant-design/colors';
 
 // types
 import { PaletteThemeProps } from 'types/theme';

@@ -1,11 +1,11 @@
-import useSWR, { mutate } from 'swr';
 import { useMemo } from 'react';
+import useSWR, { mutate } from 'swr';
 
 // Project-imports
+import { MenuProps, NavItemType } from 'types/menu';
 import { fetcher } from 'utils/axios';
 
 // types
-import { MenuProps, NavItemType } from 'types/menu';
 
 const initialState: MenuProps = {
   isDashboardDrawerOpened: false,

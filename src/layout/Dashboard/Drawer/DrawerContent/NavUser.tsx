@@ -1,25 +1,25 @@
-import { useState, MouseEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import RightOutlined from '@ant-design/icons/RightOutlined';
+import Box from '@mui/material/Box';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 
 // material-ui
-import { styled } from '@mui/material/styles';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
+import { useState, MouseEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 // project imports
+import { useGetMenuMaster } from 'api/menu';
+import avatar1 from 'assets/images/users/avatar-1.png';
 import Avatar from 'components/@extended/Avatar';
 import useAuth from 'hooks/useAuth';
-import { useGetMenuMaster } from 'api/menu';
 
 // assets
-import RightOutlined from '@ant-design/icons/RightOutlined';
-import avatar1 from 'assets/images/users/avatar-1.png';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;

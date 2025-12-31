@@ -1,15 +1,15 @@
-import { cloneElement, ReactElement } from 'react';
-
 // material-ui
-import { useTheme } from '@mui/material/styles';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
+import { useTheme } from '@mui/material/styles';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
+import { cloneElement, ReactElement } from 'react';
 
 // project imports
-import Navigation from './DrawerContent/Navigation';
 import useConfig from 'hooks/useConfig';
+
+import Navigation from './DrawerContent/Navigation';
 
 // ==============================|| HORIZONTAL MENU LIST ||============================== //
 

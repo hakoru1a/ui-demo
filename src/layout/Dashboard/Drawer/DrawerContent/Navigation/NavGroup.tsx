@@ -1,9 +1,8 @@
-import { Fragment, useEffect, useState } from 'react';
-import { matchPath, useLocation } from 'react-router-dom';
-
 // material-ui
-import { styled } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import DownOutlined from '@ant-design/icons/DownOutlined';
+import GroupOutlined from '@ant-design/icons/GroupOutlined';
+import RightOutlined from '@ant-design/icons/RightOutlined';
+import Box from '@mui/material/Box';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
@@ -12,29 +11,30 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
 // third-party
-import { FormattedMessage } from 'react-intl';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 // project imports
-import NavItem from './NavItem';
-import NavCollapse from './NavCollapse';
-import SimpleBar from 'components/third-party/SimpleBar';
-import Transitions from 'components/@extended/Transitions';
+import { Fragment, useEffect, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { matchPath, useLocation } from 'react-router-dom';
 
+import { useGetMenuMaster } from 'api/menu';
+import Transitions from 'components/@extended/Transitions';
+import SimpleBar from 'components/third-party/SimpleBar';
 import { MenuOrientation } from 'config';
 import useConfig from 'hooks/useConfig';
-import { useGetMenuMaster } from 'api/menu';
 
 // assets
-import DownOutlined from '@ant-design/icons/DownOutlined';
-import GroupOutlined from '@ant-design/icons/GroupOutlined';
-import RightOutlined from '@ant-design/icons/RightOutlined';
 
 // types
 import { NavItemType } from 'types/menu';
+
+import NavCollapse from './NavCollapse';
+import NavItem from './NavItem';
 
 // ==============================|| NAVIGATION - LIST GROUP ||============================== //
 

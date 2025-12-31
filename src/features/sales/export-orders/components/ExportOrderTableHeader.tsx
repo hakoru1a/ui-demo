@@ -290,7 +290,7 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                 <Box sx={{ p: 2.5 }}>
                   <Grid container spacing={2}>
                     {/* Mã đơn hàng */}
-                    <Grid size={{ xs: 12, sm: 4 }}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                       <TextField
                         label="Mã đơn hàng"
                         value={getFilterValue('orderNo') || ''}
@@ -301,7 +301,7 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                     </Grid>
 
                     {/* Khách hàng - TODO: Replace with customer autocomplete when CRM is ready */}
-                    <Grid size={{ xs: 12, sm: 4 }}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                       <TextField
                         label="Khách hàng"
                         value={getFilterValue('customerName') || ''}
@@ -312,7 +312,7 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                     </Grid>
 
                     {/* Quốc gia */}
-                    <Grid size={{ xs: 12, sm: 4 }}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                       <SelectField
                         label="Quốc gia"
                         value={getFilterValue('country') || ''}
@@ -324,58 +324,65 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                     </Grid>
 
                     {/* Ngày đơn hàng - Date Range */}
-                    <Grid size={{ xs: 12, sm: 6 }}>
+                    <Grid size={{ xs: 12, sm: 12, md: 6 }}>
                       <Box>
-                        <Box sx={{ mb: 1, fontSize: '0.875rem', fontWeight: 500 }}>Ngày đơn hàng</Box>
-                        <Stack direction="row" spacing={1}>
-                          <DatePickerField
-                            label="Từ ngày"
-                            value={
-                              getDateRangeValue('orderDate')?.start
-                                ? dateHelper.normalizeDateValue(getDateRangeValue('orderDate')?.start || '')
-                                : null
-                            }
-                            onChange={(newValue) => {
-                              const currentRange = getDateRangeValue('orderDate') || {};
-                              handleDateRangeChange('orderDate', newValue ? dateHelper.formatDate(newValue) : undefined, currentRange.end);
-                            }}
-                            format="DD/MM/YYYY"
-                            slotProps={{
-                              textField: {
-                                fullWidth: true,
-                                size: 'medium' as 'small' | 'medium'
+                        <Grid container spacing={1}>
+                          <Grid size={{ xs: 12, sm: 6 }}>
+                            <DatePickerField
+                              label="Từ ngày"
+                              value={
+                                getDateRangeValue('orderDate')?.start
+                                  ? dateHelper.normalizeDateValue(getDateRangeValue('orderDate')?.start || '')
+                                  : null
                               }
-                            }}
-                          />
-                          <DatePickerField
-                            label="Đến ngày"
-                            value={
-                              getDateRangeValue('orderDate')?.end
-                                ? dateHelper.normalizeDateValue(getDateRangeValue('orderDate')?.end || '')
-                                : null
-                            }
-                            onChange={(newValue) => {
-                              const currentRange = getDateRangeValue('orderDate') || {};
-                              handleDateRangeChange(
-                                'orderDate',
-                                currentRange.start,
-                                newValue ? dateHelper.formatDate(newValue) : undefined
-                              );
-                            }}
-                            format="DD/MM/YYYY"
-                            slotProps={{
-                              textField: {
-                                fullWidth: true,
-                                size: 'medium' as 'small' | 'medium'
+                              onChange={(newValue) => {
+                                const currentRange = getDateRangeValue('orderDate') || {};
+                                handleDateRangeChange(
+                                  'orderDate',
+                                  newValue ? dateHelper.formatDate(newValue) : undefined,
+                                  currentRange.end
+                                );
+                              }}
+                              format="DD/MM/YYYY"
+                              slotProps={{
+                                textField: {
+                                  fullWidth: true,
+                                  size: 'medium' as 'small' | 'medium'
+                                }
+                              }}
+                            />
+                          </Grid>
+                          <Grid size={{ xs: 12, sm: 6 }}>
+                            <DatePickerField
+                              label="Đến ngày"
+                              value={
+                                getDateRangeValue('orderDate')?.end
+                                  ? dateHelper.normalizeDateValue(getDateRangeValue('orderDate')?.end || '')
+                                  : null
                               }
-                            }}
-                          />
-                        </Stack>
+                              onChange={(newValue) => {
+                                const currentRange = getDateRangeValue('orderDate') || {};
+                                handleDateRangeChange(
+                                  'orderDate',
+                                  currentRange.start,
+                                  newValue ? dateHelper.formatDate(newValue) : undefined
+                                );
+                              }}
+                              format="DD/MM/YYYY"
+                              slotProps={{
+                                textField: {
+                                  fullWidth: true,
+                                  size: 'medium' as 'small' | 'medium'
+                                }
+                              }}
+                            />
+                          </Grid>
+                        </Grid>
                       </Box>
                     </Grid>
 
                     {/* Incoterms */}
-                    <Grid size={{ xs: 12, sm: 3 }}>
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                       <SelectField
                         label="Incoterms"
                         value={getFilterValue('incoterms') || ''}
@@ -387,7 +394,7 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                     </Grid>
 
                     {/* Trạng thái */}
-                    <Grid size={{ xs: 12, sm: 3 }}>
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                       <SelectField
                         label="Trạng thái"
                         value={getFilterValue('status') || ''}

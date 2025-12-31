@@ -1,12 +1,12 @@
-import { CSSProperties, ReactElement, Ref } from 'react';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
 
 // material-ui
-import Collapse from '@mui/material/Collapse';
 import Fade from '@mui/material/Fade';
 import Grow from '@mui/material/Grow';
 import Slide from '@mui/material/Slide';
 import Zoom, { ZoomProps } from '@mui/material/Zoom';
-import Box from '@mui/material/Box';
+import { CSSProperties, ReactElement, Ref } from 'react';
 
 // ==============================|| TRANSITIONS ||============================== //
 

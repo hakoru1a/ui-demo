@@ -1,22 +1,22 @@
 // material-ui
-import { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
+import { Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 // third-party
 import { useTimer } from 'react-timer-hook';
 
 // project imports
+import coming from 'assets/images/maintenance/coming-soon.png';
 import MainCard from 'components/MainCard';
 
 // assets
-import coming from 'assets/images/maintenance/coming-soon.png';
 
 // ==============================|| COMING SOON - TIMER ||============================== //
 

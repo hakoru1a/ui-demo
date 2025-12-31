@@ -1,14 +1,15 @@
-import { Link } from 'react-router-dom';
+import ButtonBase from '@mui/material/ButtonBase';
+import { SxProps } from '@mui/material/styles';
 import { To } from 'history';
+import { Link } from 'react-router-dom';
 
 // material-ui
-import { SxProps } from '@mui/material/styles';
-import ButtonBase from '@mui/material/ButtonBase';
 
 // project imports
-import Logo from './LogoMain';
-import LogoIcon from './LogoIcon';
 import { APP_DEFAULT_PATH } from 'config';
+
+import LogoIcon from './LogoIcon';
+import Logo from './LogoMain';
 
 // ==============================|| MAIN LOGO ||============================== //
 

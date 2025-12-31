@@ -1,15 +1,15 @@
+import createCache, { StylisPlugin } from '@emotion/cache';
+import { CacheProvider } from '@emotion/react';
 import { useEffect, ReactNode } from 'react';
 
 // material-ui
-import { CacheProvider } from '@emotion/react';
-import createCache, { StylisPlugin } from '@emotion/cache';
 
 // third-party
 import rtlPlugin from 'stylis-plugin-rtl';
 
 // project imports
-import useConfig from 'hooks/useConfig';
 import { ThemeDirection } from 'config';
+import useConfig from 'hooks/useConfig';
 
 // ==============================|| RTL LAYOUT ||============================== //
 
