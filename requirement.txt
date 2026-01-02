@@ -1,35 +1,16 @@
-Danh sách khách hàng / nhà cung cấp (List)
-Filter
-Field Name	Input Type	Required	Notes
-Tên khách hàng	Text	No
-Mã khách hàng	Text	No
-Loại đối tượng	Dropdown	No	Cá nhân / Doanh nghiệp
-Trạng thái	Dropdown	No	Hoạt động / Ngưng
-
-Column Name	Display Type	Sortable	Clickable	Notes
-Mã KH	Text	Yes	View
-Tên khách hàng	Text	Yes	View
-Loại	Badge	Yes	No
-SĐT	Text	No	No
-Trạng thái	Status	Yes	No
-Hành động	Action Button	No	Edit	View / Edit
-
-Action Name	Action Type	Availability	Notes
-Thêm khách hàng	Primary	Always
-Export Excel	Secondary	Always
-
-Thông tin khách hàng (VIEW/UPDADTE/CREATE)
+Thiết lập bảng giá & Công thức giá
 Field Name	Input Type	Required	Default Value	Business Notes
-Mã khách hàng	Text	Yes	Auto-generate	Read-only
-Tên khách hàng	Text	Yes
-Loại khách hàng	Dropdown	Yes		Cá nhân / DN
-Người đại diện	Text	Conditional		Nếu DN
-SĐT	Text	Yes
-Địa chỉ	Textarea	No
-Trạng thái	Dropdown	Yes	Hoạt động
-Ghi chú	Textarea	No
+Tên bảng giá	Text	Yes
+Loại nguyên liệu	Dropdown	Yes		Gỗ keo, gỗ tràm…
+Đơn giá cơ bản (VNĐ/kg)	Number	Yes
+Công thức điều chỉnh	Textarea	No		Mô tả logic
+Hiệu lực từ ngày	Date	Yes
+Trạng thái	Dropdown	Yes	Active
 
 Action Name	Action Type	Availability	Notes
-Lưu	Primary	Edit mode
-Chỉnh sửa	Secondary	View mode
+Lưu bảng giá	Primary	Edit mode
+Tạo bảng giá mới	Primary	Always
+Ngưng áp dụng	Secondary	Conditional	Khi đang Active
 Quay lại	Secondary	Always
+
+
