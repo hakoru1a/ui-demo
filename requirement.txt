@@ -1,41 +1,35 @@
-Danh sách Phiếu cân (Inbound / Outbound) (LIST)
+Danh sách khách hàng / nhà cung cấp (List)
 Filter
 Field Name	Input Type	Required	Notes
-Mã phiếu cân	Text	No
-Biển số xe	Text	No
-Nhà cung cấp	Dropdown	No
-Loại phiếu	Dropdown	No	Inbound / Outbound
-Thời gian cân	Date Range	No
+Tên khách hàng	Text	No
+Mã khách hàng	Text	No
+Loại đối tượng	Dropdown	No	Cá nhân / Doanh nghiệp
+Trạng thái	Dropdown	No	Hoạt động / Ngưng
 
 Column Name	Display Type	Sortable	Clickable	Notes
-Mã phiếu	Text	Yes	View
-Biển số xe	Text	Yes	No
-Nhà cung cấp	Text	Yes	View
-Loại phiếu	Badge	Yes	No	In / Out
-Trọng lượng (kg)	Number	Yes	No
-Thời gian	Text	Yes	No
-Hành động	Action Button	No	View	View / Edit
+Mã KH	Text	Yes	View
+Tên khách hàng	Text	Yes	View
+Loại	Badge	Yes	No
+SĐT	Text	No	No
+Trạng thái	Status	Yes	No
+Hành động	Action Button	No	Edit	View / Edit
 
 Action Name	Action Type	Availability	Notes
-Tạo phiếu mới	Primary	Always
+Thêm khách hàng	Primary	Always
 Export Excel	Secondary	Always
-Export PDF	Secondary	Always
 
-Thông tin phiếu cân (VIEW)
-
+Thông tin khách hàng (VIEW/UPDADTE/CREATE)
 Field Name	Input Type	Required	Default Value	Business Notes
-Mã phiếu	Text	Yes	Auto-generate	Read-only
-Biển số xe	Text	Yes
-Nhà cung cấp	Dropdown	Yes
-Trọng lượng vào (kg)	Number	Conditional		Inbound
-Trọng lượng ra (kg)	Number	Conditional		Outbound
-Khối lượng chênh lệch (kg)	Number (Auto)	No	Auto	Out - In
-Đơn giá áp dụng	Number	No	Auto	Theo bảng giá
-Thành tiền (ước tính)	Number (Auto)	No	Auto
+Mã khách hàng	Text	Yes	Auto-generate	Read-only
+Tên khách hàng	Text	Yes
+Loại khách hàng	Dropdown	Yes		Cá nhân / DN
+Người đại diện	Text	Conditional		Nếu DN
+SĐT	Text	Yes
+Địa chỉ	Textarea	No
+Trạng thái	Dropdown	Yes	Hoạt động
 Ghi chú	Textarea	No
 
 Action Name	Action Type	Availability	Notes
 Lưu	Primary	Edit mode
 Chỉnh sửa	Secondary	View mode
-In phiếu	Secondary	Always
 Quay lại	Secondary	Always

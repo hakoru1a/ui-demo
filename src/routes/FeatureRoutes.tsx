@@ -14,6 +14,7 @@ import WorkforceDispatchRoutes from 'features/admin/workforce-dispatch/routes';
 import AdvancesRoutes from 'features/business/advances/routes';
 import ContractsRoutes from 'features/business/contracts/routes';
 import PabRoutes from 'features/business/pab/routes';
+import BusinessPartnersRoutes from 'features/business/partners/routes';
 import PaymentsRoutes from 'features/business/payments/routes';
 // factory
 import BatchesRoutes from 'features/factory/batches/routes';
@@ -66,6 +67,7 @@ export const featureRoutes = [
   WorkforceDispatchRoutes,
   // business
   AdvancesRoutes,
+  BusinessPartnersRoutes,
   ContractsRoutes,
   PabRoutes,
   PaymentsRoutes,
