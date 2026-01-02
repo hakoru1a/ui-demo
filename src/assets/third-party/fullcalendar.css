@@ -219,11 +219,23 @@
 .fc-timegrid-event:hover,
 .fc-list-event:hover,
 .fc-event-selected:hover,
-.fc-event-mirror:hover {
+.fc-event-mirror:hover,
+.fc-event:hover .fc-event-main,
+.fc-daygrid-event:hover .fc-event-main,
+.fc-timegrid-event:hover .fc-event-main {
   opacity: 1 !important;
   background-color: inherit !important;
   border-color: inherit !important;
   color: inherit !important;
   transform: none !important;
   box-shadow: none !important;
+}
+
+/* Ensure event background color is preserved on hover */
+.fc-event-main {
+  background-color: inherit !important;
+}
+
+.fc-event:hover .fc-event-main {
+  background-color: inherit !important;
 }

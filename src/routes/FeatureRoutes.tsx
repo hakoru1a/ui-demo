@@ -19,6 +19,7 @@ import PaymentsRoutes from 'features/business/payments/routes';
 // factory
 import BatchesRoutes from 'features/factory/batches/routes';
 import MaterialReceiptsRoutes from 'features/factory/material-receipts/routes';
+import ProductionCalendarRoutes from 'features/factory/production-calendar/routes';
 import ProductionOrdersRoutes from 'features/factory/production-orders/routes';
 import ProductionPlansRoutes from 'features/factory/production-plans/routes';
 import QualityRoutes from 'features/factory/quality/routes';
@@ -74,6 +75,7 @@ export const featureRoutes = [
   // factory
   BatchesRoutes,
   MaterialReceiptsRoutes,
+  ProductionCalendarRoutes,
   ProductionOrdersRoutes,
   ProductionPlansRoutes,
   QualityRoutes,

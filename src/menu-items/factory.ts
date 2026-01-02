@@ -1,14 +1,15 @@
 import {
-  BuildOutlined,
-  InboxOutlined,
-  UnorderedListOutlined,
-  ToolOutlined,
-  SettingOutlined,
   AppstoreOutlined,
+  BarChartOutlined,
   BookOutlined,
+  BuildOutlined,
+  CalendarOutlined,
   ExportOutlined,
+  InboxOutlined,
   SafetyOutlined,
-  BarChartOutlined
+  SettingOutlined,
+  ToolOutlined,
+  UnorderedListOutlined
 } from '@ant-design/icons';
 
 import { NavItemType } from 'types/menu';
@@ -68,6 +69,13 @@ const factory: NavItemType = {
           type: 'item',
           url: '/batches',
           icon: UnorderedListOutlined
+        },
+        {
+          id: 'factory-production-schedule-log',
+          title: 'menu.factory.production-schedule-log',
+          type: 'item',
+          url: '/production-calendar',
+          icon: CalendarOutlined
         },
         {
           id: 'factory-shift-operation-log',

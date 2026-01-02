@@ -1,43 +1,21 @@
-SC-3-1: Danh sách lô sản xuất / nguyên liệu (LIST)
+Nhật ký vận hành ca sản xuất(LIST)
 Filter
 Field Name	Input Type	Required	Notes
-Mã lô	Text	No
-Kế hoạch / Lệnh SX	Dropdown	No
-Sản phẩm / Nguyên liệu	Dropdown	No
-Thời gian sản xuất	Date Range	No
-Trạng thái lô	Dropdown	No	Đang SX / Hoàn thành / Hủy
+Ca sản xuất	Dropdown	No
+Lô sản xuất	Dropdown	No
+Ngày làm việc	Date	No
+Trạng thái ca	Dropdown	No	Đang chạy / Kết thúc
 
 Column Name	Display Type	Sortable	Clickable	Notes
-Mã lô	Text	Yes	View
-Kế hoạch / Lệnh	Text	Yes	View
-Sản phẩm	Text	Yes	No
-Sản lượng kế hoạch	Number	Yes	No
-Sản lượng thực tế	Number	Yes	No
-Trạng thái	Status	Yes	No	Màu theo tiến độ
-Hành động	Action Button	No	Edit	View / Edit
+Mã ca	Text	Yes	View
+Lô sản xuất	Text	Yes	View
+Thời gian ca	Text	Yes	No
+Sản lượng ca	Number	Yes	No
+Sự cố	Badge	No	No	Có / Không
+Trạng thái	Status	Yes	No
+Hành động	Action Button	No	View	View
 
 Action Name	Action Type	Availability	Notes
-Tạo lô sản xuất	Primary	Always
+Ghi nhận nhật ký	Primary	Conditional	Khi ca đang chạy
 Export Excel	Secondary	Always
-Đóng lô	Secondary	Conditional	Khi hoàn thành
-
-
-SC-3-2: Thông tin lô sản xuất / nguyên liệu (VIEW/CREATE/UPDATE)
-
-Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
-Batch Code – Mã lô	Text	Yes	Auto-generate	Read-only
-Production Order – Lệnh SX	Dropdown	Yes
-Product / Material – SP / NL	Dropdown	Yes
-Planned Quantity – SL kế hoạch	Number	Yes		> 0
-Actual Quantity – SL thực tế	Number	No		Cập nhật dần
-Start Date – Ngày bắt đầu	Date	Yes
-End Date – Ngày kết thúc	Date	No
-Status – Trạng thái	Dropdown	Yes	Đang SX
-Notes – Ghi chú	Textarea	No
-
-Action Name	Action Type	Availability	Notes
-Lưu	Primary	Edit mode	Validate
-Chỉnh sửa	Secondary	View mode
-Tạo ca sản xuất	Primary	Conditional	Khi đang SX
-Đóng lô	Primary	Conditional	Khi đủ sản lượng
-Quay lại danh sách	Secondary	Always
+Quay lại lịch	Secondary	Always	SC-3-3
