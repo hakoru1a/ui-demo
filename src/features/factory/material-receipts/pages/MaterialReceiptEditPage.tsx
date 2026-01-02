@@ -1,4 +1,4 @@
-import { EditOutlined, PrinterOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import { SaveOutlined, CloseOutlined, PrinterOutlined } from '@ant-design/icons';
 import { Stack, Button } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Formik, Form } from 'formik';
@@ -13,9 +13,9 @@ import type { MaterialReceipt, MaterialReceiptFormData } from '../types';
 import { MATERIAL_RECEIPT_URLS } from '../types/constants';
 import { materialReceiptSchema, materialReceiptDefaultValues } from '../validation';
 
-// ==============================|| MATERIAL RECEIPT DETAIL PAGE ||============================== //
+// ==============================|| MATERIAL RECEIPT EDIT PAGE ||============================== //
 
-const MaterialReceiptDetailPage = () => {
+const MaterialReceiptEditPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [receipt, setReceipt] = useState<MaterialReceipt | null>(null);
@@ -69,17 +69,35 @@ const MaterialReceiptDetailPage = () => {
     };
   };
 
-  // Handle edit
-  const handleEdit = useCallback(() => {
+  // Handle form submission
+  const handleSubmit = useCallback(
+    async (values: MaterialReceiptFormData) => {
+      if (!id) return;
+
+      // TODO: Call API to update material receipt
+      // const response = await materialReceiptService.updateMaterialReceipt(id, values);
+      // if (response.success) {
+      //   navigate(MATERIAL_RECEIPT_URLS.DETAIL(id));
+      // }
+
+      // Mock API call
+      console.warn('Updating material receipt:', values);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      alert('Cập nhật phiếu nhập kho thành công! (Mock)');
+      navigate(MATERIAL_RECEIPT_URLS.DETAIL(id));
+    },
+    [id, navigate]
+  );
+
+  // Handle cancel
+  const handleCancel = useCallback(() => {
     if (id) {
-      navigate(MATERIAL_RECEIPT_URLS.EDIT(id));
+      navigate(MATERIAL_RECEIPT_URLS.DETAIL(id));
+    } else {
+      navigate(MATERIAL_RECEIPT_URLS.LIST);
     }
   }, [id, navigate]);
-
-  // Handle back to list
-  const handleBack = useCallback(() => {
-    navigate(MATERIAL_RECEIPT_URLS.LIST);
-  }, [navigate]);
 
   // Handle print
   const handlePrint = useCallback(() => {
@@ -126,39 +144,33 @@ const MaterialReceiptDetailPage = () => {
   const isDraft = receipt.status === 'draft';
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={materialReceiptSchema}
-      onSubmit={() => {}}
-      validateOnChange={false}
-      validateOnBlur={false}
-    >
-      {() => (
+    <Formik initialValues={initialValues} validationSchema={materialReceiptSchema} onSubmit={handleSubmit} validateOnChange validateOnBlur>
+      {({ isSubmitting, dirty }) => (
         <Form>
           <MainCard
-            title="Chi tiết phiếu nhập kho"
+            title="Chỉnh sửa phiếu nhập kho"
             secondary={
               <Stack direction="row" spacing={1}>
-                <Button variant="outlined" color="secondary" startIcon={<ArrowLeftOutlined />} onClick={handleBack}>
-                  Quay lại danh sách
-                </Button>
                 <Button variant="outlined" color="secondary" startIcon={<PrinterOutlined />} onClick={handlePrint}>
                   In phiếu
                 </Button>
                 {isDraft && (
-                  <Button variant="contained" color="success" onClick={handleConfirmReceipt}>
+                  <Button variant="contained" color="success" onClick={handleConfirmReceipt} disabled={isSubmitting}>
                     Xác nhận nhập kho
                   </Button>
                 )}
-                <Button variant="contained" color="primary" startIcon={<EditOutlined />} onClick={handleEdit}>
-                  Chỉnh sửa
+                <Button variant="outlined" color="secondary" startIcon={<CloseOutlined />} onClick={handleCancel} disabled={isSubmitting}>
+                  Quay lại
+                </Button>
+                <Button type="submit" variant="contained" color="primary" startIcon={<SaveOutlined />} disabled={isSubmitting || !dirty}>
+                  {isSubmitting ? 'Đang lưu...' : 'Lưu'}
                 </Button>
               </Stack>
             }
           >
             <Grid container spacing={3} sx={{ p: 1 }}>
               <Grid size={12}>
-                <MaterialReceiptForm mode="view" />
+                <MaterialReceiptForm mode="edit" />
               </Grid>
             </Grid>
           </MainCard>
@@ -168,4 +180,4 @@ const MaterialReceiptDetailPage = () => {
   );
 };
 
-export default MaterialReceiptDetailPage;
+export default MaterialReceiptEditPage;

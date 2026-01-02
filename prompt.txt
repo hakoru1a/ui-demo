@@ -2,6 +2,7 @@ Implement màn hình mới với các trường dữ liệu tuân theo conventio
 
 Yêu cầu:
 - Tuân theo cấu trúc và convention của các feature hiện có (suppliers, forest-areas)
+- Check page route nếu đã có folder rồi thì đừng tạo forlder
 - Không tự ý tạo thêm folder, nếu cần thiết confirm trước khi tạo (*)
 - Structure là Featurebase architecture với convention đã có sẵn
 - Luôn cố gắn hướng tới việc tách logic ra khỏi component (PureComponent)
