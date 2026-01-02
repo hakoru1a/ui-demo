@@ -298,10 +298,10 @@ const VesselTrackingForm = ({ mode }: VesselTrackingFormProps) => {
           helperText={getError('currentStatus') || 'Tự động cập nhật'}
           slotProps={{
             input: {
-              readOnly: isReadOnly || mode === 'view'
+              readOnly: isReadOnly
             }
           }}
-          disabled={isReadOnly || mode === 'view'}
+          disabled={isReadOnly}
           sx={isReadOnly ? { '& .MuiInputBase-root': { opacity: 1 } } : undefined}
         />
       </Grid>

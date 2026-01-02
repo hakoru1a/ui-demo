@@ -1,22 +1,41 @@
-Ghi nhận chi phí Logistics & Dịch vụ
+Danh sách Phiếu cân (Inbound / Outbound) (LIST)
+Filter
+Field Name	Input Type	Required	Notes
+Mã phiếu cân	Text	No
+Biển số xe	Text	No
+Nhà cung cấp	Dropdown	No
+Loại phiếu	Dropdown	No	Inbound / Outbound
+Thời gian cân	Date Range	No
 
-Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
-Cost Code – Mã chi phí	Text	Yes	Auto-generate	Read-only
-Cost Type – Loại chi phí	Dropdown	Yes	Logistics	Logistics / Dịch vụ
-Service Category – Nhóm dịch vụ	Dropdown	No		Vận chuyển / Bốc xếp / Hải quan
-Partner – Đối tác	Dropdown	Yes		NCC dịch vụ
-Related Shipment / Order – Lô/Đơn liên quan	Dropdown	No		Tham chiếu
-Cost Date – Ngày phát sinh	Date	Yes	Today
-Amount – Số tiền	Number	Yes		> 0
-Currency – Tiền tệ	Dropdown	Yes	VND
-Allocation Method – Phân bổ	Dropdown	No		Theo lô / Theo đơn
-Attachment – Chứng từ	File Upload	No		Hóa đơn / Biên nhận
-Status – Trạng thái	Dropdown	Yes	Nháp	Nháp / Đã ghi nhận
-Notes – Ghi chú	Textarea	No
+Column Name	Display Type	Sortable	Clickable	Notes
+Mã phiếu	Text	Yes	View
+Biển số xe	Text	Yes	No
+Nhà cung cấp	Text	Yes	View
+Loại phiếu	Badge	Yes	No	In / Out
+Trọng lượng (kg)	Number	Yes	No
+Thời gian	Text	Yes	No
+Hành động	Action Button	No	View	View / Edit
 
 Action Name	Action Type	Availability	Notes
-Lưu chi phí	Primary	Edit mode	Validate
-Ghi nhận chi phí	Primary	Conditional	Khi trạng thái = Nháp
+Tạo phiếu mới	Primary	Always
+Export Excel	Secondary	Always
+Export PDF	Secondary	Always
+
+Thông tin phiếu cân (VIEW)
+
+Field Name	Input Type	Required	Default Value	Business Notes
+Mã phiếu	Text	Yes	Auto-generate	Read-only
+Biển số xe	Text	Yes
+Nhà cung cấp	Dropdown	Yes
+Trọng lượng vào (kg)	Number	Conditional		Inbound
+Trọng lượng ra (kg)	Number	Conditional		Outbound
+Khối lượng chênh lệch (kg)	Number (Auto)	No	Auto	Out - In
+Đơn giá áp dụng	Number	No	Auto	Theo bảng giá
+Thành tiền (ước tính)	Number (Auto)	No	Auto
+Ghi chú	Textarea	No
+
+Action Name	Action Type	Availability	Notes
+Lưu	Primary	Edit mode
 Chỉnh sửa	Secondary	View mode
 In phiếu	Secondary	Always
 Quay lại	Secondary	Always

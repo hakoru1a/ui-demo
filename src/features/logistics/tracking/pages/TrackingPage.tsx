@@ -28,6 +28,7 @@ const TrackingPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showRoute] = useState(true);
 
   // Fetch tracking data
   const fetchTrackingData = useCallback(

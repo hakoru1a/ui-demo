@@ -377,10 +377,9 @@ const LogisticsCostForm = ({ mode }: LogisticsCostFormProps) => {
         <Field name="attachment">
           {({ field }: FieldProps) => (
             <SingleFileUpload
-              files={getFileArray(field.value)}
+              file={getFileArray(field.value)}
               setFieldValue={createSetFieldValueWrapper('attachment')}
               error={!!getError('attachment')}
-              disabled={isReadOnly}
             />
           )}
         </Field>

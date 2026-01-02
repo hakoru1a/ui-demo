@@ -22,7 +22,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 // ==============================|| TYPES ||============================== //
 
-import type { TrackingStatus } from '../types';
+import type { TrackingStatus, TrackingPosition } from '../types';
 
 interface TrackingMapViewerProps {
   trackingStatus: TrackingStatus;
@@ -47,7 +47,8 @@ const TrackingMapViewer = ({ trackingStatus, height = 500, showRoute = true }: T
   const currentPos: [number, number] = [trackingStatus.currentPosition.latitude, trackingStatus.currentPosition.longitude];
 
   // Route waypoints for polyline
-  const routePositions: [number, number][] = trackingStatus.route?.waypoints.map((wp) => [wp.latitude, wp.longitude]) || [];
+  const routePositions: [number, number][] =
+    trackingStatus.route?.waypoints.map((wp: { latitude: number; longitude: number }) => [wp.latitude, wp.longitude]) || [];
 
   // Get status color
   const getStatusColor = () => {
@@ -129,7 +130,7 @@ const TrackingMapViewer = ({ trackingStatus, height = 500, showRoute = true }: T
 
         {/* Route waypoints markers */}
         {showRoute &&
-          trackingStatus.route?.waypoints.map((waypoint, index) => (
+          trackingStatus.route?.waypoints.map((waypoint: TrackingPosition, index: number) => (
             <Marker
               key={`waypoint-${index}`}
               position={[waypoint.latitude, waypoint.longitude]}

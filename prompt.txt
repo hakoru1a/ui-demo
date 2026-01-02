@@ -8,7 +8,9 @@ Yêu cầu:
 - UI width/height/size cố gắn giống nhất theo convention không tự ý thay đổi
 - Đảm bảo tiêu chí less code- dễ đọc, dễ bảo trì và đúng convention
 - Không dùng dayjs trực tiếp dùng dateHelper trong utils
-- chạy eslint trước khi báo xong
+- Không dùng magic string hãy khai  báo enum hoặc contant
+- Nếu là ListPage hãy bổ sung func deletebulk và delete item
+- Chạy eslint trước khi báo xong
 Convention cần tuân theo:
 
 1. TYPES:

@@ -96,7 +96,7 @@ const VesselTrackingDetailPage = () => {
       // Mock API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       // await vesselTrackingService.updateStatus(id, tracking.currentStatus === 'running' ? 'arrived' : 'running');
-      const newStatus = tracking.currentStatus === 'running' ? 'arrived' : 'running';
+      const newStatus: 'running' | 'arrived' = tracking.currentStatus === 'running' ? 'arrived' : 'running';
       alert(`Cập nhật trạng thái thành công! (Mock - ${newStatus === 'running' ? 'Đang chạy' : 'Đã đến'})`);
       // Reload tracking
       const updatedTracking = { ...tracking, currentStatus: newStatus };

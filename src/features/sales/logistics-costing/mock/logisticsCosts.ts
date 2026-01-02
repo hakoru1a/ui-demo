@@ -9,9 +9,9 @@ import type { LogisticsCost } from '../types';
  */
 export function getMockLogisticsCosts(): LogisticsCost[] {
   const today = dateHelper.getToday();
-  const yesterday = dateHelper.subtractDays(today, 1);
-  const lastWeek = dateHelper.subtractDays(today, 7);
-  const lastMonth = dateHelper.subtractDays(today, 30);
+  const yesterday = dateHelper.subtractDays(today, 1).toDate();
+  const lastWeek = dateHelper.subtractDays(today, 7).toDate();
+  const lastMonth = dateHelper.subtractDays(today, 30).toDate();
 
   return [
     {
