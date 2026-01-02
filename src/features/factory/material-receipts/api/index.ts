@@ -99,7 +99,7 @@ class MaterialReceiptService extends BaseService {
    * @param id - Material receipt ID
    * @returns Updated material receipt result
    */
-  async confirmReceipt(id: string): Promise<ApiResult<MaterialReceipt>> {
+  async confirmReceipt(id: string): Promise<MaterialReceipt> {
     return this.patch<{ status: 'received' }, MaterialReceipt>(`/api/material-receipts/${id}/confirm`, { status: 'received' });
   }
 }

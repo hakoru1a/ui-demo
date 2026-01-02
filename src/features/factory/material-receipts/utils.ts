@@ -5,5 +5,5 @@
  */
 export function getLabelFromOptions<T extends { value: unknown; label: string }>(value: T['value'], options: T[]): string {
   const option = options.find((opt) => opt.value === value);
-  return option?.label || value || '-';
+  return option?.label || (typeof value === 'string' ? value : String(value || '-'));
 }

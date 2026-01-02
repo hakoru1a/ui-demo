@@ -8,6 +8,8 @@ import DashboardLayout from 'layout/Dashboard';
 
 const BatchesListPage = Loadable(lazy(() => import('./pages/BatchesListPage')));
 const BatchDetailPage = Loadable(lazy(() => import('./pages/BatchDetailPage')));
+const BatchCreatePage = Loadable(lazy(() => import('./pages/BatchCreatePage')));
+const BatchEditPage = Loadable(lazy(() => import('./pages/BatchEditPage')));
 
 const BatchesRoutes = {
   path: '/batches',
@@ -20,6 +22,14 @@ const BatchesRoutes = {
     {
       path: ':id',
       element: <BatchDetailPage />
+    },
+    {
+      path: 'new',
+      element: <BatchCreatePage />
+    },
+    {
+      path: ':id/edit',
+      element: <BatchEditPage />
     }
   ]
 };

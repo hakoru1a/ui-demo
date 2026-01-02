@@ -424,3 +424,43 @@ Lưu ý:
   * Export: CSVExport component trong TableHeader
   * Filter: FilterPopover với FilterOutlined icon
   * Search: TextField với SearchOutlined icon trong Toolbar
+
+17. COMMON BUILD ERRORS & FIXES:
+    - Import Types:
+      * LUÔN import từ 'types' hoặc '../types' (KHÔNG dùng 'types.ts' hoặc 'types/index.ts')
+      * TypeScript tự động resolve 'types' -> 'types/index.ts'
+      * Ví dụ: `import type { Entity, EntityFormData } from '../types';` ✅
+      * KHÔNG: `import type { Entity } from '../types.ts';` ❌
+      * KHÔNG: `import type { Entity } from '../types/index';` ❌
+    - Empty types.ts files:
+      * Nếu có folder types/ với index.ts, KHÔNG tạo file types.ts ở parent directory
+      * File types.ts trống sẽ gây lỗi "File is not a module"
+      * Xóa file types.ts nếu đã có types/index.ts
+    - API Service Type Errors:
+      * Khi dùng post/put với empty payload, dùng `Record<string, never>` thay vì `never`
+      * Ví dụ: `this.post<Record<string, never>, Response>(url, {})` ✅
+      * KHÔNG: `this.post<never, Response>(url, {})` ❌
+    - Enum Values:
+      * Đảm bảo enum values khớp với usage trong constants và mock data
+      * Nếu thêm value mới vào constants, phải thêm vào enum type
+      * Ví dụ: Nếu constants có 'dispatched', enum phải có: `'available' | 'busy' | 'off' | 'dispatched'`
+    - DateTime Handling in FilterPopover:
+      * LUÔN dùng dateHelper để format date values trong FilterPopover
+      * KHÔNG dùng `value.toString()` hoặc `value.toISOString()` trực tiếp
+      * Pattern đúng:
+        ```typescript
+        onChange={(value) => {
+          const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
+          handleFilterChange('dateField', dateStr);
+        }}
+        ```
+      * Hoặc cho date range:
+        ```typescript
+        onChange={(newValue) => {
+          const dateStr = newValue ? dateHelper.formatDate(newValue, 'YYYY-MM-DD') : undefined;
+          handleFilterChange('dateFrom', dateStr);
+        }}
+        ```
+      * KHÔNG: `onChange={(value) => handleFilterChange('date', value ? value.toString() : undefined)}` ❌
+      * KHÔNG: `onChange={(value) => handleFilterChange('date', value ? value.toISOString() : undefined)}` ❌
+      * Lý do: dateHelper đảm bảo format nhất quán và xử lý timezone đúng cách

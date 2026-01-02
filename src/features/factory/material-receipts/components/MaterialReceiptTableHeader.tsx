@@ -37,6 +37,7 @@ import MainCard from 'components/MainCard';
 import { CSVExport, RowSelection, SelectColumnVisibility } from 'components/third-party/react-table';
 import { useTableFilterDialog } from 'hooks/table';
 import useBoolean from 'hooks/useBoolean';
+import dateHelper from 'utils/dateHelper';
 
 import type { MaterialReceipt, ReceiptStatus } from '../types';
 import {
@@ -323,18 +324,32 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                       <Stack direction="row" spacing={1} alignItems="center">
                         <DatePickerField
                           label="Từ ngày"
-                          value={getFilterValue('receiptDateFrom') || null}
-                          onChange={(value) => handleFilterChange('receiptDateFrom', value ? value.toString() : undefined)}
-                          fullWidth
-                          size="medium"
+                          value={dateHelper.normalizeDateValue(getFilterValue('receiptDateFrom') || null)}
+                          onChange={(value) => {
+                            const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
+                            handleFilterChange('receiptDateFrom', dateStr);
+                          }}
+                          slotProps={{
+                            textField: {
+                              fullWidth: true,
+                              size: 'medium'
+                            }
+                          }}
                         />
                         <Box>-</Box>
                         <DatePickerField
                           label="Đến ngày"
-                          value={getFilterValue('receiptDateTo') || null}
-                          onChange={(value) => handleFilterChange('receiptDateTo', value ? value.toString() : undefined)}
-                          fullWidth
-                          size="medium"
+                          value={dateHelper.normalizeDateValue(getFilterValue('receiptDateTo') || null)}
+                          onChange={(value) => {
+                            const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
+                            handleFilterChange('receiptDateTo', dateStr);
+                          }}
+                          slotProps={{
+                            textField: {
+                              fullWidth: true,
+                              size: 'medium'
+                            }
+                          }}
                         />
                       </Stack>
                     </Grid>

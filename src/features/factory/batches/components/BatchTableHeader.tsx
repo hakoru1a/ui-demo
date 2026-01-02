@@ -1,4 +1,4 @@
-// ==============================|| PRICE TABLE TABLE HEADER ||============================== //
+// ==============================|| BATCH TABLE HEADER ||============================== //
 // Combines: StatusTabs + Toolbar + FilterPopover
 
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
@@ -37,72 +37,81 @@ import MainCard from 'components/MainCard';
 import { CSVExport, RowSelection, SelectColumnVisibility } from 'components/third-party/react-table';
 import { useTableFilterDialog } from 'hooks/table';
 import useBoolean from 'hooks/useBoolean';
-import { STATUS_OPTIONS, StatusFilter } from 'types/status';
 import dateHelper from 'utils/dateHelper';
-import { getStatusColorMap } from 'utils/getStatusColor';
 
-import type { PriceTable } from '../types';
-import { PRICE_TABLE_URLS, MATERIAL_TYPE_OPTIONS } from '../types/constants';
+import type { Batch, BatchStatus } from '../types';
+import { BATCH_URLS, BATCH_STATUS_OPTIONS, PRODUCTION_ORDER_OPTIONS, PRODUCT_MATERIAL_OPTIONS } from '../types/constants';
 
 // ==============================|| TYPES ||============================== //
 
-interface PriceTableTableHeaderProps {
-  table: Table<PriceTable>;
+export type BatchStatusFilter = 'all' | BatchStatus;
+
+interface BatchTableHeaderProps {
+  table: Table<Batch>;
   // CSV Export
-  csvData: PriceTable[];
+  csvData: Batch[];
   csvHeadersData: Array<{ label: string; key: string }>;
   csvFilename?: string;
   // Filter
   columnFilters: ColumnFiltersState;
   onFilterChange: (filters: ColumnFiltersState) => void;
   // Status
-  statusFilter?: StatusFilter;
-  onStatusFilterChange?: (status: StatusFilter) => void;
+  statusFilter?: BatchStatusFilter;
+  onStatusFilterChange?: (status: BatchStatusFilter) => void;
   // Search
   searchValue?: string;
   onSearchChange?: (value: string) => void;
+  // Delete
+  onBulkDelete?: (batches: Batch[]) => void;
   // Feature flags
   enableRowSelection?: boolean;
   enableCSVExport?: boolean;
   enableColumnVisibility?: boolean;
-  // Bulk delete
-  onBulkDelete?: (priceTables: PriceTable[]) => void;
 }
 
 // ==============================|| STATUS TABS ||============================== //
 
 interface StatusTabsProps {
-  table: Table<PriceTable>;
-  statusFilter: StatusFilter;
-  onStatusFilterChange?: (status: StatusFilter) => void;
+  table: Table<Batch>;
+  statusFilter: BatchStatusFilter;
+  onStatusFilterChange?: (status: BatchStatusFilter) => void;
 }
 
 function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsProps) {
   const theme = useTheme();
-  const tabColorMap = getStatusColorMap(theme);
 
   const statusCounts = useMemo(() => {
     const allRows = table.getPreFilteredRowModel().rows;
     return {
       all: allRows.length,
-      active: allRows.filter((row) => row.original.status === 'active').length,
-      inactive: allRows.filter((row) => row.original.status === 'inactive').length
+      'in-progress': allRows.filter((row) => row.original.status === 'in-progress').length,
+      completed: allRows.filter((row) => row.original.status === 'completed').length,
+      cancelled: allRows.filter((row) => row.original.status === 'cancelled').length
     };
   }, [table]);
 
+  // Get color for each status - MUST be different for each status
+  const getTabColor = (value: BatchStatusFilter) => {
+    switch (value) {
+      case 'all':
+        return theme.palette.primary.main;
+      case 'in-progress':
+        return theme.palette.info.main;
+      case 'completed':
+        return theme.palette.success.main;
+      case 'cancelled':
+        return theme.palette.error.main;
+      default:
+        return theme.palette.primary.main;
+    }
+  };
+
   const tabsConfig = useMemo(
     () => [
-      { value: StatusFilter.ALL, label: 'Tất cả', count: statusCounts.all },
-      {
-        value: StatusFilter.ACTIVE,
-        label: STATUS_OPTIONS.find((opt) => opt.value === 'active')?.label || 'Hoạt động',
-        count: statusCounts.active
-      },
-      {
-        value: StatusFilter.INACTIVE,
-        label: STATUS_OPTIONS.find((opt) => opt.value === 'inactive')?.label || 'Tạm ngưng',
-        count: statusCounts.inactive
-      }
+      { value: 'all' as BatchStatusFilter, label: 'Tất cả', count: statusCounts.all },
+      { value: 'in-progress' as BatchStatusFilter, label: 'Đang SX', count: statusCounts['in-progress'] },
+      { value: 'completed' as BatchStatusFilter, label: 'Hoàn thành', count: statusCounts.completed },
+      { value: 'cancelled' as BatchStatusFilter, label: 'Hủy', count: statusCounts.cancelled }
     ],
     [statusCounts]
   );
@@ -111,44 +120,47 @@ function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsPro
     <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 2, pt: 2 }}>
       <Tabs
         value={statusFilter}
-        onChange={(_, value) => onStatusFilterChange?.(value)}
-        sx={{ '& .MuiTabs-indicator': { backgroundColor: tabColorMap[statusFilter], height: 3 } }}
+        onChange={(_, value) => onStatusFilterChange?.(value as BatchStatusFilter)}
+        sx={{ '& .MuiTabs-indicator': { backgroundColor: getTabColor(statusFilter), height: 3 } }}
       >
-        {tabsConfig.map((tab) => (
-          <Tab
-            key={tab.value}
-            value={tab.value}
-            label={
-              <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                <span>{tab.label}</span>
-                <Box
-                  component="span"
-                  sx={{
-                    minWidth: 20,
-                    height: 20,
-                    px: 0.75,
-                    borderRadius: '10px',
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    bgcolor: tabColorMap[tab.value] + '20',
-                    color: tabColorMap[tab.value],
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  {tab.count}
+        {tabsConfig.map((tab) => {
+          const tabColor = getTabColor(tab.value);
+          return (
+            <Tab
+              key={tab.value}
+              value={tab.value}
+              label={
+                <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                  <span>{tab.label}</span>
+                  <Box
+                    component="span"
+                    sx={{
+                      minWidth: 20,
+                      height: 20,
+                      px: 0.75,
+                      borderRadius: '10px',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      bgcolor: tabColor + '20',
+                      color: tabColor,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    {tab.count}
+                  </Box>
                 </Box>
-              </Box>
-            }
-            sx={{
-              textTransform: 'none',
-              fontWeight: 600,
-              '&.Mui-selected': { color: tabColorMap[tab.value] + ' !important' },
-              '&:hover': { color: tabColorMap[tab.value] }
-            }}
-          />
-        ))}
+              }
+              sx={{
+                textTransform: 'none',
+                fontWeight: 600,
+                '&.Mui-selected': { color: tabColor + ' !important' },
+                '&:hover': { color: tabColor }
+              }}
+            />
+          );
+        })}
       </Tabs>
     </Box>
   );
@@ -242,21 +254,10 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                 <Divider />
                 <Box sx={{ p: 2.5 }}>
                   <Grid container spacing={2}>
-                    {/* Tên bảng giá */}
+                    {/* Mã lô */}
                     <Grid size={{ xs: 12, sm: 4 }}>
                       <TextField
-                        label="Tên bảng giá"
-                        value={getFilterValue('name') || ''}
-                        onChange={(e) => handleFilterChange('name', e.target.value)}
-                        fullWidth
-                        size="medium"
-                      />
-                    </Grid>
-
-                    {/* Mã bảng giá */}
-                    <Grid size={{ xs: 12, sm: 4 }}>
-                      <TextField
-                        label="Mã bảng giá"
+                        label="Mã lô"
                         value={getFilterValue('code') || ''}
                         onChange={(e) => handleFilterChange('code', e.target.value)}
                         fullWidth
@@ -264,69 +265,75 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                       />
                     </Grid>
 
-                    {/* Loại nguyên liệu */}
+                    {/* Kế hoạch / Lệnh SX */}
                     <Grid size={{ xs: 12, sm: 4 }}>
                       <SelectField
-                        label="Loại nguyên liệu"
-                        value={getFilterValue('materialType') || ''}
-                        onChange={(e) => handleFilterChange('materialType', e.target.value)}
-                        options={[{ value: '', label: 'Tất cả' }, ...MATERIAL_TYPE_OPTIONS]}
+                        label="Kế hoạch / Lệnh SX"
+                        value={getFilterValue('productionOrderId') || ''}
+                        onChange={(e) => handleFilterChange('productionOrderId', e.target.value)}
+                        options={[{ value: '', label: 'Tất cả' }, ...PRODUCTION_ORDER_OPTIONS]}
                         fullWidth
                         size="medium"
                       />
                     </Grid>
 
-                    {/* Trạng thái */}
+                    {/* Sản phẩm / Nguyên liệu */}
                     <Grid size={{ xs: 12, sm: 4 }}>
                       <SelectField
-                        label="Trạng thái"
+                        label="Sản phẩm / Nguyên liệu"
+                        value={getFilterValue('productId') || ''}
+                        onChange={(e) => handleFilterChange('productId', e.target.value)}
+                        options={[{ value: '', label: 'Tất cả' }, ...PRODUCT_MATERIAL_OPTIONS]}
+                        fullWidth
+                        size="medium"
+                      />
+                    </Grid>
+
+                    {/* Trạng thái lô */}
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <SelectField
+                        label="Trạng thái lô"
                         value={getFilterValue('status') || ''}
                         onChange={(e) => handleFilterChange('status', e.target.value)}
-                        options={[{ value: '', label: 'Tất cả' }, ...STATUS_OPTIONS]}
+                        options={[{ value: '', label: 'Tất cả' }, ...BATCH_STATUS_OPTIONS]}
                         fullWidth
                         size="medium"
                       />
                     </Grid>
 
-                    {/* Đơn giá cơ bản - Range */}
-                    <Grid size={{ xs: 12, sm: 4 }}>
+                    {/* Thời gian sản xuất - Date Range */}
+                    <Grid size={{ xs: 12, sm: 6 }}>
                       <Stack direction="row" spacing={1} alignItems="center">
-                        <TextField
-                          label="Min (VNĐ/kg)"
-                          value={getFilterValue('minBasePrice') || ''}
-                          onChange={(e) => handleFilterChange('minBasePrice', e.target.value)}
-                          fullWidth
-                          size="medium"
-                          type="number"
+                        <DatePickerField
+                          label="Từ ngày"
+                          value={dateHelper.normalizeDateValue(getFilterValue('startDateFrom') || null)}
+                          onChange={(value) => {
+                            const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
+                            handleFilterChange('startDateFrom', dateStr);
+                          }}
+                          slotProps={{
+                            textField: {
+                              fullWidth: true,
+                              size: 'medium'
+                            }
+                          }}
                         />
                         <Box>-</Box>
-                        <TextField
-                          label="Max (VNĐ/kg)"
-                          value={getFilterValue('maxBasePrice') || ''}
-                          onChange={(e) => handleFilterChange('maxBasePrice', e.target.value)}
-                          fullWidth
-                          size="medium"
-                          type="number"
+                        <DatePickerField
+                          label="Đến ngày"
+                          value={dateHelper.normalizeDateValue(getFilterValue('startDateTo') || null)}
+                          onChange={(value) => {
+                            const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
+                            handleFilterChange('startDateTo', dateStr);
+                          }}
+                          slotProps={{
+                            textField: {
+                              fullWidth: true,
+                              size: 'medium'
+                            }
+                          }}
                         />
                       </Stack>
-                    </Grid>
-
-                    {/* Hiệu lực từ ngày */}
-                    <Grid size={{ xs: 12, sm: 4 }}>
-                      <DatePickerField
-                        label="Hiệu lực từ ngày"
-                        value={dateHelper.normalizeDateValue(getFilterValue('effectiveFrom') || null)}
-                        onChange={(value) => {
-                          const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
-                          handleFilterChange('effectiveFrom', dateStr);
-                        }}
-                        slotProps={{
-                          textField: {
-                            fullWidth: true,
-                            size: 'medium'
-                          }
-                        }}
-                      />
                     </Grid>
                   </Grid>
                 </Box>
@@ -353,41 +360,33 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
 
 // ==============================|| MAIN COMPONENT ||============================== //
 
-const PriceTableTableHeader = ({
+const BatchTableHeader = ({
   table,
   csvData,
   csvHeadersData,
-  csvFilename = 'price-tables',
+  csvFilename = 'batches',
   columnFilters,
   onFilterChange,
-  statusFilter = StatusFilter.ALL,
+  statusFilter = 'all',
   onStatusFilterChange,
   searchValue = '',
   onSearchChange,
+  onBulkDelete,
   enableRowSelection = false,
   enableCSVExport = true,
-  enableColumnVisibility = true,
-  onBulkDelete
-}: PriceTableTableHeaderProps) => {
+  enableColumnVisibility = true
+}: BatchTableHeaderProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const filterPopover = useBoolean(false);
   const filterAnchorRef = useRef<HTMLButtonElement>(null);
 
-  const selectedRows = table.getFilteredSelectedRowModel().rows;
-  const selectedCount = selectedRows.length;
-  const hasSelection = selectedCount > 0;
-
   const handleCreateNew = () => {
-    navigate(PRICE_TABLE_URLS.NEW);
+    navigate(BATCH_URLS.NEW);
   };
 
-  const handleBulkDelete = () => {
-    if (onBulkDelete && hasSelection) {
-      const selectedPriceTables = selectedRows.map((row) => row.original);
-      onBulkDelete(selectedPriceTables);
-    }
-  };
+  const selectedRows = table.getFilteredSelectedRowModel().rows.map((row) => row.original);
+  const hasSelectedRows = selectedRows.length > 0;
 
   return (
     <>
@@ -402,7 +401,7 @@ const PriceTableTableHeader = ({
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%' }}>
           <TextField
-            placeholder="Tìm kiếm theo mã, tên bảng giá..."
+            placeholder="Tìm kiếm theo mã lô..."
             value={searchValue}
             onChange={(e) => onSearchChange?.(e.target.value)}
             size="medium"
@@ -420,7 +419,7 @@ const PriceTableTableHeader = ({
 
           {enableRowSelection && (
             <Box sx={{ minWidth: 120 }}>
-              <RowSelection selected={selectedCount} />
+              <RowSelection selected={table.getFilteredSelectedRowModel().rows.length} />
             </Box>
           )}
 
@@ -442,6 +441,23 @@ const PriceTableTableHeader = ({
             </IconButton>
           </Tooltip>
 
+          {hasSelectedRows && onBulkDelete && (
+            <Tooltip title="Xóa nhiều lô sản xuất">
+              <IconButton
+                size="medium"
+                color="error"
+                onClick={() => onBulkDelete(selectedRows)}
+                sx={{
+                  '&:hover': {
+                    bgcolor: 'error.lighter'
+                  }
+                }}
+              >
+                <DeleteOutlined />
+              </IconButton>
+            </Tooltip>
+          )}
+
           {enableCSVExport && csvData.length > 0 && <CSVExport data={csvData} filename={csvFilename} headers={csvHeadersData} />}
 
           {enableColumnVisibility && (
@@ -453,15 +469,8 @@ const PriceTableTableHeader = ({
             />
           )}
 
-          {/* Xóa nhiều - Secondary, Conditional (when ≥1 selected) */}
-          {hasSelection && onBulkDelete && (
-            <Button variant="outlined" color="error" startIcon={<DeleteOutlined />} onClick={handleBulkDelete}>
-              Xóa nhiều ({selectedCount})
-            </Button>
-          )}
-
           <Button variant="contained" color="primary" startIcon={<PlusOutlined />} onClick={handleCreateNew}>
-            Tạo mới
+            Tạo lô sản xuất
           </Button>
         </Stack>
       </Toolbar>
@@ -478,4 +487,4 @@ const PriceTableTableHeader = ({
   );
 };
 
-export default PriceTableTableHeader;
+export default BatchTableHeader;

@@ -37,6 +37,7 @@ import MainCard from 'components/MainCard';
 import { CSVExport, RowSelection, SelectColumnVisibility } from 'components/third-party/react-table';
 import { useTableFilterDialog } from 'hooks/table';
 import useBoolean from 'hooks/useBoolean';
+import dateHelper from 'utils/dateHelper';
 
 import type { ProductionPlan, PlanStatus } from '../types';
 import { PRODUCTION_PLAN_URLS, PLAN_TYPE_OPTIONS, PLAN_STATUS_OPTIONS, PRODUCT_OPTIONS } from '../types/constants';
@@ -305,18 +306,32 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                       <Stack direction="row" spacing={1} alignItems="center">
                         <DatePickerField
                           label="Từ ngày"
-                          value={getFilterValue('startDateFrom') || null}
-                          onChange={(value) => handleFilterChange('startDateFrom', value ? value.toString() : undefined)}
-                          fullWidth
-                          size="medium"
+                          value={dateHelper.normalizeDateValue(getFilterValue('startDateFrom') || null)}
+                          onChange={(value) => {
+                            const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
+                            handleFilterChange('startDateFrom', dateStr);
+                          }}
+                          slotProps={{
+                            textField: {
+                              fullWidth: true,
+                              size: 'medium'
+                            }
+                          }}
                         />
                         <Box>-</Box>
                         <DatePickerField
                           label="Đến ngày"
-                          value={getFilterValue('startDateTo') || null}
-                          onChange={(value) => handleFilterChange('startDateTo', value ? value.toString() : undefined)}
-                          fullWidth
-                          size="medium"
+                          value={dateHelper.normalizeDateValue(getFilterValue('startDateTo') || null)}
+                          onChange={(value) => {
+                            const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
+                            handleFilterChange('startDateTo', dateStr);
+                          }}
+                          slotProps={{
+                            textField: {
+                              fullWidth: true,
+                              size: 'medium'
+                            }
+                          }}
                         />
                       </Stack>
                     </Grid>

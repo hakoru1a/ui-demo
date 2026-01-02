@@ -1,44 +1,43 @@
-SC-2-2: Danh sách kế hoạch / lệnh sản xuất (LIST)
-Fitler
+SC-3-1: Danh sách lô sản xuất / nguyên liệu (LIST)
+Filter
 Field Name	Input Type	Required	Notes
-Mã kế hoạch / lệnh	Text	No
-Loại	Dropdown	No	Kế hoạch / Lệnh
-Sản phẩm	Dropdown	No
+Mã lô	Text	No
+Kế hoạch / Lệnh SX	Dropdown	No
+Sản phẩm / Nguyên liệu	Dropdown	No
 Thời gian sản xuất	Date Range	No
-Trạng thái	Dropdown	No	Nháp / Đang SX / Hoàn thành
+Trạng thái lô	Dropdown	No	Đang SX / Hoàn thành / Hủy
 
 Column Name	Display Type	Sortable	Clickable	Notes
-Mã	Text	Yes	View
-Loại	Badge	Yes	No	Kế hoạch / Lệnh
-Sản phẩm	Text	Yes	View
-Sản lượng dự kiến	Number	Yes	No
-Thời gian	Text	Yes	No
-Chi phí ước tính	Number	Yes	No
+Mã lô	Text	Yes	View
+Kế hoạch / Lệnh	Text	Yes	View
+Sản phẩm	Text	Yes	No
+Sản lượng kế hoạch	Number	Yes	No
+Sản lượng thực tế	Number	Yes	No
 Trạng thái	Status	Yes	No	Màu theo tiến độ
 Hành động	Action Button	No	Edit	View / Edit
 
 Action Name	Action Type	Availability	Notes
-Tạo kế hoạch / lệnh	Primary	Always
+Tạo lô sản xuất	Primary	Always
 Export Excel	Secondary	Always
-Xóa	Secondary	Conditional	Khi còn Nháp
+Đóng lô	Secondary	Conditional	Khi hoàn thành
 
-SC-2-3: Thông tin kế hoạch / lệnh sản xuất (UPDATE/VIEW/CREATE)
+
+SC-3-2: Thông tin lô sản xuất / nguyên liệu (VIEW/CREATE/UPDATE)
 
 Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
-Plan / Order Code – Mã	Text	Yes	Auto-generate	Read-only
-Type – Loại	Dropdown	Yes	Kế hoạch	Kế hoạch / Lệnh
-Product – Sản phẩm	Dropdown	Yes
-Planned Quantity – Sản lượng dự kiến	Number	Yes		> 0
+Batch Code – Mã lô	Text	Yes	Auto-generate	Read-only
+Production Order – Lệnh SX	Dropdown	Yes
+Product / Material – SP / NL	Dropdown	Yes
+Planned Quantity – SL kế hoạch	Number	Yes		> 0
+Actual Quantity – SL thực tế	Number	No		Cập nhật dần
 Start Date – Ngày bắt đầu	Date	Yes
-End Date – Ngày kết thúc	Date	Yes		≥ ngày bắt đầu
-Estimated Cost – Chi phí ước tính	Number	No	Auto	Tổng hợp
-Production Line – Dây chuyền	Dropdown	No
-Status – Trạng thái	Dropdown	Yes	Nháp
+End Date – Ngày kết thúc	Date	No
+Status – Trạng thái	Dropdown	Yes	Đang SX
 Notes – Ghi chú	Textarea	No
 
 Action Name	Action Type	Availability	Notes
 Lưu	Primary	Edit mode	Validate
-Phê duyệt	Primary	Conditional	Khi đủ thông tin
-Chuyển thành lệnh SX	Primary	Conditional	Từ kế hoạch
 Chỉnh sửa	Secondary	View mode
+Tạo ca sản xuất	Primary	Conditional	Khi đang SX
+Đóng lô	Primary	Conditional	Khi đủ sản lượng
 Quay lại danh sách	Secondary	Always
