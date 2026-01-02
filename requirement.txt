@@ -1,46 +1,44 @@
-Danh sách Phiếu nguyên liệu đầu vào (LIST)
-Filter
+SC-2-2: Danh sách kế hoạch / lệnh sản xuất (LIST)
+Fitler
 Field Name	Input Type	Required	Notes
-Mã phiếu nhập	Text	No	Tìm chính xác / gần đúng
-Nhà cung cấp	Dropdown	No
-Kho nhập	Dropdown	No
-Loại nguyên liệu	Dropdown	No	Gỗ keo, gỗ tràm…
-Ngày nhập kho	Date Range	No
-Trạng thái phiếu	Dropdown	No	Nháp / Đã nhập / Hủy
+Mã kế hoạch / lệnh	Text	No
+Loại	Dropdown	No	Kế hoạch / Lệnh
+Sản phẩm	Dropdown	No
+Thời gian sản xuất	Date Range	No
+Trạng thái	Dropdown	No	Nháp / Đang SX / Hoàn thành
 
 Column Name	Display Type	Sortable	Clickable	Notes
-Mã phiếu	Text	Yes	View
-Ngày nhập	Text	Yes	No	dd/mm/yyyy
-Nhà cung cấp	Text	Yes	View
-Kho nhập	Text	Yes	No
-Tổng khối lượng (kg)	Number	Yes	No	Canh phải
-Trạng thái	Status	Yes	No	Màu theo trạng thái
-Hành động	Action Button	No	Edit	View / Edit / Delete
+Mã	Text	Yes	View
+Loại	Badge	Yes	No	Kế hoạch / Lệnh
+Sản phẩm	Text	Yes	View
+Sản lượng dự kiến	Number	Yes	No
+Thời gian	Text	Yes	No
+Chi phí ước tính	Number	Yes	No
+Trạng thái	Status	Yes	No	Màu theo tiến độ
+Hành động	Action Button	No	Edit	View / Edit
 
 Action Name	Action Type	Availability	Notes
-Tạo phiếu nhập kho	Primary	Always
+Tạo kế hoạch / lệnh	Primary	Always
 Export Excel	Secondary	Always
-Export PDF	Secondary	Always
-Xóa nhiều phiếu	Secondary	Conditional	Khi chọn ≥1
+Xóa	Secondary	Conditional	Khi còn Nháp
 
-Thông tin phiếu nguyên liệu	(VIEW/UPDATE/CREATE)
-Form
+SC-2-3: Thông tin kế hoạch / lệnh sản xuất (UPDATE/VIEW/CREATE)
+
 Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
-Receipt Code – Mã phiếu	Text	Yes	Auto-generate	Read-only
-Receipt Date – Ngày nhập	Date	Yes	Today
-Supplier – Nhà cung cấp	Dropdown	Yes
-Warehouse – Kho nhập	Dropdown	Yes
-Material Type – Loại nguyên liệu	Dropdown	Yes
-Quantity (kg) – Khối lượng	Number	Yes		> 0
-Unit Price (est.) – Đơn giá ước tính	Number	No	Auto	Tham chiếu bảng giá
-Total Value (est.) – Tổng giá trị	Number (Auto)	No	Auto	Quantity × Price
-Reference Doc – Chứng từ	File Upload	No		PDF / Image
+Plan / Order Code – Mã	Text	Yes	Auto-generate	Read-only
+Type – Loại	Dropdown	Yes	Kế hoạch	Kế hoạch / Lệnh
+Product – Sản phẩm	Dropdown	Yes
+Planned Quantity – Sản lượng dự kiến	Number	Yes		> 0
+Start Date – Ngày bắt đầu	Date	Yes
+End Date – Ngày kết thúc	Date	Yes		≥ ngày bắt đầu
+Estimated Cost – Chi phí ước tính	Number	No	Auto	Tổng hợp
+Production Line – Dây chuyền	Dropdown	No
 Status – Trạng thái	Dropdown	Yes	Nháp
 Notes – Ghi chú	Textarea	No
 
 Action Name	Action Type	Availability	Notes
-Lưu	Primary	Edit mode	Validate dữ liệu
-Xác nhận nhập kho	Primary	Conditional	Khi trạng thái = Nháp
+Lưu	Primary	Edit mode	Validate
+Phê duyệt	Primary	Conditional	Khi đủ thông tin
+Chuyển thành lệnh SX	Primary	Conditional	Từ kế hoạch
 Chỉnh sửa	Secondary	View mode
-In phiếu	Secondary	Always
 Quay lại danh sách	Secondary	Always

@@ -10,6 +10,7 @@ Yêu cầu:
 - Đảm bảo tiêu chí less code- dễ đọc, dễ bảo trì và đúng convention
 - Không dùng dayjs trực tiếp dùng dateHelper trong utils
 - Không dùng magic string hãy khai  báo enum hoặc contant
+- Delete item các dòng phải hiện icon nếu không đủ điều kiện delete thì disable nhé
 - Nếu là ListPage hãy bổ sung func deletebulk và delete item
 - Chạy eslint trước khi báo xong
 Convention cần tuân theo:
