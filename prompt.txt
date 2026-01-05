@@ -428,7 +428,64 @@ useSelectionChange(selectedRows, !!onSelectionChange, onSelectionChange ? handle
 
 ---
 
-## 16. General Notes
+## 16. Mock Data Pattern
+
+### Mock Data Structure
+- Tạo folder `mock/` trong feature directory
+- Tạo file `mock.ts` (hoặc tên cụ thể như `pabs.ts`, `vehicles.ts`) trong folder `mock/`
+- Export function `getMock[EntityName]s()` để lấy danh sách mock data
+- Export function `getMock[EntityName](id: string)` để lấy một entity theo ID
+
+### Example:
+```typescript
+// src/features/business/payments/mock/mock.ts
+// ==============================|| PAYMENT ORDERS MOCK DATA ||============================== //
+
+import type { PaymentOrder } from '../types';
+
+/**
+ * Mock Payment Order data for development and testing
+ */
+export function getMockPaymentOrders(): PaymentOrder[] {
+  return [
+    {
+      id: '1',
+      code: 'PO001',
+      type: 'payment',
+      // ... other fields
+    }
+  ];
+}
+
+/**
+ * Get a single mock payment order by ID
+ */
+export function getMockPaymentOrder(id: string): PaymentOrder | null {
+  const paymentOrders = getMockPaymentOrders();
+  return paymentOrders.find((po) => po.id === id) || null;
+}
+```
+
+### Usage in Pages:
+```typescript
+// In ListPage
+import { getMockPaymentOrders } from '../mock/mock';
+const [items, setItems] = useState<PaymentOrder[]>(getMockPaymentOrders());
+
+// In DetailPage/EditPage
+import { getMockPaymentOrder } from '../mock/mock';
+const found = getMockPaymentOrder(id);
+```
+
+### Notes:
+- Mock data chỉ dùng cho development và testing
+- TODO comment: "TODO: Replace with API call"
+- Không để mock data inline trong pages, luôn tách ra file riêng trong `mock/` folder
+- Mock data phải đầy đủ các trường bắt buộc và có đủ các status/type để test
+
+---
+
+## 17. General Notes
 
 - Tất cả imports phải đúng path
 - Sử dụng TypeScript strict mode
@@ -437,4 +494,3 @@ useSelectionChange(selectedRows, !!onSelectionChange, onSelectionChange ? handle
 - Code phải clean, có comments rõ ràng
 - Sử dụng Material-UI components từ `@mui/material`
 - Icons từ `@ant-design/icons`
-- Có thể tạo mock data trong pages hoặc `mock/` folder để test

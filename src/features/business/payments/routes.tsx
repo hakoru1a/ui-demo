@@ -9,6 +9,7 @@ import DashboardLayout from 'layout/Dashboard';
 const PaymentsListPage = Loadable(lazy(() => import('./pages/PaymentsListPage')));
 const PaymentDetailPage = Loadable(lazy(() => import('./pages/PaymentDetailPage')));
 const PaymentCreatePage = Loadable(lazy(() => import('./pages/PaymentCreatePage')));
+const PaymentEditPage = Loadable(lazy(() => import('./pages/PaymentEditPage')));
 const PaymentApprovalPage = Loadable(lazy(() => import('./pages/PaymentApprovalPage')));
 
 const PaymentsRoutes = {
@@ -20,12 +21,16 @@ const PaymentsRoutes = {
       element: <PaymentsListPage />
     },
     {
+      path: 'new',
+      element: <PaymentCreatePage />
+    },
+    {
       path: ':id',
       element: <PaymentDetailPage />
     },
     {
-      path: 'new',
-      element: <PaymentCreatePage />
+      path: ':id/edit',
+      element: <PaymentEditPage />
     },
     {
       path: ':id/approval',
