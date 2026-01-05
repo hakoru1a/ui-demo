@@ -8,7 +8,8 @@ import {
   SendOutlined,
   BookOutlined,
   SafetyCertificateOutlined,
-  CustomerServiceOutlined
+  CustomerServiceOutlined,
+  CalendarOutlined
 } from '@ant-design/icons';
 
 import { NavItemType } from 'types/menu';
@@ -82,6 +83,13 @@ const admin: NavItemType = {
           type: 'item',
           url: '/training',
           icon: SafetyCertificateOutlined
+        },
+        {
+          id: 'admin-training-schedule',
+          title: 'menu.admin.training-schedule',
+          type: 'item',
+          url: '/training/schedule',
+          icon: CalendarOutlined
         },
         {
           id: 'admin-complaints-handling',
