@@ -37,6 +37,8 @@ export function useSelectedRows<T>(table: Table<T>, enabled: boolean = false) {
   const selectedRows = useMemo(() => {
     if (!enabled) return [];
     return table.getFilteredSelectedRowModel().rows.map((row) => row.original);
+    // rowSelection is used indirectly via table.getFilteredSelectedRowModel()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table, enabled, rowSelection]);
 
   return selectedRows;
@@ -51,6 +53,7 @@ export function useSelectedRows<T>(table: Table<T>, enabled: boolean = false) {
  * ```
  */
 export function useSelectionChange<T>(selectedRows: T[], enabled: boolean, onSelectionChange?: (rows: T[]) => void) {
+  const prevSelectedIdsRef = useRef<string[]>([]);
   const prevSelectedRowsRef = useRef<T[]>([]);
   const callbackRef = useRef(onSelectionChange);
 
@@ -62,9 +65,27 @@ export function useSelectionChange<T>(selectedRows: T[], enabled: boolean, onSel
   useEffect(() => {
     if (!enabled || !callbackRef.current) return;
 
-    // Only call if selection actually changed (compare by reference or length)
-    const prev = prevSelectedRowsRef.current;
-    const hasChanged = prev.length !== selectedRows.length || prev.some((row, index) => row !== selectedRows[index]);
+    // Try to compare by IDs if available (to avoid infinite loops from new array references)
+
+    const hasId = selectedRows.length > 0 && typeof (selectedRows[0] as Record<string, unknown>)?.id === 'string';
+
+    let hasChanged = false;
+
+    if (hasId) {
+      // Compare by IDs
+
+      const currentIds = (selectedRows as Array<Record<string, unknown>>).map((row) => (row.id as string) || '').sort();
+      const prevIds = prevSelectedIdsRef.current;
+      hasChanged = prevIds.length !== currentIds.length || prevIds.some((id, index) => id !== currentIds[index]);
+
+      if (hasChanged) {
+        prevSelectedIdsRef.current = currentIds;
+      }
+    } else {
+      // Fallback to reference comparison (but more careful)
+      const prev = prevSelectedRowsRef.current;
+      hasChanged = prev.length !== selectedRows.length || prev.some((row, index) => row !== selectedRows[index]);
+    }
 
     if (hasChanged) {
       prevSelectedRowsRef.current = selectedRows;

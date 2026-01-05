@@ -1,14 +1,51 @@
-SC-5-1: Báo cáo kiểm tra độ ẩm & Tạp chất
+SD-2-1: Danh sách hợp đồng
+Filter
+Field Name	Input Type	Optional / Required	Notes
+Mã hợp đồng	Text	Optional	Tìm chính xác / gần đúng
+Loại hợp đồng	Dropdown	Optional	Mua / Bán
+Đối tác	Dropdown	Optional	Nhà cung cấp / Khách hàng
+Ngày hiệu lực	Date Range	Optional
+Trạng thái hợp đồng	Dropdown	Optional	Nháp / Hiệu lực / Hết hạn / Hủy
 
-Chart Name	Chart Type	Data Dimension (X-axis)	Metric (Y-axis)	Filters Applied	Notes
-Xu hướng độ ẩm theo thời gian	Line	Ngày kiểm tra	% Độ ẩm	Date range, Sản phẩm, Lô	Tooltip hiển thị giá trị chi tiết
-Tỷ lệ tạp chất theo lô	Bar	Lô sản xuất	% Tạp chất	Date range, Sản phẩm	So sánh giữa các lô
-Phân bố kết quả QC	Pie	Nhóm chất lượng	Số phiếu	Date range	Đạt / Không đạt
+Column Name	Display Type	Sortable	Clickable	Notes
+Mã hợp đồng	Text	Yes	View
+Loại hợp đồng	Badge	Yes	No	Mua / Bán
+Đối tác	Text	Yes	View
+Ngày hiệu lực	Text	Yes	No	dd/mm/yyyy
+Ngày hết hạn	Text	Yes	No	dd/mm/yyyy
+Giá trị hợp đồng	Number	Yes	No	Canh phải
+Trạng thái	Status	Yes	No	Màu theo trạng thái
+Hành động	Action Button	No	Edit	View / Edit / Delete
 
 Action Name	Action Type	Availability	Notes
-Chọn bộ lọc	Primary	Always	Áp dụng cho toàn bộ biểu đồ
-Export PDF	Secondary	Always
+Tạo hợp đồng	Primary	Always
 Export Excel	Secondary	Always
+Export PDF	Secondary	Always
+Xóa nhiều hợp đồng	Secondary	Conditional	Khi chọn ≥1 & còn Nháp
 
 
+SD-2-2: Thông tin hợp đồng	(UPDATE/VIEW/CREATE)
 
+Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
+Contract Code – Mã hợp đồng	Text	Yes	Auto-generate	Read-only
+Contract Type – Loại hợp đồng	Dropdown	Yes		Mua / Bán
+Partner – Đối tác	Dropdown	Yes		NCC / Khách hàng
+Product / Material – Sản phẩm	Dropdown	Yes
+Pricing Method – Phương thức giá	Dropdown	Yes	Cố định	Cố định / Theo công thức
+Unit Price – Đơn giá	Number	Conditional		Bắt buộc nếu giá cố định
+Price Formula – Công thức giá	Textarea	Conditional		Chỉ hiển thị khi chọn công thức
+Currency – Tiền tệ	Dropdown	Yes	VND
+Contract Quantity – Sản lượng cam kết	Number	No
+Effective Date – Ngày hiệu lực	Date	Yes
+Expiry Date – Ngày hết hạn	Date	Yes
+Payment Terms – Điều khoản thanh toán	Dropdown	No
+Attachment – File hợp đồng	File Upload	No		PDF / Scan
+Status – Trạng thái	Dropdown	Yes	Nháp
+Notes – Ghi chú	Textarea	No
+
+Action Name	Action Type	Availability	Notes
+Lưu hợp đồng	Primary	Edit mode	Validate
+Kích hoạt hợp đồng	Primary	Conditional	Khi trạng thái = Nháp
+Chỉnh sửa	Secondary	View mode
+In hợp đồng	Secondary	Always
+Quay lại danh sách	Secondary	Always
