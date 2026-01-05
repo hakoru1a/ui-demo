@@ -6,7 +6,7 @@ import DashboardLayout from 'layout/Dashboard';
 
 // ==============================|| Dashboards ROUTING ||============================== //
 
-const DashboardsPage = Loadable(lazy(() => import('./pages/DashboardsPage')));
+const FactoryKPIPage = Loadable(lazy(() => import('./components/factory-kpi/FactoryKPIPage')));
 
 const DashboardsRoutes = {
   path: '/dashboards',
@@ -14,7 +14,7 @@ const DashboardsRoutes = {
   children: [
     {
       path: '',
-      element: <DashboardsPage />
+      element: <FactoryKPIPage />
     }
   ]
 };
