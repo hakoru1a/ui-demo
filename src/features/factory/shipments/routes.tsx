@@ -9,6 +9,7 @@ import DashboardLayout from 'layout/Dashboard';
 const ShipmentsListPage = Loadable(lazy(() => import('./pages/ShipmentsListPage')));
 const ShipmentDetailPage = Loadable(lazy(() => import('./pages/ShipmentDetailPage')));
 const ShipmentCreatePage = Loadable(lazy(() => import('./pages/ShipmentCreatePage')));
+const ShipmentEditPage = Loadable(lazy(() => import('./pages/ShipmentEditPage')));
 
 const ShipmentsRoutes = {
   path: '/shipments',
@@ -19,12 +20,16 @@ const ShipmentsRoutes = {
       element: <ShipmentsListPage />
     },
     {
+      path: 'new',
+      element: <ShipmentCreatePage />
+    },
+    {
       path: ':id',
       element: <ShipmentDetailPage />
     },
     {
-      path: 'new',
-      element: <ShipmentCreatePage />
+      path: ':id/edit',
+      element: <ShipmentEditPage />
     }
   ]
 };

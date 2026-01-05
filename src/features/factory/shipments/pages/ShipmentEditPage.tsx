@@ -1,4 +1,4 @@
-import { EditOutlined, PrinterOutlined, ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons';
+import { SaveOutlined, CloseOutlined } from '@ant-design/icons';
 import { Stack, Button, Box, CircularProgress, Alert } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Formik, Form } from 'formik';
@@ -36,9 +36,9 @@ const entityToFormData = (entity: Shipment): ShipmentFormData => ({
   notes: entity.notes
 });
 
-// ==============================|| SHIPMENT DETAIL PAGE ||============================== //
+// ==============================|| SHIPMENT EDIT PAGE ||============================== //
 
-const ShipmentDetailPage = () => {
+const ShipmentEditPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
@@ -46,7 +46,6 @@ const ShipmentDetailPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [initialValues, setInitialValues] = useState<ShipmentFormData>(shipmentDefaultValues);
   const [originalData, setOriginalData] = useState<Shipment | null>(null);
-  const [isConfirming, setIsConfirming] = useState(false);
 
   // Fetch data on mount
   useEffect(() => {
@@ -96,73 +95,64 @@ const ShipmentDetailPage = () => {
     }
   }, [id]);
 
-  // Handle confirm shipment (change status from draft to issued)
-  const handleConfirmShipment = useCallback(async () => {
-    if (!id || !originalData || originalData.status !== 'draft') return;
+  // Handle form submission
+  const handleSubmit = useCallback(
+    async (values: ShipmentFormData) => {
+      if (!id) return;
 
-    setIsConfirming(true);
-    try {
-      if (!id.startsWith('mock-')) {
-        const response = await shipmentService.confirmShipment(id);
-        if (response.success && response.data) {
+      try {
+        if (!id.startsWith('mock-')) {
+          const response = await shipmentService.updateShipment(id, values);
+          if (response.success && response.data) {
+            openSnackbar({
+              open: true,
+              message: 'Cập nhật phiếu xuất thành công',
+              variant: 'alert',
+              alert: { color: 'success' }
+            } as SnackbarProps);
+            navigate(SHIPMENT_URLS.DETAIL(id));
+          } else {
+            openSnackbar({
+              open: true,
+              message: 'Có lỗi xảy ra khi cập nhật phiếu xuất',
+              variant: 'alert',
+              alert: { color: 'error' }
+            } as SnackbarProps);
+          }
+        } else {
+          // Mock success
           openSnackbar({
             open: true,
-            message: 'Xác nhận xuất hàng thành công',
+            message: 'Cập nhật phiếu xuất thành công (Mock)',
             variant: 'alert',
             alert: { color: 'success' }
           } as SnackbarProps);
-          // Refresh data
-          setOriginalData(response.data);
-          setInitialValues(entityToFormData(response.data));
-        } else {
-          openSnackbar({
-            open: true,
-            message: 'Có lỗi xảy ra khi xác nhận xuất hàng',
-            variant: 'alert',
-            alert: { color: 'error' }
-          } as SnackbarProps);
+          navigate(SHIPMENT_URLS.DETAIL(id));
         }
-      } else {
-        // Mock success
-        const updated = { ...originalData, status: 'issued' as const };
-        setOriginalData(updated);
-        setInitialValues(entityToFormData(updated));
+      } catch (err) {
+        console.error('Error updating shipment:', err);
         openSnackbar({
           open: true,
-          message: 'Xác nhận xuất hàng thành công',
+          message: 'Có lỗi xảy ra khi cập nhật phiếu xuất',
           variant: 'alert',
-          alert: { color: 'success' }
+          alert: { color: 'error' }
         } as SnackbarProps);
       }
-    } catch (err) {
-      console.error('Error confirming shipment:', err);
-      openSnackbar({
-        open: true,
-        message: 'Có lỗi xảy ra khi xác nhận xuất hàng',
-        variant: 'alert',
-        alert: { color: 'error' }
-      } as SnackbarProps);
-    } finally {
-      setIsConfirming(false);
-    }
-  }, [id, originalData]);
+    },
+    [navigate, id]
+  );
 
-  // Handle print
-  const handlePrint = useCallback(() => {
-    window.print();
-  }, []);
-
-  // Handle edit
-  const handleEdit = useCallback(() => {
+  // Handle cancel
+  const handleCancel = useCallback(() => {
     if (id) {
-      navigate(SHIPMENT_URLS.EDIT(id));
+      navigate(SHIPMENT_URLS.DETAIL(id));
     }
   }, [navigate, id]);
 
   // Loading state
   if (isLoading) {
     return (
-      <MainCard title="Chi tiết phiếu xuất">
+      <MainCard title="Chỉnh sửa phiếu xuất">
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 300 }}>
           <CircularProgress />
         </Box>
@@ -173,7 +163,7 @@ const ShipmentDetailPage = () => {
   // Error state
   if (error) {
     return (
-      <MainCard title="Chi tiết phiếu xuất">
+      <MainCard title="Chỉnh sửa phiếu xuất">
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
@@ -184,49 +174,33 @@ const ShipmentDetailPage = () => {
     );
   }
 
-  const canConfirm = originalData?.status === 'draft';
-
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={shipmentSchema}
-      onSubmit={() => {}}
+      onSubmit={handleSubmit}
       enableReinitialize
-      validateOnChange={false}
-      validateOnBlur={false}
+      validateOnChange
+      validateOnBlur
     >
-      {() => (
+      {({ isSubmitting, dirty, values }) => (
         <Form>
           <MainCard
-            title={`Chi tiết phiếu xuất: ${originalData?.code || ''}`}
+            title={`Chỉnh sửa: ${originalData?.code || ''}`}
             secondary={
               <Stack direction="row" spacing={1}>
-                <Button variant="outlined" color="secondary" startIcon={<ArrowLeftOutlined />} onClick={() => navigate(SHIPMENT_URLS.LIST)}>
-                  Quay lại danh sách
+                <Button variant="outlined" color="secondary" startIcon={<CloseOutlined />} onClick={handleCancel} disabled={isSubmitting}>
+                  Hủy
                 </Button>
-                <Button variant="outlined" color="info" startIcon={<PrinterOutlined />} onClick={handlePrint}>
-                  In phiếu
-                </Button>
-                {canConfirm && (
-                  <Button
-                    variant="contained"
-                    color="success"
-                    startIcon={<CheckOutlined />}
-                    onClick={handleConfirmShipment}
-                    disabled={isConfirming}
-                  >
-                    {isConfirming ? 'Đang xác nhận...' : 'Xác nhận xuất hàng'}
-                  </Button>
-                )}
-                <Button variant="contained" color="primary" startIcon={<EditOutlined />} onClick={handleEdit}>
-                  Chỉnh sửa
+                <Button type="submit" variant="contained" color="primary" startIcon={<SaveOutlined />} disabled={isSubmitting || !dirty}>
+                  {isSubmitting ? 'Đang lưu...' : 'Lưu thay đổi'}
                 </Button>
               </Stack>
             }
           >
             <Grid container spacing={3} sx={{ p: 1 }}>
               <Grid size={12}>
-                <ShipmentForm mode="view" />
+                <ShipmentForm mode="edit" />
               </Grid>
             </Grid>
           </MainCard>
@@ -236,4 +210,4 @@ const ShipmentDetailPage = () => {
   );
 };
 
-export default ShipmentDetailPage;
+export default ShipmentEditPage;
