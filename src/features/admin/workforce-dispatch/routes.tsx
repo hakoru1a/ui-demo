@@ -4,11 +4,12 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
 
-// ==============================|| Workforce Dispatch ROUTING ||============================== //
+// ==============================|| WORKFORCE DISPATCH ROUTING ||============================== //
 
-const WorkforceDispatchListPage = Loadable(lazy(() => import('./pages/WorkforceDispatchListPage')));
-const WorkforceDispatchDetailPage = Loadable(lazy(() => import('./pages/WorkforceDispatchDetailPage')));
-const WorkforceDispatchSchedulePage = Loadable(lazy(() => import('./pages/WorkforceDispatchSchedulePage')));
+const WorkforceDispatchOrderListPage = Loadable(lazy(() => import('./pages/WorkforceDispatchOrderListPage')));
+const WorkforceDispatchOrderDetailPage = Loadable(lazy(() => import('./pages/WorkforceDispatchOrderDetailPage')));
+const WorkforceDispatchOrderCreatePage = Loadable(lazy(() => import('./pages/WorkforceDispatchOrderCreatePage')));
+const WorkforceDispatchOrderEditPage = Loadable(lazy(() => import('./pages/WorkforceDispatchOrderEditPage')));
 
 const WorkforcedispatchRoutes = {
   path: '/workforce-dispatch',
@@ -16,15 +17,19 @@ const WorkforcedispatchRoutes = {
   children: [
     {
       path: '',
-      element: <WorkforceDispatchListPage />
+      element: <WorkforceDispatchOrderListPage />
+    },
+    {
+      path: 'new',
+      element: <WorkforceDispatchOrderCreatePage />
     },
     {
       path: ':id',
-      element: <WorkforceDispatchDetailPage />
+      element: <WorkforceDispatchOrderDetailPage />
     },
     {
-      path: 'schedule',
-      element: <WorkforceDispatchSchedulePage />
+      path: ':id/edit',
+      element: <WorkforceDispatchOrderEditPage />
     }
   ]
 };

@@ -58,7 +58,7 @@ const admin: NavItemType = {
           id: 'admin-hr-timesheet-payroll',
           title: 'menu.admin.hr-timesheet-payroll',
           type: 'item',
-          url: '/timekeeping',
+          url: '/timekeeping-payroll/timekeeping',
           icon: FileTextOutlined
         },
         {

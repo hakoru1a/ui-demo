@@ -7,35 +7,35 @@ import { useNavigate } from 'react-router-dom';
 // project imports
 import MainCard from 'components/MainCard';
 
-import EmployeeForm from '../components/EmployeeForm';
-import type { EmployeeFormData } from '../types';
-import { EMPLOYEE_URLS } from '../types/constants';
-import { employeeDefaultValues, employeeSchema } from '../validation';
+import WorkforceDispatchOrderForm from '../components/WorkforceDispatchOrderForm';
+import type { WorkforceDispatchOrderFormData } from '../types';
+import { WORKFORCE_DISPATCH_URLS } from '../types/constants';
+import { workforceDispatchOrderDefaultValues, workforceDispatchOrderSchema } from '../validation';
 
-// ==============================|| EMPLOYEE CREATE PAGE ||============================== //
+// ==============================|| WORKFORCE DISPATCH ORDER CREATE PAGE ||============================== //
 
-const EmployeeCreatePage = () => {
+const WorkforceDispatchOrderCreatePage = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Handle form submission
   const handleSubmit = useCallback(
-    async (values: EmployeeFormData) => {
+    async (values: WorkforceDispatchOrderFormData) => {
       setIsSubmitting(true);
       setError(null);
 
       try {
-        // TODO: Call API to create employee
-        // await employeeService.createEmployee(values);
+        // TODO: Call API to create order
+        // await workforceDispatchOrderService.createWorkforceDispatchOrder(values);
 
         // Mock API call
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         // Navigate to list page after success
-        navigate(EMPLOYEE_URLS.LIST);
+        navigate(WORKFORCE_DISPATCH_URLS.LIST);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Có lỗi xảy ra khi tạo nhân sự');
+        setError(err instanceof Error ? err.message : 'Có lỗi xảy ra khi tạo lệnh điều phối');
       } finally {
         setIsSubmitting(false);
       }
@@ -45,12 +45,12 @@ const EmployeeCreatePage = () => {
 
   // Handle back navigation
   const handleBack = useCallback(() => {
-    navigate(EMPLOYEE_URLS.LIST);
+    navigate(WORKFORCE_DISPATCH_URLS.LIST);
   }, [navigate]);
 
   return (
     <MainCard
-      title="Thêm nhân sự mới"
+      title="Thêm lệnh điều phối mới"
       secondary={
         <Button variant="outlined" startIcon={<ArrowLeftOutlined />} onClick={handleBack}>
           Quay lại
@@ -63,10 +63,10 @@ const EmployeeCreatePage = () => {
         </Alert>
       )}
 
-      <Formik initialValues={employeeDefaultValues} validationSchema={employeeSchema} onSubmit={handleSubmit}>
+      <Formik initialValues={workforceDispatchOrderDefaultValues} validationSchema={workforceDispatchOrderSchema} onSubmit={handleSubmit}>
         {({ handleSubmit: formikSubmit, isSubmitting: formikIsSubmitting }) => (
           <Form>
-            <EmployeeForm mode="create" />
+            <WorkforceDispatchOrderForm mode="create" />
             <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ mt: 3 }}>
               <Button variant="outlined" onClick={handleBack} disabled={isSubmitting || formikIsSubmitting}>
                 Hủy
@@ -81,7 +81,7 @@ const EmployeeCreatePage = () => {
                 }}
                 disabled={isSubmitting || formikIsSubmitting}
               >
-                {isSubmitting || formikIsSubmitting ? 'Đang lưu...' : 'Lưu'}
+                {isSubmitting || formikIsSubmitting ? 'Đang lưu...' : 'Lưu nháp'}
               </Button>
             </Stack>
           </Form>
@@ -91,4 +91,4 @@ const EmployeeCreatePage = () => {
   );
 };
 
-export default EmployeeCreatePage;
+export default WorkforceDispatchOrderCreatePage;

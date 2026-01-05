@@ -1,127 +1,21 @@
-SG-1-1: Dashboard Tổng hợp KPI Nhà máy
-Field Name	Input Type	Optional	Notes
-Thời gian	Date Range	Yes	Ngày / Tháng / Quý
-Nhà máy	Dropdown	Optional	Nếu có nhiều nhà máy
-Sản phẩm	Dropdown	Optional
-Vùng trồng	Dropdown	Optional
+SG-2-3 – Lệnh điều phối nhân sự cho nhà máy
 
-KPI	Display Type	Notes
-Sản lượng sản xuất	Big Number	So với kỳ trước
-Tỷ lệ đạt kế hoạch	Progress Bar	%
-Chi phí / tấn	Big Number	Avg
-Tồn kho hiện tại	Big Number	Tổng SKU
-Tỷ lệ QC đạt	Percentage
+Field Name	Input Type	Required	Default Value	Business Notes
+Mã lệnh điều phối	Text	Yes	Auto-generate	Read-only
+Ngày áp dụng	Date	Yes	Today
+Nhà máy	Dropdown	Yes
+Ca sản xuất	Dropdown	Yes
+Bộ phận	Dropdown	Yes
 
-Chart Name	Chart Type	Notes
-Sản lượng theo thời gian	Line Chart	Ngày / Tháng
-Chi phí theo nghiệp vụ	Stacked Bar	SX / Logistics / Khác
-Tồn kho theo kho	Bar Chart
+Field Name	Input Type	Required	Default Value	Business Notes
+Nhân sự	Multi-select	Yes		Lọc theo bộ phận
+Vai trò	Dropdown	Yes		Công nhân / Tổ trưởng
+Ghi chú	Textarea	No
+Trạng thái	Status	Yes	Draft	Draft / Approved / Applied
 
-Action	Type	Notes
-Export Dashboard	Secondary	PDF
-Drill-down	Inline	Sang report chi tiết
-
-
-SG-1-2: Báo cáo P&L (Lỗ lãi)
-Filter
-Field	Input Type	Notes
-Kỳ báo cáo	Date Range	Tháng / Quý / Năm
-Nhà máy	Dropdown
-Hợp đồng / PAB	Dropdown	Optional
-
-Chỉ tiêu	Value	Notes
-Doanh thu	Number
-Giá vốn	Number
-Lợi nhuận gộp	Number
-Chi phí vận hành	Number
-Lợi nhuận ròng	Number	Highlight
-
-Chart	Type
-Doanh thu vs Chi phí	Column Chart
-Biên lợi nhuận	Line Chart
-
-Action	Notes
-Export Excel	Cho kế toán soi
-Export PDF	Cho sếp ký
-
-SG-1-3: Báo cáo sản xuất
-
-Field	Input Type
-Thời gian	Date Range
-Kế hoạch / Lệnh SX	Dropdown
-Ca sản xuất	Dropdown
-Sản phẩm	Dropdown
-
-Column	Notes
-Ngày
-Lệnh sản xuất
-Ca
-Sản lượng kế hoạch
-Sản lượng thực tế
-Chênh lệch
-Tỷ lệ đạt	%
-
-Chart	Type
-Kế hoạch vs Thực tế	Line
-Sản lượng theo ca	Bar
-
-SG-1-4: Báo cáo tồn kho / kiểm kê
-
-Field	Input Type
-Thời điểm	Date
-Kho	Dropdown
-SKU	Dropdown
-
-Column	Notes
-SKU
-Tồn hệ thống
-Tồn thực tế
-Chênh lệch	Highlight
-Giá trị tồn	Currency
-
-Action	Notes
-Xem phiếu kiểm kê	Drill-down
-Export	Excel / PDF
-
-SG-1-5: Báo cáo nhập / xuất hàng
-
-Field	Input Type
-Thời gian	Date Range
-Kho	Dropdown
-Loại giao dịch	Dropdown (Nhập / Xuất)
-
-Column	Notes
-Ngày
-Mã phiếu
-Loại	Nhập / Xuất
-SKU
-Khối lượng
-Đối tác	NCC / Khách
-
-Chart	Type
-Nhập vs Xuất	Column
-Xu hướng luân chuyển	Line
-
-
-SG-1-6: Báo cáo sản lượng / vùng trồng
-
-Field	Input Type
-Thời gian	Date Range
-Vùng trồng	Dropdown
-Chứng chỉ	Dropdown (FSC/PEFC)
-
-Section	Notes
-Map vùng trồng	Heatmap theo sản lượng
-Bảng sản lượng	Theo vùng / lô
-
-Column	Notes
-Vùng trồng
-Diện tích	ha
-Sản lượng khai thác	m³ / tấn
-Tỷ lệ đạt FSC	%
-
-Action	Notes
-Export báo cáo	PDF
-Xem chi tiết vùng	Drill-down
-
-
+Action Name	Action Type	Availability	Notes
+Lưu nháp	Primary	Edit mode
+Trình duyệt	Primary	View mode
+Phê duyệt	Primary	Conditional	Theo quyền
+Hủy lệnh	Secondary	Conditional	Khi chưa áp dụng
+In lệnh	Secondary	Always	PDF

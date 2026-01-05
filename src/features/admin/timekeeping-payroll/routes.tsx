@@ -8,6 +8,7 @@ import DashboardLayout from 'layout/Dashboard';
 
 const TimekeepingListPage = Loadable(lazy(() => import('./pages/TimekeepingListPage')));
 const TimekeepingDetailPage = Loadable(lazy(() => import('./pages/TimekeepingDetailPage')));
+const TimekeepingCreatePage = Loadable(lazy(() => import('./pages/TimekeepingCreatePage')));
 const PayrollListPage = Loadable(lazy(() => import('./pages/PayrollListPage')));
 const PayrollDetailPage = Loadable(lazy(() => import('./pages/PayrollDetailPage')));
 
@@ -18,6 +19,10 @@ const TimekeepingpayrollRoutes = {
     {
       path: 'timekeeping',
       element: <TimekeepingListPage />
+    },
+    {
+      path: 'timekeeping/new',
+      element: <TimekeepingCreatePage />
     },
     {
       path: 'timekeeping/:id',

@@ -8,36 +8,39 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CircularLoader from 'components/CircularLoader';
 import MainCard from 'components/MainCard';
 
-import EmployeeForm from '../components/EmployeeForm';
-import { getMockEmployee } from '../mock/employees';
-import type { Employee, EmployeeFormData } from '../types';
-import { EMPLOYEE_URLS } from '../types/constants';
-import { employeeDefaultValues, employeeSchema } from '../validation';
+import WorkforceDispatchOrderForm from '../components/WorkforceDispatchOrderForm';
+import { getMockWorkforceDispatchOrder } from '../mock/orders';
+import type { WorkforceDispatchOrder, WorkforceDispatchOrderFormData } from '../types';
+import { WORKFORCE_DISPATCH_URLS } from '../types/constants';
+import { workforceDispatchOrderDefaultValues, workforceDispatchOrderSchema } from '../validation';
 
 // ==============================|| HELPER: CONVERT ENTITY TO FORM DATA ||============================== //
 
-const entityToFormData = (entity: Employee): EmployeeFormData => ({
+const entityToFormData = (entity: WorkforceDispatchOrder): WorkforceDispatchOrderFormData => ({
   code: entity.code,
-  fullName: entity.fullName,
-  department: entity.department,
-  position: entity.position,
-  contractType: entity.contractType,
-  effectiveDate: entity.effectiveDate,
-  expiryDate: entity.expiryDate,
+  applicationDate: entity.applicationDate,
+  factoryId: entity.factoryId,
+  productionShiftId: entity.productionShiftId,
+  departmentId: entity.departmentId,
+  personnel: entity.personnel.map((p) => ({
+    personnelId: p.personnelId,
+    role: p.role,
+    note: p.note
+  })),
   status: entity.status
 });
 
-// ==============================|| EMPLOYEE EDIT PAGE ||============================== //
+// ==============================|| WORKFORCE DISPATCH ORDER EDIT PAGE ||============================== //
 
-const EmployeeEditPage = () => {
+const WorkforceDispatchOrderEditPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<Employee | null>(null);
-  const [initialValues, setInitialValues] = useState<EmployeeFormData>(employeeDefaultValues);
+  const [data, setData] = useState<WorkforceDispatchOrder | null>(null);
+  const [initialValues, setInitialValues] = useState<WorkforceDispatchOrderFormData>(workforceDispatchOrderDefaultValues);
 
   // Fetch data on mount (mock)
   useEffect(() => {
@@ -49,13 +52,13 @@ const EmployeeEditPage = () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       if (id) {
-        const found = getMockEmployee(id);
+        const found = getMockWorkforceDispatchOrder(id);
 
         if (found) {
           setData(found);
           setInitialValues(entityToFormData(found));
         } else {
-          setError('Không tìm thấy nhân sự');
+          setError('Không tìm thấy lệnh điều phối');
         }
       }
 
@@ -69,23 +72,23 @@ const EmployeeEditPage = () => {
 
   // Handle form submission
   const handleSubmit = useCallback(
-    async (values: EmployeeFormData) => {
+    async (values: WorkforceDispatchOrderFormData) => {
       if (!id) return;
 
       setIsSubmitting(true);
       setError(null);
 
       try {
-        // TODO: Call API to update employee
-        // await employeeService.updateEmployee(id, values);
+        // TODO: Call API to update order
+        // await workforceDispatchOrderService.updateWorkforceDispatchOrder(id, values);
 
         // Mock API call
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         // Navigate to detail page after success
-        navigate(EMPLOYEE_URLS.DETAIL(id));
+        navigate(WORKFORCE_DISPATCH_URLS.DETAIL(id));
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Có lỗi xảy ra khi cập nhật nhân sự');
+        setError(err instanceof Error ? err.message : 'Có lỗi xảy ra khi cập nhật lệnh điều phối');
       } finally {
         setIsSubmitting(false);
       }
@@ -96,9 +99,9 @@ const EmployeeEditPage = () => {
   // Handle back navigation
   const handleBack = useCallback(() => {
     if (id) {
-      navigate(EMPLOYEE_URLS.DETAIL(id));
+      navigate(WORKFORCE_DISPATCH_URLS.DETAIL(id));
     } else {
-      navigate(EMPLOYEE_URLS.LIST);
+      navigate(WORKFORCE_DISPATCH_URLS.LIST);
     }
   }, [navigate, id]);
 
@@ -114,7 +117,7 @@ const EmployeeEditPage = () => {
     return (
       <MainCard>
         <Stack spacing={2}>
-          <div>{error || 'Không tìm thấy nhân sự'}</div>
+          <div>{error || 'Không tìm thấy lệnh điều phối'}</div>
           <Button variant="outlined" startIcon={<ArrowLeftOutlined />} onClick={handleBack}>
             Quay lại
           </Button>
@@ -125,7 +128,7 @@ const EmployeeEditPage = () => {
 
   return (
     <MainCard
-      title="Chỉnh sửa nhân sự"
+      title="Chỉnh sửa lệnh điều phối"
       secondary={
         <Button variant="outlined" startIcon={<ArrowLeftOutlined />} onClick={handleBack}>
           Quay lại
@@ -138,10 +141,10 @@ const EmployeeEditPage = () => {
         </Alert>
       )}
 
-      <Formik initialValues={initialValues} validationSchema={employeeSchema} enableReinitialize onSubmit={handleSubmit}>
+      <Formik initialValues={initialValues} validationSchema={workforceDispatchOrderSchema} enableReinitialize onSubmit={handleSubmit}>
         {({ handleSubmit: formikSubmit, isSubmitting: formikIsSubmitting }) => (
           <Form>
-            <EmployeeForm mode="edit" />
+            <WorkforceDispatchOrderForm mode="edit" />
             <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ mt: 3 }}>
               <Button variant="outlined" onClick={handleBack} disabled={isSubmitting || formikIsSubmitting}>
                 Hủy
@@ -156,7 +159,7 @@ const EmployeeEditPage = () => {
                 }}
                 disabled={isSubmitting || formikIsSubmitting}
               >
-                {isSubmitting || formikIsSubmitting ? 'Đang lưu...' : 'Lưu'}
+                {isSubmitting || formikIsSubmitting ? 'Đang lưu...' : 'Lưu nháp'}
               </Button>
             </Stack>
           </Form>
@@ -166,4 +169,4 @@ const EmployeeEditPage = () => {
   );
 };
 
-export default EmployeeEditPage;
+export default WorkforceDispatchOrderEditPage;
