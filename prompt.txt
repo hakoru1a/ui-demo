@@ -203,7 +203,7 @@ const getTabColor = (value: StatusFilter) => {
 
 ### Bulk Delete
 - Thêm `DeleteOutlined` icon trong TableHeader toolbar
-- Chỉ hiển thị khi có rows được chọn (`selectedRows.length > 0`)
+- Chỉ hiển thị khi có rows được chọn (`selectedRows.length > 0`) và đủ điều kiện (ví dụ: chỉ draft mới xóa được)
 - Khi click: Gọi `handleBulkDelete(selectedRows)` từ hook
 - Mở ConfirmDialog với title "Xác nhận xóa nhiều [items]"
 - Hiển thị số lượng và danh sách items trong dialog
@@ -214,6 +214,92 @@ const getTabColor = (value: StatusFilter) => {
 - Quản lý state: `confirmDialog`, `selectedItems`, `isDeleting`, `isBulkDelete`
 - Methods: `handleDelete` (single), `handleBulkDelete` (multiple), `handleConfirmDelete`, `handleCancelDelete`
 - Callback `onSuccess` để update parent state sau khi delete thành công
+
+### Implementation trong ListPage
+- ✅ **ĐÚNG** - Setup đầy đủ bulk delete:
+```typescript
+// 1. Import use[FeatureName]Delete hook
+import { useContractsDelete } from '../hooks/useContractsDelete';
+
+// 2. Setup delete hook với onSuccess callback
+const {
+  confirmDialog,
+  selectedItems,
+  isBulkDelete,
+  handleDelete,
+  handleBulkDelete,
+  handleConfirmDelete,
+  handleCancelDelete
+} = useContractsDelete({
+  onSuccess: () => {
+    // Update local state after delete
+    if (isBulkDelete) {
+      const idsToDelete = selectedItems.map((item) => item.id);
+      setItems((prev) => prev.filter((item) => !idsToDelete.includes(item.id)));
+    } else if (selectedItems.length > 0) {
+      const itemId = selectedItems[0].id;
+      setItems((prev) => prev.filter((item) => item.id !== itemId));
+    }
+  }
+});
+
+// 3. Memoize delete handler để tránh re-render
+const handleDeleteMemo = useCallback(
+  (item: Entity) => {
+    handleDelete(item);
+  },
+  [handleDelete]
+);
+
+// 4. Pass onBulkDelete vào TableHeader
+<EntityTableHeader
+  table={table}
+  onBulkDelete={handleBulkDelete}  // ✅ Pass bulk delete handler
+  // ... other props
+/>
+
+// 5. Setup ConfirmDialog với logic cho cả single và bulk delete
+<ConfirmDialog
+  open={confirmDialog.open}
+  onClose={handleCancelDelete}
+  onConfirm={handleConfirmDelete}
+  title={isBulkDelete ? 'Xác nhận xóa nhiều [items]' : 'Xác nhận xóa [item]'}
+  message={
+    isBulkDelete
+      ? `Bạn có chắc chắn muốn xóa ${selectedItems.length} [items] đã chọn?`
+      : selectedItems.length > 0
+        ? `Bạn có chắc chắn muốn xóa [item] ${selectedItems[0].name}?`
+        : ''
+  }
+  confirmText="Xóa"
+  cancelText="Hủy"
+  confirmColor="error"
+  data={
+    selectedItems.length > 0 && !isBulkDelete
+      ? [
+          { label: 'Mã', value: selectedItems[0].code },
+          { label: 'Tên', value: selectedItems[0].name },
+          // ... other fields
+        ]
+      : []
+  }
+/>
+```
+- ❌ **SAI** - Thiếu bulk delete:
+```typescript
+// Không có use[FeatureName]Delete hook
+// Không pass onBulkDelete vào TableHeader
+<EntityTableHeader
+  table={table}
+  // ❌ Thiếu onBulkDelete
+/>
+// Không có ConfirmDialog cho bulk delete
+```
+- **Lưu ý**:
+  - Luôn implement cả single delete và bulk delete
+  - Bulk delete button chỉ hiển thị khi có rows được chọn và đủ điều kiện
+  - Update state trong `onSuccess` callback sau khi delete thành công
+  - ConfirmDialog phải xử lý cả single và bulk delete với `isBulkDelete` flag
 
 ---
 
@@ -239,7 +325,10 @@ const getTabColor = (value: StatusFilter) => {
 - **Create**: Button "Thêm mới" trong TableHeader
 - **Edit**: Icon Edit trong Actions column
 - **View**: Icon Eye hoặc click vào row/code để xem chi tiết
-- **Delete**: Icon Delete trong Actions column (single) và TableHeader toolbar (bulk)
+- **Delete**:
+  - Single: Icon Delete trong Actions column
+  - Bulk: Button "Xóa nhiều" trong TableHeader toolbar (chỉ hiển thị khi có rows được chọn và đủ điều kiện)
+  - **QUAN TRỌNG**: Luôn implement cả single và bulk delete, không được thiếu
 - **Disable/Inactive**: Icon Delete hoặc button riêng tùy business logic
 - **Export**: CSVExport component trong TableHeader
 - **Filter**: FilterPopover với FilterOutlined icon
@@ -282,6 +371,60 @@ onChange={(value) => {
 - ❌ **SAI**: `onChange={(value) => handleFilterChange('date', value ? value.toString() : undefined)}`
 - ❌ **SAI**: `onChange={(value) => handleFilterChange('date', value ? value.toISOString() : undefined)}`
 - **Lý do**: `dateHelper` đảm bảo format nhất quán và xử lý timezone đúng cách
+
+### Infinite Re-render khi chọn checkbox trong Table
+- **Triệu chứng**: Khi click checkbox để chọn row, component bị re-render vô hạn
+- **Nguyên nhân**:
+  - Callbacks (`onEdit`, `onDelete`, `onSelectionChange`) không được memoize, tạo function mới mỗi lần render
+  - Filter functions không được memoize, tạo function mới mỗi lần render
+  - Filtered data không được memoize, tính toán lại mỗi lần render
+- ✅ **ĐÚNG**:
+```typescript
+// Trong ListPage
+import { useCallback, useMemo } from 'react';
+
+// Memoize filter function
+const statusFilterFn = useCallback(
+  (item: Entity) => {
+    if (statusFilter === StatusFilter.ALL) return true;
+    return item.status === statusFilter;
+  },
+  [statusFilter]
+);
+
+// Memoize filtered data
+const filteredData = useMemo(() => data.filter(statusFilterFn), [data, statusFilterFn]);
+
+// Memoize callbacks
+const handleDeleteMemo = useCallback(
+  (item: Entity) => {
+    handleDelete(item);
+  },
+  [handleDelete]
+);
+
+// Pass memoized callbacks to table hook
+const { table } = useEntityTable({
+  data: filteredData,
+  onDelete: handleDeleteMemo,
+  // ...
+});
+```
+- ❌ **SAI**:
+```typescript
+// Tạo function mới mỗi lần render
+const statusFilterFn = (item: Entity) => item.status === statusFilter;
+const filteredData = data.filter(statusFilterFn);
+const { table } = useEntityTable({ data: filteredData, onDelete: handleDelete });
+```
+- **Lý do**:
+  - `useCallback` đảm bảo function reference ổn định giữa các lần render
+  - `useMemo` tránh tính toán lại không cần thiết
+  - Callbacks ổn định giúp `useSelectionChange` không trigger re-render vô hạn
+- **Trong useEntityTable hook**: Chỉ enable `useSelectionChange` khi có callback:
+```typescript
+useSelectionChange(selectedRows, !!onSelectionChange, onSelectionChange ? handleRowSelectionChange : undefined);
+```
 
 ---
 
