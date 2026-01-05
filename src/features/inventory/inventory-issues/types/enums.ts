@@ -1,5 +1,4 @@
 // ==============================|| INVENTORY ISSUES ENUMS ||============================== //
 
-export type IssueType = 'warehouse' | 'port'; // Loại xuất: Xuất kho / Xuất cảng
+export type IssueType = 'material' | 'finished'; // Loại xuất: Nguyên liệu / Thành phẩm (NL / TP)
 export type IssueStatus = 'draft' | 'issued' | 'cancelled'; // Trạng thái: Nháp / Đã xuất / Hủy
-export type DestinationType = 'warehouse' | 'port'; // Điểm nhận: Kho nội bộ / Cảng

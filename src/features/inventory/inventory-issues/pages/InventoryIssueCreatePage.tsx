@@ -9,9 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import MainCard from 'components/MainCard';
 
 import InventoryIssueForm from '../components/InventoryIssueForm';
+import type { InventoryIssueFormData } from '../types';
 import { INVENTORY_ISSUE_URLS } from '../types/constants';
-import type { InventoryIssueFormData } from '../types/index';
-import { inventoryIssueSchema, inventoryIssueDefaultValues } from '../validation';
+import { inventoryIssueDefaultValues, inventoryIssueSchema } from '../validation';
 
 // ==============================|| INVENTORY ISSUE CREATE PAGE ||============================== //
 
@@ -49,14 +49,14 @@ const InventoryIssueCreatePage = () => {
       {({ isSubmitting, dirty, values }) => (
         <Form>
           <MainCard
-            title="Tạo phiếu xuất mới"
+            title="Tạo phiếu xuất kho mới"
             secondary={
               <Stack direction="row" spacing={1}>
                 <Button variant="outlined" color="secondary" startIcon={<CloseOutlined />} onClick={handleCancel} disabled={isSubmitting}>
                   Quay lại danh sách
                 </Button>
                 <Button type="submit" variant="contained" color="primary" startIcon={<SaveOutlined />} disabled={isSubmitting || !dirty}>
-                  {isSubmitting ? 'Đang lưu...' : 'Lưu'}
+                  {isSubmitting ? 'Đang lưu...' : 'Lưu phiếu'}
                 </Button>
               </Stack>
             }

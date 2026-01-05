@@ -1,17 +1,17 @@
-// ==============================|| INVENTORY ISSUES MOCK DATA ||============================== //
+// ==============================|| INVENTORY RECEIPTS MOCK DATA ||============================== //
 
-import type { InventoryIssue } from '../types';
+import type { InventoryReceipt } from '../types';
 
 /**
- * Mock Inventory Issue data for development and testing
+ * Mock Inventory Receipt data for development and testing
  */
-export function getMockInventoryIssues(): InventoryIssue[] {
+export function getMockInventoryReceipts(): InventoryReceipt[] {
   return [
     {
       id: '1',
-      code: 'PX001',
-      issueDate: new Date('2024-01-10'),
-      issueType: 'material',
+      code: 'PN001',
+      receiptDate: new Date('2024-01-10'),
+      receiptType: 'material',
       warehouseId: '1',
       warehouseName: 'Kho Nguyên liệu A',
       productId: '1',
@@ -21,17 +21,17 @@ export function getMockInventoryIssues(): InventoryIssue[] {
       quantity: 1000,
       unit: 'Kg',
       totalWeight: 1000,
-      destination: 'SX',
+      source: 'purchase',
       status: 'draft',
-      notes: 'Xuất cho sản xuất',
+      notes: 'Nhập từ nhà cung cấp ABC',
       createdAt: new Date('2024-01-10'),
       updatedAt: new Date('2024-01-10')
     },
     {
       id: '2',
-      code: 'PX002',
-      issueDate: new Date('2024-01-15'),
-      issueType: 'finished',
+      code: 'PN002',
+      receiptDate: new Date('2024-01-15'),
+      receiptType: 'finished',
       warehouseId: '2',
       warehouseName: 'Kho Thành phẩm B',
       productId: '3',
@@ -39,16 +39,16 @@ export function getMockInventoryIssues(): InventoryIssue[] {
       quantity: 500,
       unit: 'm3',
       totalWeight: 500,
-      destination: 'Bán',
-      status: 'issued',
+      source: 'production',
+      status: 'received',
       createdAt: new Date('2024-01-15'),
       updatedAt: new Date('2024-01-16')
     },
     {
       id: '3',
-      code: 'PX003',
-      issueDate: new Date('2024-01-18'),
-      issueType: 'material',
+      code: 'PN003',
+      receiptDate: new Date('2024-01-18'),
+      receiptType: 'material',
       warehouseId: '1',
       warehouseName: 'Kho Nguyên liệu A',
       productId: '2',
@@ -58,7 +58,7 @@ export function getMockInventoryIssues(): InventoryIssue[] {
       quantity: 2000,
       unit: 'Kg',
       totalWeight: 2000,
-      destination: 'SX',
+      source: 'purchase',
       status: 'cancelled',
       notes: 'Hủy do không đủ điều kiện',
       createdAt: new Date('2024-01-18'),
@@ -66,9 +66,9 @@ export function getMockInventoryIssues(): InventoryIssue[] {
     },
     {
       id: '4',
-      code: 'PX004',
-      issueDate: new Date('2024-01-20'),
-      issueType: 'finished',
+      code: 'PN004',
+      receiptDate: new Date('2024-01-20'),
+      receiptType: 'finished',
       warehouseId: '2',
       warehouseName: 'Kho Thành phẩm B',
       productId: '4',
@@ -76,16 +76,16 @@ export function getMockInventoryIssues(): InventoryIssue[] {
       quantity: 300,
       unit: 'Tấn',
       totalWeight: 300,
-      destination: 'Bán',
+      source: 'production',
       status: 'draft',
       createdAt: new Date('2024-01-20'),
       updatedAt: new Date('2024-01-20')
     },
     {
       id: '5',
-      code: 'PX005',
-      issueDate: new Date('2024-01-22'),
-      issueType: 'material',
+      code: 'PN005',
+      receiptDate: new Date('2024-01-22'),
+      receiptType: 'material',
       warehouseId: '3',
       warehouseName: 'Kho Trung chuyển C',
       productId: '1',
@@ -95,8 +95,8 @@ export function getMockInventoryIssues(): InventoryIssue[] {
       quantity: 1500,
       unit: 'Kg',
       totalWeight: 1500,
-      destination: 'SX',
-      status: 'issued',
+      source: 'purchase',
+      status: 'received',
       createdAt: new Date('2024-01-22'),
       updatedAt: new Date('2024-01-23')
     }
@@ -104,9 +104,9 @@ export function getMockInventoryIssues(): InventoryIssue[] {
 }
 
 /**
- * Get a single mock inventory issue by ID
+ * Get a single mock inventory receipt by ID
  */
-export function getMockInventoryIssue(id: string): InventoryIssue | null {
-  const issues = getMockInventoryIssues();
-  return issues.find((issue) => issue.id === id) || null;
+export function getMockInventoryReceipt(id: string): InventoryReceipt | null {
+  const receipts = getMockInventoryReceipts();
+  return receipts.find((receipt) => receipt.id === id) || null;
 }

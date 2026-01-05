@@ -1,4 +1,4 @@
-// ==============================|| INVENTORY ISSUE TABLE COLUMNS ||============================== //
+// ==============================|| INVENTORY RECEIPT TABLE COLUMNS ||============================== //
 
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import EditOutlined from '@ant-design/icons/EditOutlined';
@@ -16,51 +16,51 @@ import { StatusFilter } from 'types/status';
 import dateHelper from 'utils/dateHelper';
 import { getStatusColorMap } from 'utils/getStatusColor';
 
-import type { InventoryIssue } from '../types';
-import { INVENTORY_ISSUE_URLS, STATUS_OPTIONS } from '../types/constants';
+import type { InventoryReceipt } from '../types';
+import { INVENTORY_RECEIPT_URLS, STATUS_OPTIONS } from '../types/constants';
 import { getLabelFromOptions } from '../utils';
 
 /**
- * Inventory Issue Table Columns Definition
+ * Inventory Receipt Table Columns Definition
  */
-interface UseInventoryIssueColumnsProps {
-  onEdit?: (issue: InventoryIssue) => void;
-  onDelete?: (issue: InventoryIssue) => void;
+interface UseInventoryReceiptColumnsProps {
+  onEdit?: (receipt: InventoryReceipt) => void;
+  onDelete?: (receipt: InventoryReceipt) => void;
 }
 
-export function useInventoryIssueColumns({ onEdit, onDelete }: UseInventoryIssueColumnsProps = {}): ColumnDef<InventoryIssue>[] {
+export function useInventoryReceiptColumns({ onEdit, onDelete }: UseInventoryReceiptColumnsProps = {}): ColumnDef<InventoryReceipt>[] {
   const theme = useTheme();
   const navigate = useNavigate();
   const statusColorMap = getStatusColorMap(theme);
 
   const handleView = useCallback(
     (id: string) => {
-      navigate(INVENTORY_ISSUE_URLS.DETAIL(id));
+      navigate(INVENTORY_RECEIPT_URLS.DETAIL(id));
     },
     [navigate]
   );
 
   const handleEdit = useCallback(
-    (issue: InventoryIssue) => {
+    (receipt: InventoryReceipt) => {
       if (onEdit) {
-        onEdit(issue);
+        onEdit(receipt);
       } else {
-        navigate(INVENTORY_ISSUE_URLS.EDIT(issue.id));
+        navigate(INVENTORY_RECEIPT_URLS.EDIT(receipt.id));
       }
     },
     [navigate, onEdit]
   );
 
   const handleDelete = useCallback(
-    (issue: InventoryIssue) => {
+    (receipt: InventoryReceipt) => {
       if (onDelete) {
-        onDelete(issue);
+        onDelete(receipt);
       }
     },
     [onDelete]
   );
 
-  return useMemo<ColumnDef<InventoryIssue>[]>(
+  return useMemo<ColumnDef<InventoryReceipt>[]>(
     () => [
       {
         accessorKey: 'code',
@@ -81,8 +81,8 @@ export function useInventoryIssueColumns({ onEdit, onDelete }: UseInventoryIssue
         )
       },
       {
-        accessorKey: 'issueDate',
-        header: 'Ngày xuất',
+        accessorKey: 'receiptDate',
+        header: 'Ngày nhập',
         enableSorting: true,
         enableColumnFilter: true,
         cell: ({ getValue }) => {
@@ -91,8 +91,8 @@ export function useInventoryIssueColumns({ onEdit, onDelete }: UseInventoryIssue
         }
       },
       {
-        accessorKey: 'issueType',
-        header: 'Loại xuất',
+        accessorKey: 'receiptType',
+        header: 'Loại nhập',
         enableSorting: true,
         enableColumnFilter: true,
         cell: ({ getValue }) => {
@@ -111,7 +111,7 @@ export function useInventoryIssueColumns({ onEdit, onDelete }: UseInventoryIssue
       },
       {
         accessorKey: 'warehouseName',
-        header: 'Kho xuất',
+        header: 'Kho nhập',
         enableSorting: true,
         enableColumnFilter: true,
         cell: ({ getValue }) => <Typography variant="body2">{getValue<string>()}</Typography>
@@ -140,12 +140,12 @@ export function useInventoryIssueColumns({ onEdit, onDelete }: UseInventoryIssue
         enableSorting: true,
         enableColumnFilter: true,
         cell: ({ getValue }) => {
-          const value = getValue<'draft' | 'issued' | 'cancelled'>();
+          const value = getValue<'draft' | 'received' | 'cancelled'>();
           const label = getLabelFromOptions(value, STATUS_OPTIONS);
           let chipColor: 'default' | 'primary' | 'success' | 'warning' | 'error' = 'default';
           let statusFilter = StatusFilter.INACTIVE;
 
-          if (value === 'issued') {
+          if (value === 'received') {
             chipColor = 'success';
             statusFilter = StatusFilter.ACTIVE;
           } else if (value === 'draft') {
@@ -180,8 +180,8 @@ export function useInventoryIssueColumns({ onEdit, onDelete }: UseInventoryIssue
           align: 'center' as const
         },
         cell: ({ row }) => {
-          const issue = row.original;
-          const canDelete = issue.status === 'draft'; // Only draft issues can be deleted
+          const receipt = row.original;
+          const canDelete = receipt.status === 'draft'; // Only draft receipts can be deleted
           return (
             <Stack direction="row" spacing={0.5} alignItems="center" justifyContent="center" sx={{ width: '100%' }}>
               <Tooltip title="Xem chi tiết">
@@ -190,7 +190,7 @@ export function useInventoryIssueColumns({ onEdit, onDelete }: UseInventoryIssue
                   color="info"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleView(issue.id);
+                    handleView(receipt.id);
                   }}
                   sx={{
                     '&:hover': {
@@ -207,7 +207,7 @@ export function useInventoryIssueColumns({ onEdit, onDelete }: UseInventoryIssue
                   color="primary"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleEdit(issue);
+                    handleEdit(receipt);
                   }}
                   sx={{
                     '&:hover': {
@@ -227,7 +227,7 @@ export function useInventoryIssueColumns({ onEdit, onDelete }: UseInventoryIssue
                       onClick={(e) => {
                         e.stopPropagation();
                         if (canDelete) {
-                          handleDelete(issue);
+                          handleDelete(receipt);
                         }
                       }}
                       disabled={!canDelete}

@@ -9,6 +9,7 @@ import DashboardLayout from 'layout/Dashboard';
 const InventoryReceiptsListPage = Loadable(lazy(() => import('./pages/InventoryReceiptsListPage')));
 const InventoryReceiptDetailPage = Loadable(lazy(() => import('./pages/InventoryReceiptDetailPage')));
 const InventoryReceiptCreatePage = Loadable(lazy(() => import('./pages/InventoryReceiptCreatePage')));
+const InventoryReceiptEditPage = Loadable(lazy(() => import('./pages/InventoryReceiptEditPage')));
 
 const InventoryreceiptsRoutes = {
   path: '/inventory-receipts',
@@ -19,12 +20,16 @@ const InventoryreceiptsRoutes = {
       element: <InventoryReceiptsListPage />
     },
     {
+      path: 'new',
+      element: <InventoryReceiptCreatePage />
+    },
+    {
       path: ':id',
       element: <InventoryReceiptDetailPage />
     },
     {
-      path: 'new',
-      element: <InventoryReceiptCreatePage />
+      path: ':id/edit',
+      element: <InventoryReceiptEditPage />
     }
   ]
 };

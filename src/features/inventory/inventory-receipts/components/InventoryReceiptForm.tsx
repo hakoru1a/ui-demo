@@ -1,4 +1,4 @@
-// ==============================|| INVENTORY ISSUE FORM COMPONENT ||============================== //
+// ==============================|| INVENTORY RECEIPT FORM COMPONENT ||============================== //
 
 import { Box, Grid, Typography } from '@mui/material';
 import { useFormikContext, Field, FieldProps } from 'formik';
@@ -13,25 +13,33 @@ import SingleFileUpload from 'components/third-party/dropzone/SingleFile';
 import type { CustomFile } from 'types/dropzone';
 import dateHelper from 'utils/dateHelper';
 
-import type { InventoryIssueFormData } from '../types';
-import { BATCH_OPTIONS, ISSUE_TYPE_OPTIONS, PRODUCT_OPTIONS, STATUS_OPTIONS, UNIT_OPTIONS, WAREHOUSE_OPTIONS } from '../types/constants';
+import type { InventoryReceiptFormData } from '../types';
+import {
+  BATCH_OPTIONS,
+  PRODUCT_OPTIONS,
+  RECEIPT_TYPE_OPTIONS,
+  SOURCE_OPTIONS,
+  STATUS_OPTIONS,
+  UNIT_OPTIONS,
+  WAREHOUSE_OPTIONS
+} from '../types/constants';
 
 // ==============================|| FORM MODE TYPE ||============================== //
 
 export type FormMode = 'create' | 'edit' | 'view';
 
-export interface InventoryIssueFormProps {
+export interface InventoryReceiptFormProps {
   mode: FormMode;
 }
 
-// ==============================|| INVENTORY ISSUE FORM ||============================== //
+// ==============================|| INVENTORY RECEIPT FORM ||============================== //
 
-const InventoryIssueForm = ({ mode }: InventoryIssueFormProps) => {
-  const { values, errors, touched, handleChange, handleBlur, setFieldValue } = useFormikContext<InventoryIssueFormData>();
+const InventoryReceiptForm = ({ mode }: InventoryReceiptFormProps) => {
+  const { values, errors, touched, handleChange, handleBlur, setFieldValue } = useFormikContext<InventoryReceiptFormData>();
 
   const isReadOnly = mode === 'view';
 
-  const getError = (field: keyof InventoryIssueFormData): string | undefined => {
+  const getError = (field: keyof InventoryReceiptFormData): string | undefined => {
     const error = touched[field] && errors[field];
     return typeof error === 'string' ? error : undefined;
   };
@@ -77,12 +85,12 @@ const InventoryIssueForm = ({ mode }: InventoryIssueFormProps) => {
         </Typography>
       </Grid>
 
-      {/* Mã phiếu xuất - Auto-generated, always read-only */}
+      {/* Mã phiếu nhập - Auto-generated, always read-only */}
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <TextField
           name="code"
           value={values.code}
-          label="Mã phiếu xuất"
+          label="Mã phiếu nhập"
           placeholder="Tự động tạo"
           fullWidth
           disabled
@@ -95,40 +103,40 @@ const InventoryIssueForm = ({ mode }: InventoryIssueFormProps) => {
         />
       </Grid>
 
-      {/* Ngày xuất */}
+      {/* Ngày nhập */}
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <DatePickerField
-          label="Ngày xuất"
-          value={values.issueDate ? dateHelper.normalizeDateValue(values.issueDate) : null}
+          label="Ngày nhập"
+          value={values.receiptDate ? dateHelper.normalizeDateValue(values.receiptDate) : null}
           onChange={(newValue) => {
-            setFieldValue('issueDate', newValue ? newValue.toDate() : new Date());
+            setFieldValue('receiptDate', newValue ? newValue.toDate() : new Date());
           }}
           format="DD/MM/YYYY"
           slotProps={{
             textField: {
               fullWidth: true,
               required: true,
-              error: !!getError('issueDate'),
-              helperText: getError('issueDate'),
+              error: !!getError('receiptDate'),
+              helperText: getError('receiptDate'),
               readOnly: isReadOnly
             }
           }}
         />
       </Grid>
 
-      {/* Loại xuất */}
+      {/* Loại nhập */}
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <SelectField
-          name="issueType"
-          value={values.issueType}
+          name="receiptType"
+          value={values.receiptType}
           onChange={handleChange}
           onBlur={handleBlur}
-          label="Loại xuất"
+          label="Loại nhập"
           fullWidth
           required
-          error={!!getError('issueType')}
-          helperText={getError('issueType')}
-          options={ISSUE_TYPE_OPTIONS}
+          error={!!getError('receiptType')}
+          helperText={getError('receiptType')}
+          options={RECEIPT_TYPE_OPTIONS}
           slotProps={{
             input: {
               readOnly: isReadOnly
@@ -138,14 +146,14 @@ const InventoryIssueForm = ({ mode }: InventoryIssueFormProps) => {
         />
       </Grid>
 
-      {/* Kho xuất */}
+      {/* Kho nhập */}
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <SelectField
           name="warehouseId"
           value={values.warehouseId}
           onChange={handleChange}
           onBlur={handleBlur}
-          label="Kho xuất"
+          label="Kho nhập"
           fullWidth
           required
           error={!!getError('warehouseId')}
@@ -276,18 +284,18 @@ const InventoryIssueForm = ({ mode }: InventoryIssueFormProps) => {
         />
       </Grid>
 
-      {/* Điểm nhận */}
+      {/* Nguồn nhập */}
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-        <TextField
-          name="destination"
-          value={values.destination || ''}
+        <SelectField
+          name="source"
+          value={values.source || ''}
           onChange={handleChange}
           onBlur={handleBlur}
-          label="Điểm nhận"
-          placeholder="Nhập điểm nhận (SX / Bán)"
+          label="Nguồn nhập"
           fullWidth
-          error={!!getError('destination')}
-          helperText={getError('destination')}
+          error={!!getError('source')}
+          helperText={getError('source')}
+          options={[{ value: '', label: 'Không có' }, ...SOURCE_OPTIONS]}
           slotProps={{
             input: {
               readOnly: isReadOnly
@@ -379,4 +387,4 @@ const InventoryIssueForm = ({ mode }: InventoryIssueFormProps) => {
   );
 };
 
-export default InventoryIssueForm;
+export default InventoryReceiptForm;

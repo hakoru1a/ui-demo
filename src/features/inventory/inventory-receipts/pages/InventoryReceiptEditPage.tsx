@@ -10,25 +10,25 @@ import CircularLoader from 'components/CircularLoader';
 import MainCard from 'components/MainCard';
 import type { CustomFile } from 'types/dropzone';
 
-import inventoryIssueService from '../api/index';
-import InventoryIssueForm from '../components/InventoryIssueForm';
-import { getMockInventoryIssue } from '../mock/inventoryIssues';
-import type { InventoryIssue, InventoryIssueFormData } from '../types';
-import { INVENTORY_ISSUE_URLS } from '../types/constants';
-import { inventoryIssueDefaultValues, inventoryIssueSchema } from '../validation';
+import inventoryReceiptService from '../api/index';
+import InventoryReceiptForm from '../components/InventoryReceiptForm';
+import { getMockInventoryReceipt } from '../mock/mock';
+import type { InventoryReceipt, InventoryReceiptFormData } from '../types';
+import { INVENTORY_RECEIPT_URLS } from '../types/constants';
+import { inventoryReceiptDefaultValues, inventoryReceiptSchema } from '../validation';
 
 // ==============================|| HELPER: CONVERT ENTITY TO FORM DATA ||============================== //
 
-const entityToFormData = (entity: InventoryIssue): InventoryIssueFormData => ({
+const entityToFormData = (entity: InventoryReceipt): InventoryReceiptFormData => ({
   code: entity.code,
-  issueDate: entity.issueDate,
-  issueType: entity.issueType,
+  receiptDate: entity.receiptDate,
+  receiptType: entity.receiptType,
   warehouseId: entity.warehouseId,
   productId: entity.productId,
   batchId: entity.batchId,
   quantity: entity.quantity,
   unit: entity.unit,
-  destination: entity.destination,
+  source: entity.source,
   referenceDoc: entity.referenceDocUrl
     ? ([{ name: entity.referenceDocUrl.split('/').pop() || 'File', preview: entity.referenceDocUrl }] as CustomFile[])
     : undefined,
@@ -36,15 +36,15 @@ const entityToFormData = (entity: InventoryIssue): InventoryIssueFormData => ({
   notes: entity.notes
 });
 
-// ==============================|| INVENTORY ISSUE EDIT PAGE ||============================== //
+// ==============================|| INVENTORY RECEIPT EDIT PAGE ||============================== //
 
-const InventoryIssueEditPage = () => {
+const InventoryReceiptEditPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [initialValues, setInitialValues] = useState<InventoryIssueFormData>(inventoryIssueDefaultValues);
+  const [initialValues, setInitialValues] = useState<InventoryReceiptFormData>(inventoryReceiptDefaultValues);
 
   // Fetch data on mount (mock)
   useEffect(() => {
@@ -57,12 +57,12 @@ const InventoryIssueEditPage = () => {
 
       if (id) {
         // TODO: Replace with API call
-        const found = getMockInventoryIssue(id);
+        const found = getMockInventoryReceipt(id);
 
         if (found) {
           setInitialValues(entityToFormData(found));
         } else {
-          setError('Không tìm thấy phiếu xuất kho');
+          setError('Không tìm thấy phiếu nhập kho');
         }
       }
 
@@ -76,22 +76,22 @@ const InventoryIssueEditPage = () => {
 
   // Handle form submission
   const handleSubmit = useCallback(
-    async (values: InventoryIssueFormData) => {
+    async (values: InventoryReceiptFormData) => {
       if (!id) return;
 
       // TODO: Replace with API call
-      console.warn('Updating inventory issue:', values);
+      console.warn('Updating inventory receipt:', values);
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Mock: Call API
       try {
-        const response = await inventoryIssueService.updateInventoryIssue(id, values);
+        const response = await inventoryReceiptService.updateInventoryReceipt(id, values);
         if (response.success) {
           // Navigate to detail page
-          navigate(INVENTORY_ISSUE_URLS.DETAIL(id));
+          navigate(INVENTORY_RECEIPT_URLS.DETAIL(id));
         }
       } catch (err) {
-        console.error('Error updating inventory issue:', err);
+        console.error('Error updating inventory receipt:', err);
       }
     },
     [navigate, id]
@@ -100,14 +100,16 @@ const InventoryIssueEditPage = () => {
   // Handle cancel
   const handleCancel = useCallback(() => {
     if (id) {
-      navigate(INVENTORY_ISSUE_URLS.DETAIL(id));
+      navigate(INVENTORY_RECEIPT_URLS.DETAIL(id));
+    } else {
+      navigate(INVENTORY_RECEIPT_URLS.LIST);
     }
   }, [navigate, id]);
 
   // Loading state
   if (isLoading) {
     return (
-      <MainCard title="Chỉnh sửa phiếu xuất kho">
+      <MainCard title="Chỉnh sửa phiếu nhập kho">
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 300 }}>
           <CircularLoader />
         </Box>
@@ -118,11 +120,11 @@ const InventoryIssueEditPage = () => {
   // Error state
   if (error) {
     return (
-      <MainCard title="Chỉnh sửa phiếu xuất kho">
+      <MainCard title="Chỉnh sửa phiếu nhập kho">
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
-        <Button variant="outlined" onClick={() => navigate(INVENTORY_ISSUE_URLS.LIST)}>
+        <Button variant="outlined" onClick={() => navigate(INVENTORY_RECEIPT_URLS.LIST)}>
           Quay lại danh sách
         </Button>
       </MainCard>
@@ -132,7 +134,7 @@ const InventoryIssueEditPage = () => {
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={inventoryIssueSchema}
+      validationSchema={inventoryReceiptSchema}
       onSubmit={handleSubmit}
       validateOnChange
       validateOnBlur
@@ -141,7 +143,7 @@ const InventoryIssueEditPage = () => {
       {({ isSubmitting, dirty }) => (
         <Form>
           <MainCard
-            title="Chỉnh sửa phiếu xuất kho"
+            title="Chỉnh sửa phiếu nhập kho"
             secondary={
               <Stack direction="row" spacing={1}>
                 <Button variant="outlined" color="secondary" startIcon={<CloseOutlined />} onClick={handleCancel} disabled={isSubmitting}>
@@ -155,7 +157,7 @@ const InventoryIssueEditPage = () => {
           >
             <Grid container spacing={3} sx={{ p: 1 }}>
               <Grid size={12}>
-                <InventoryIssueForm mode="edit" />
+                <InventoryReceiptForm mode="edit" />
               </Grid>
             </Grid>
           </MainCard>
@@ -165,4 +167,4 @@ const InventoryIssueEditPage = () => {
   );
 };
 
-export default InventoryIssueEditPage;
+export default InventoryReceiptEditPage;

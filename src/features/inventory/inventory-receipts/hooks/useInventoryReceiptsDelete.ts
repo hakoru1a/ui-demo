@@ -4,29 +4,29 @@ import { openSnackbar } from 'api/snackbar';
 import useBoolean from 'hooks/useBoolean';
 import type { SnackbarProps } from 'types/snackbar';
 
-import inventoryIssueService from '../api/index';
-import type { InventoryIssue } from '../types';
+import inventoryReceiptService from '../api/index';
+import type { InventoryReceipt } from '../types';
 
-// ==============================|| INVENTORY ISSUES DELETE HOOK ||============================== //
+// ==============================|| INVENTORY RECEIPTS DELETE HOOK ||============================== //
 
-interface UseInventoryIssuesDeleteProps {
+interface UseInventoryReceiptsDeleteProps {
   onSuccess?: () => void;
 }
 
 /**
- * Hook to manage delete operations for Inventory Issues
+ * Hook to manage delete operations for Inventory Receipts
  * Handles both single and bulk delete with confirmation dialogs
  */
-export function useInventoryIssuesDelete({ onSuccess }: UseInventoryIssuesDeleteProps = {}) {
+export function useInventoryReceiptsDelete({ onSuccess }: UseInventoryReceiptsDeleteProps = {}) {
   const confirmDialog = useBoolean(false);
-  const [selectedItems, setSelectedItems] = useState<InventoryIssue[]>([]);
+  const [selectedItems, setSelectedItems] = useState<InventoryReceipt[]>([]);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isBulkDelete, setIsBulkDelete] = useState(false);
 
   // Handle single delete action - opens confirmation dialog
   const handleDelete = useCallback(
-    (issue: InventoryIssue) => {
-      setSelectedItems([issue]);
+    (receipt: InventoryReceipt) => {
+      setSelectedItems([receipt]);
       setIsBulkDelete(false);
       confirmDialog.onTrue();
     },
@@ -35,8 +35,8 @@ export function useInventoryIssuesDelete({ onSuccess }: UseInventoryIssuesDelete
 
   // Handle bulk delete action - opens confirmation dialog
   const handleBulkDelete = useCallback(
-    (issues: InventoryIssue[]) => {
-      setSelectedItems(issues);
+    (receipts: InventoryReceipt[]) => {
+      setSelectedItems(receipts);
       setIsBulkDelete(true);
       confirmDialog.onTrue();
     },
@@ -52,9 +52,9 @@ export function useInventoryIssuesDelete({ onSuccess }: UseInventoryIssuesDelete
       let response;
       if (isBulkDelete) {
         const ids = selectedItems.map((item) => item.id);
-        response = await inventoryIssueService.bulkDeleteInventoryIssues(ids);
+        response = await inventoryReceiptService.bulkDeleteInventoryReceipts(ids);
       } else {
-        response = await inventoryIssueService.deleteInventoryIssue(selectedItems[0].id);
+        response = await inventoryReceiptService.deleteInventoryReceipt(selectedItems[0].id);
       }
 
       if (response.success) {
@@ -64,8 +64,8 @@ export function useInventoryIssuesDelete({ onSuccess }: UseInventoryIssuesDelete
 
         // Show success notification
         const message = isBulkDelete
-          ? `Đã xóa ${selectedItems.length} phiếu xuất kho thành công`
-          : `Đã xóa phiếu xuất kho "${selectedItems[0].code}" thành công`;
+          ? `Đã xóa ${selectedItems.length} phiếu nhập kho thành công`
+          : `Đã xóa phiếu nhập kho "${selectedItems[0].code}" thành công`;
 
         openSnackbar({
           open: true,
@@ -79,17 +79,17 @@ export function useInventoryIssuesDelete({ onSuccess }: UseInventoryIssuesDelete
         // Show error notification for failed response
         openSnackbar({
           open: true,
-          message: 'Có lỗi xảy ra khi xóa phiếu xuất kho',
+          message: 'Có lỗi xảy ra khi xóa phiếu nhập kho',
           variant: 'alert',
           alert: { color: 'error' }
         } as SnackbarProps);
       }
     } catch (error) {
-      console.error('Error deleting inventory issue:', error);
+      console.error('Error deleting inventory receipt:', error);
       // Show error notification for exception
       openSnackbar({
         open: true,
-        message: 'Có lỗi xảy ra khi xóa phiếu xuất kho',
+        message: 'Có lỗi xảy ra khi xóa phiếu nhập kho',
         variant: 'alert',
         alert: { color: 'error' }
       } as SnackbarProps);

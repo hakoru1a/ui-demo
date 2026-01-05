@@ -1,4 +1,4 @@
-// ==============================|| INVENTORY ISSUE TABLE HEADER ||============================== //
+// ==============================|| INVENTORY RECEIPT TABLE HEADER ||============================== //
 // Combines: StatusTabs + Toolbar + FilterPopover
 
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
@@ -42,15 +42,15 @@ import useBoolean from 'hooks/useBoolean';
 import { StatusFilter } from 'types/status';
 import dateHelper from 'utils/dateHelper';
 
-import type { InventoryIssue } from '../types';
-import { INVENTORY_ISSUE_URLS, ISSUE_TYPE_OPTIONS, STATUS_OPTIONS, WAREHOUSE_OPTIONS } from '../types/constants';
+import type { InventoryReceipt } from '../types';
+import { INVENTORY_RECEIPT_URLS, RECEIPT_TYPE_OPTIONS, STATUS_OPTIONS, WAREHOUSE_OPTIONS } from '../types/constants';
 
 // ==============================|| TYPES ||============================== //
 
-interface InventoryIssueTableHeaderProps {
-  table: Table<InventoryIssue>;
+interface InventoryReceiptTableHeaderProps {
+  table: Table<InventoryReceipt>;
   // CSV Export
-  csvData: InventoryIssue[];
+  csvData: InventoryReceipt[];
   csvHeadersData: Array<{ label: string; key: string }>;
   csvFilename?: string;
   // Filter
@@ -67,7 +67,7 @@ interface InventoryIssueTableHeaderProps {
   enableCSVExport?: boolean;
   enableColumnVisibility?: boolean;
   // Actions
-  onBulkDelete?: (selectedIssues: InventoryIssue[]) => void;
+  onBulkDelete?: (selectedReceipts: InventoryReceipt[]) => void;
   onExportExcel?: () => void;
   onExportPDF?: () => void;
 }
@@ -75,7 +75,7 @@ interface InventoryIssueTableHeaderProps {
 // ==============================|| STATUS TABS ||============================== //
 
 interface StatusTabsProps {
-  table: Table<InventoryIssue>;
+  table: Table<InventoryReceipt>;
   statusFilter: StatusFilter | string;
   onStatusFilterChange?: (status: StatusFilter | string) => void;
 }
@@ -88,7 +88,7 @@ function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsPro
     return {
       all: allRows.length,
       draft: allRows.filter((row) => row.original.status === 'draft').length,
-      issued: allRows.filter((row) => row.original.status === 'issued').length,
+      received: allRows.filter((row) => row.original.status === 'received').length,
       cancelled: allRows.filter((row) => row.original.status === 'cancelled').length
     };
   }, [table]);
@@ -96,7 +96,7 @@ function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsPro
   // Get color for each status - MUST be different for each status
   const getTabColor = (value: StatusFilter | string) => {
     if (value === StatusFilter.ALL) return theme.palette.primary.main;
-    if (value === 'issued') return theme.palette.success.main;
+    if (value === 'received') return theme.palette.success.main;
     if (value === 'draft') return theme.palette.warning.main;
     if (value === 'cancelled') return theme.palette.error.main;
     return theme.palette.primary.main;
@@ -111,9 +111,9 @@ function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsPro
         count: statusCounts.draft
       },
       {
-        value: 'issued' as StatusFilter | string,
-        label: STATUS_OPTIONS.find((opt) => opt.value === 'issued')?.label || 'Đã xuất',
-        count: statusCounts.issued
+        value: 'received' as StatusFilter | string,
+        label: STATUS_OPTIONS.find((opt) => opt.value === 'received')?.label || 'Đã nhập',
+        count: statusCounts.received
       },
       {
         value: 'cancelled' as StatusFilter | string,
@@ -223,21 +223,21 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
     onFilterChange(newFilters);
   };
 
-  // Date range state for issue date
-  const issueDateRange = getDateRangeValue('issueDate') || {};
-  const [issueStartDate, setIssueStartDate] = useState<Date | null>(issueDateRange.start ? new Date(issueDateRange.start) : null);
-  const [issueEndDate, setIssueEndDate] = useState<Date | null>(issueDateRange.end ? new Date(issueDateRange.end) : null);
+  // Date range state for receipt date
+  const receiptDateRange = getDateRangeValue('receiptDate') || {};
+  const [receiptStartDate, setReceiptStartDate] = useState<Date | null>(receiptDateRange.start ? new Date(receiptDateRange.start) : null);
+  const [receiptEndDate, setReceiptEndDate] = useState<Date | null>(receiptDateRange.end ? new Date(receiptDateRange.end) : null);
 
-  const handleIssueStartDateChange = (value: Date | null) => {
-    setIssueStartDate(value);
+  const handleReceiptStartDateChange = (value: Date | null) => {
+    setReceiptStartDate(value);
     const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
-    handleDateRangeChange('issueDate', dateStr, issueDateRange.end);
+    handleDateRangeChange('receiptDate', dateStr, receiptDateRange.end);
   };
 
-  const handleIssueEndDateChange = (value: Date | null) => {
-    setIssueEndDate(value);
+  const handleReceiptEndDateChange = (value: Date | null) => {
+    setReceiptEndDate(value);
     const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
-    handleDateRangeChange('issueDate', issueDateRange.start, dateStr);
+    handleDateRangeChange('receiptDate', receiptDateRange.start, dateStr);
   };
 
   return (
@@ -297,10 +297,10 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                 <Divider />
                 <Box sx={{ p: 2.5 }}>
                   <Grid container spacing={2}>
-                    {/* Mã phiếu xuất */}
+                    {/* Mã phiếu nhập */}
                     <Grid size={{ xs: 12, sm: 4 }}>
                       <TextField
-                        label="Mã phiếu xuất"
+                        label="Mã phiếu nhập"
                         value={getFilterValue('code') || ''}
                         onChange={(e) => handleFilterChange('code', e.target.value)}
                         fullWidth
@@ -308,22 +308,22 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                       />
                     </Grid>
 
-                    {/* Loại xuất */}
+                    {/* Loại nhập */}
                     <Grid size={{ xs: 12, sm: 4 }}>
                       <SelectField
-                        label="Loại xuất"
-                        value={getFilterValue('issueType') || ''}
-                        onChange={(e) => handleFilterChange('issueType', e.target.value)}
-                        options={[{ value: '', label: 'Tất cả' }, ...ISSUE_TYPE_OPTIONS]}
+                        label="Loại nhập"
+                        value={getFilterValue('receiptType') || ''}
+                        onChange={(e) => handleFilterChange('receiptType', e.target.value)}
+                        options={[{ value: '', label: 'Tất cả' }, ...RECEIPT_TYPE_OPTIONS]}
                         fullWidth
                         size="medium"
                       />
                     </Grid>
 
-                    {/* Kho xuất */}
+                    {/* Kho nhập */}
                     <Grid size={{ xs: 12, sm: 4 }}>
                       <SelectField
-                        label="Kho xuất"
+                        label="Kho nhập"
                         value={getFilterValue('warehouseId') || ''}
                         onChange={(e) => handleFilterChange('warehouseId', e.target.value)}
                         options={[{ value: '', label: 'Tất cả' }, ...WAREHOUSE_OPTIONS]}
@@ -332,15 +332,15 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                       />
                     </Grid>
 
-                    {/* Ngày xuất - Date Range */}
+                    {/* Ngày nhập - Date Range */}
                     <Grid size={{ xs: 12, sm: 6 }}>
                       <Box>
                         <Grid container spacing={1}>
                           <Grid size={{ xs: 12, sm: 6 }}>
                             <DatePickerField
                               label="Từ ngày"
-                              value={issueStartDate ? dateHelper.normalizeDateValue(issueStartDate) : null}
-                              onChange={(newValue) => handleIssueStartDateChange(newValue ? newValue.toDate() : null)}
+                              value={receiptStartDate ? dateHelper.normalizeDateValue(receiptStartDate) : null}
+                              onChange={(newValue) => handleReceiptStartDateChange(newValue ? newValue.toDate() : null)}
                               format="DD/MM/YYYY"
                               slotProps={{
                                 textField: {
@@ -353,8 +353,8 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                           <Grid size={{ xs: 12, sm: 6 }}>
                             <DatePickerField
                               label="Đến ngày"
-                              value={issueEndDate ? dateHelper.normalizeDateValue(issueEndDate) : null}
-                              onChange={(newValue) => handleIssueEndDateChange(newValue ? newValue.toDate() : null)}
+                              value={receiptEndDate ? dateHelper.normalizeDateValue(receiptEndDate) : null}
+                              onChange={(newValue) => handleReceiptEndDateChange(newValue ? newValue.toDate() : null)}
                               format="DD/MM/YYYY"
                               slotProps={{
                                 textField: {
@@ -404,11 +404,11 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
 
 // ==============================|| MAIN COMPONENT ||============================== //
 
-const InventoryIssueTableHeader = ({
+const InventoryReceiptTableHeader = ({
   table,
   csvData,
   csvHeadersData,
-  csvFilename = 'inventory-issues',
+  csvFilename = 'inventory-receipts',
   columnFilters,
   onFilterChange,
   statusFilter = StatusFilter.ALL,
@@ -421,7 +421,7 @@ const InventoryIssueTableHeader = ({
   onBulkDelete,
   onExportExcel,
   onExportPDF
-}: InventoryIssueTableHeaderProps) => {
+}: InventoryReceiptTableHeaderProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const filterPopover = useBoolean(false);
@@ -430,17 +430,17 @@ const InventoryIssueTableHeader = ({
   const selectedRows = table.getFilteredSelectedRowModel().rows;
   const selectedCount = selectedRows.length;
   const hasSelection = selectedCount > 0;
-  // Only draft issues can be bulk deleted
+  // Only draft receipts can be bulk deleted
   const canBulkDelete = hasSelection && selectedRows.every((row) => row.original.status === 'draft');
 
   const handleCreateNew = () => {
-    navigate(INVENTORY_ISSUE_URLS.NEW);
+    navigate(INVENTORY_RECEIPT_URLS.NEW);
   };
 
   const handleBulkDelete = () => {
     if (onBulkDelete && canBulkDelete) {
-      const selectedIssues = selectedRows.map((row) => row.original);
-      onBulkDelete(selectedIssues);
+      const selectedReceipts = selectedRows.map((row) => row.original);
+      onBulkDelete(selectedReceipts);
     }
   };
 
@@ -465,7 +465,7 @@ const InventoryIssueTableHeader = ({
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%' }}>
           <TextField
-            placeholder="Tìm kiếm theo mã phiếu, kho xuất, hàng hóa..."
+            placeholder="Tìm kiếm theo mã phiếu, kho nhập, hàng hóa..."
             value={searchValue}
             onChange={(e) => onSearchChange?.(e.target.value)}
             size="medium"
@@ -537,9 +537,9 @@ const InventoryIssueTableHeader = ({
             </Button>
           )}
 
-          {/* Tạo phiếu xuất - Primary, Always */}
+          {/* Tạo phiếu nhập - Primary, Always */}
           <Button variant="contained" color="primary" startIcon={<PlusOutlined />} onClick={handleCreateNew}>
-            Tạo phiếu xuất
+            Tạo phiếu nhập
           </Button>
         </Stack>
       </Toolbar>
@@ -556,4 +556,4 @@ const InventoryIssueTableHeader = ({
   );
 };
 
-export default InventoryIssueTableHeader;
+export default InventoryReceiptTableHeader;

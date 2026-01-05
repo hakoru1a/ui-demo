@@ -1,37 +1,45 @@
-SD-3-3: Danh sách phiếu tạm ứng
+SF-1-3: Danh sách phiếu xuất kho (Nguyên liệu / Thành phẩm)
 
 Field Name	Input Type	Optional / Required	Notes
-Mã tạm ứng	Text	Optional
-Người đề nghị	Dropdown	Optional
-Ngày đề nghị	Date Range	Optional
-Trạng thái	Dropdown	Optional	Chờ duyệt / Đã duyệt / Từ chối
+Mã phiếu xuất	Text	Optional
+Loại xuất	Dropdown	Optional	Nguyên liệu / Thành phẩm
+Kho xuất	Dropdown	Optional
+Ngày xuất	Date Range	Optional
+Trạng thái	Dropdown	Optional	Nháp / Đã xuất / Hủy
 
 Column Name	Display Type	Sortable	Clickable	Notes
-Mã tạm ứng	Text	Yes	View
-Người đề nghị	Text	Yes	No
-Ngày đề nghị	Text	Yes	No
-Số tiền	Number	Yes	No	Canh phải
-Mục đích	Text	No	No
+Mã phiếu	Text	Yes	View
+Ngày xuất	Text	Yes	No	dd/mm/yyyy
+Loại xuất	Badge	Yes	No	NL / TP
+Kho xuất	Text	Yes	No
+Tổng khối lượng	Number	Yes	No	Canh phải
 Trạng thái	Status	Yes	No
-Hành động	Action Button	No	Edit	View
+Hành động	Action Button	No	Edit	View / Edit / Delete
 
 Action Name	Action Type	Availability	Notes
-Tạo phiếu tạm ứng	Primary	Always
+Tạo phiếu xuất	Primary	Always
 Export Excel	Secondary	Always
+Export PDF	Secondary	Always
 
-SD-3-4: Phê duyệt tạm ứng
+SF-1-4: Thông tin phiếu xuất
 
 Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
-Advance Code – Mã tạm ứng	Text	Yes		Read-only
-Requester – Người đề nghị	Text	Yes		Read-only
-Requested Amount – Số tiền	Number	Yes		Read-only
-Purpose – Mục đích	Textarea	Yes		Read-only
-Approval Decision – Quyết định	Dropdown	Yes		Duyệt / Từ chối
-Comment – Ý kiến	Textarea	Conditional		Bắt buộc nếu từ chối
-Approval Date – Ngày duyệt	Date	Yes	Today
-Status – Trạng thái	Status	Yes	Auto
+Issue Code – Mã phiếu xuất	Text	Yes	Auto-generate	Read-only
+Issue Date – Ngày xuất	Date	Yes	Today
+Issue Type – Loại xuất	Dropdown	Yes	Nguyên liệu	NL / TP
+Warehouse – Kho xuất	Dropdown	Yes
+Product / Material – Hàng hóa	Dropdown	Yes
+Batch / Lot – Lô	Dropdown	No		Truy vết
+Quantity – Số lượng	Number	Yes		> 0
+Unit – Đơn vị	Dropdown	Yes	Kg
+Destination – Điểm nhận	Text	No		SX / Bán
+Reference Doc – Chứng từ	File Upload	No
+Status – Trạng thái	Dropdown	Yes	Nháp
+Notes – Ghi chú	Textarea	No
 
 Action Name	Action Type	Availability	Notes
-Duyệt tạm ứng	Primary	Conditional	Khi có quyền
-Từ chối	Secondary	Conditional	Yêu cầu lý do
+Lưu phiếu	Primary	Edit mode	Validate
+Xác nhận xuất kho	Primary	Conditional	Khi trạng thái = Nháp
+Chỉnh sửa	Secondary	View mode
+In phiếu	Secondary	Always
 Quay lại	Secondary	Always

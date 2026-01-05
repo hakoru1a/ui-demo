@@ -1,21 +1,21 @@
 import { EditOutlined, PrinterOutlined, ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons';
-import { Stack, Button, Box, CircularProgress, Alert } from '@mui/material';
+import { Stack, Button, Box, Alert, Chip } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Formik, Form } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // project imports
-import { openSnackbar } from 'api/snackbar';
+import CircularLoader from 'components/CircularLoader';
 import MainCard from 'components/MainCard';
-import type { SnackbarProps } from 'types/snackbar';
+import type { CustomFile } from 'types/dropzone';
 
-import { inventoryIssueService } from '../api';
 import InventoryIssueForm from '../components/InventoryIssueForm';
-import { getMockInventoryIssues } from '../mock/inventoryIssues';
-import type { InventoryIssueFormData, InventoryIssue } from '../types';
-import { INVENTORY_ISSUE_URLS } from '../types/constants';
-import { inventoryIssueSchema, inventoryIssueDefaultValues } from '../validation';
+import { getMockInventoryIssue } from '../mock/inventoryIssues';
+import type { InventoryIssue, InventoryIssueFormData } from '../types';
+import { INVENTORY_ISSUE_URLS, STATUS_OPTIONS } from '../types/constants';
+import { getLabelFromOptions } from '../utils';
+import { inventoryIssueDefaultValues } from '../validation';
 
 // ==============================|| HELPER: CONVERT ENTITY TO FORM DATA ||============================== //
 
@@ -24,14 +24,14 @@ const entityToFormData = (entity: InventoryIssue): InventoryIssueFormData => ({
   issueDate: entity.issueDate,
   issueType: entity.issueType,
   warehouseId: entity.warehouseId,
-  destinationId: entity.destinationId || '',
-  destinationType: entity.destinationType,
-  customerId: entity.customerId,
   productId: entity.productId,
   batchId: entity.batchId,
   quantity: entity.quantity,
-  transportRef: entity.transportRef,
-  referenceDoc: entity.referenceDoc,
+  unit: entity.unit,
+  destination: entity.destination,
+  referenceDoc: entity.referenceDocUrl
+    ? ([{ name: entity.referenceDocUrl.split('/').pop() || 'File', preview: entity.referenceDocUrl }] as CustomFile[])
+    : undefined,
   status: entity.status,
   notes: entity.notes
 });
@@ -44,51 +44,31 @@ const InventoryIssueDetailPage = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<InventoryIssue | null>(null);
   const [initialValues, setInitialValues] = useState<InventoryIssueFormData>(inventoryIssueDefaultValues);
-  const [originalData, setOriginalData] = useState<InventoryIssue | null>(null);
-  const [isConfirming, setIsConfirming] = useState(false);
 
-  // Fetch data on mount
+  // Fetch data on mount (mock)
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
 
-      try {
-        // Try API first, fallback to mock
-        if (id && !id.startsWith('mock-')) {
-          const response = await inventoryIssueService.getInventoryIssueById(id);
-          if (response.success && response.data) {
-            setOriginalData(response.data);
-            setInitialValues(entityToFormData(response.data));
-          } else {
-            // Fallback to mock
-            const mockIssues = getMockInventoryIssues();
-            const found = mockIssues.find((item) => item.id === id);
-            if (found) {
-              setOriginalData(found);
-              setInitialValues(entityToFormData(found));
-            } else {
-              setError('Không tìm thấy phiếu xuất');
-            }
-          }
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      if (id) {
+        // TODO: Replace with API call
+        const found = getMockInventoryIssue(id);
+
+        if (found) {
+          setData(found);
+          setInitialValues(entityToFormData(found));
         } else {
-          // Use mock data
-          const mockIssues = getMockInventoryIssues();
-          const found = mockIssues.find((item) => item.id === id);
-          if (found) {
-            setOriginalData(found);
-            setInitialValues(entityToFormData(found));
-          } else {
-            setError('Không tìm thấy phiếu xuất');
-          }
+          setError('Không tìm thấy phiếu xuất kho');
         }
-      } catch (err) {
-        console.error('Error fetching inventory issue:', err);
-        setError('Có lỗi xảy ra khi tải dữ liệu');
-      } finally {
-        setIsLoading(false);
       }
+
+      setIsLoading(false);
     };
 
     if (id) {
@@ -96,56 +76,16 @@ const InventoryIssueDetailPage = () => {
     }
   }, [id]);
 
-  // Handle confirm issue (change status from draft to issued)
+  // Handle confirm issue (when status = draft)
   const handleConfirmIssue = useCallback(async () => {
-    if (!id || !originalData || originalData.status !== 'draft') return;
-
-    setIsConfirming(true);
-    try {
-      if (!id.startsWith('mock-')) {
-        const response = await inventoryIssueService.confirmIssue(id);
-        if (response.success && response.data) {
-          openSnackbar({
-            open: true,
-            message: 'Xác nhận xuất hàng thành công',
-            variant: 'alert',
-            alert: { color: 'success' }
-          } as SnackbarProps);
-          // Refresh data
-          setOriginalData(response.data);
-          setInitialValues(entityToFormData(response.data));
-        } else {
-          openSnackbar({
-            open: true,
-            message: 'Có lỗi xảy ra khi xác nhận xuất hàng',
-            variant: 'alert',
-            alert: { color: 'error' }
-          } as SnackbarProps);
-        }
-      } else {
-        // Mock success
-        const updated = { ...originalData, status: 'issued' as const };
-        setOriginalData(updated);
-        setInitialValues(entityToFormData(updated));
-        openSnackbar({
-          open: true,
-          message: 'Xác nhận xuất hàng thành công',
-          variant: 'alert',
-          alert: { color: 'success' }
-        } as SnackbarProps);
-      }
-    } catch (err) {
-      console.error('Error confirming issue:', err);
-      openSnackbar({
-        open: true,
-        message: 'Có lỗi xảy ra khi xác nhận xuất hàng',
-        variant: 'alert',
-        alert: { color: 'error' }
-      } as SnackbarProps);
-    } finally {
-      setIsConfirming(false);
+    if (id && data?.status === 'draft') {
+      // TODO: Replace with API call
+      console.warn('Confirming issue:', id);
+      alert('Xác nhận xuất kho thành công! (Mock)');
+      // Navigate to detail page to refresh
+      navigate(INVENTORY_ISSUE_URLS.DETAIL(id));
     }
-  }, [id, originalData]);
+  }, [navigate, id, data]);
 
   // Handle print
   const handlePrint = useCallback(() => {
@@ -159,12 +99,17 @@ const InventoryIssueDetailPage = () => {
     }
   }, [navigate, id]);
 
+  // Handle back
+  const handleBack = useCallback(() => {
+    navigate(INVENTORY_ISSUE_URLS.LIST);
+  }, [navigate]);
+
   // Loading state
   if (isLoading) {
     return (
-      <MainCard title="Chi tiết phiếu xuất">
+      <MainCard title="Chi tiết phiếu xuất kho">
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 300 }}>
-          <CircularProgress />
+          <CircularLoader />
         </Box>
       </MainCard>
     );
@@ -173,70 +118,66 @@ const InventoryIssueDetailPage = () => {
   // Error state
   if (error) {
     return (
-      <MainCard title="Chi tiết phiếu xuất">
+      <MainCard title="Chi tiết phiếu xuất kho">
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
-        <Button variant="outlined" onClick={() => navigate(INVENTORY_ISSUE_URLS.LIST)}>
+        <Button variant="outlined" onClick={handleBack}>
           Quay lại danh sách
         </Button>
       </MainCard>
     );
   }
 
-  const canConfirm = originalData?.status === 'draft';
+  const statusLabel = data ? getLabelFromOptions(data.status, STATUS_OPTIONS) : '';
+  const canConfirm = data?.status === 'draft';
+  const getStatusColor = (status?: InventoryIssue['status']) => {
+    if (status === 'issued') return 'success';
+    if (status === 'draft') return 'warning';
+    if (status === 'cancelled') return 'error';
+    return 'default';
+  };
 
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={inventoryIssueSchema}
-      onSubmit={() => {}}
+      onSubmit={() => {}} // No submit for view mode
       enableReinitialize
-      validateOnChange={false}
-      validateOnBlur={false}
     >
-      {() => (
-        <Form>
-          <MainCard
-            title={`Chi tiết phiếu xuất: ${originalData?.code || ''}`}
-            secondary={
-              <Stack direction="row" spacing={1}>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={<ArrowLeftOutlined />}
-                  onClick={() => navigate(INVENTORY_ISSUE_URLS.LIST)}
-                >
-                  Quay lại danh sách
+      <Form>
+        <MainCard
+          title={
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <span>{data?.code}</span>
+              <Chip label={statusLabel} color={getStatusColor(data?.status)} size="small" />
+            </Stack>
+          }
+          secondary={
+            <Stack direction="row" spacing={1}>
+              <Button variant="outlined" color="secondary" startIcon={<ArrowLeftOutlined />} onClick={handleBack}>
+                Quay lại
+              </Button>
+              <Button variant="outlined" color="info" startIcon={<PrinterOutlined />} onClick={handlePrint}>
+                In phiếu
+              </Button>
+              {canConfirm && (
+                <Button variant="contained" color="primary" startIcon={<CheckOutlined />} onClick={handleConfirmIssue}>
+                  Xác nhận xuất kho
                 </Button>
-                <Button variant="outlined" color="info" startIcon={<PrinterOutlined />} onClick={handlePrint}>
-                  In phiếu
-                </Button>
-                {canConfirm && (
-                  <Button
-                    variant="contained"
-                    color="success"
-                    startIcon={<CheckOutlined />}
-                    onClick={handleConfirmIssue}
-                    disabled={isConfirming}
-                  >
-                    {isConfirming ? 'Đang xác nhận...' : 'Xác nhận xuất hàng'}
-                  </Button>
-                )}
-                <Button variant="contained" color="primary" startIcon={<EditOutlined />} onClick={handleEdit}>
-                  Chỉnh sửa
-                </Button>
-              </Stack>
-            }
-          >
-            <Grid container spacing={3} sx={{ p: 1 }}>
-              <Grid size={12}>
-                <InventoryIssueForm mode="view" />
-              </Grid>
+              )}
+              <Button variant="contained" color="primary" startIcon={<EditOutlined />} onClick={handleEdit}>
+                Chỉnh sửa
+              </Button>
+            </Stack>
+          }
+        >
+          <Grid container spacing={3} sx={{ p: 1 }}>
+            <Grid size={12}>
+              <InventoryIssueForm mode="view" />
             </Grid>
-          </MainCard>
-        </Form>
-      )}
+          </Grid>
+        </MainCard>
+      </Form>
     </Formik>
   );
 };

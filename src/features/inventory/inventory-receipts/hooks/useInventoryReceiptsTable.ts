@@ -12,26 +12,26 @@ import {
 } from 'hooks/table';
 import { StatusFilter } from 'types/status';
 
-import { useInventoryIssueColumns } from '../components/InventoryIssueColumns';
-import type { InventoryIssue } from '../types';
+import { useInventoryReceiptColumns } from '../components/InventoryReceiptColumns';
+import type { InventoryReceipt } from '../types';
 
-// ==============================|| INVENTORY ISSUES TABLE HOOK ||============================== //
+// ==============================|| INVENTORY RECEIPTS TABLE HOOK ||============================== //
 
-interface UseInventoryIssuesTableProps {
-  data: InventoryIssue[];
+interface UseInventoryReceiptsTableProps {
+  data: InventoryReceipt[];
   statusFilter: StatusFilter | string;
   searchValue: string;
-  onEdit?: (issue: InventoryIssue) => void;
-  onDelete?: (issue: InventoryIssue) => void;
-  onSelectionChange?: (selected: InventoryIssue[]) => void;
+  onEdit?: (receipt: InventoryReceipt) => void;
+  onDelete?: (receipt: InventoryReceipt) => void;
+  onSelectionChange?: (selected: InventoryReceipt[]) => void;
   initialPageSize?: number;
 }
 
 /**
- * Hook to manage all table-related logic for Inventory Issues
+ * Hook to manage all table-related logic for Inventory Receipts
  * Consolidates table setup, filtering, selection, and CSV export
  */
-export function useInventoryIssuesTable({
+export function useInventoryReceiptsTable({
   data,
   statusFilter,
   searchValue,
@@ -39,9 +39,9 @@ export function useInventoryIssuesTable({
   onDelete,
   onSelectionChange,
   initialPageSize = 25
-}: UseInventoryIssuesTableProps) {
+}: UseInventoryReceiptsTableProps) {
   // Memoize search filter function
-  const searchFilterFn = useCallback((item: InventoryIssue, search: string) => {
+  const searchFilterFn = useCallback((item: InventoryReceipt, search: string) => {
     const searchLower = search.toLowerCase();
     return !!(
       item.code.toLowerCase().includes(searchLower) ||
@@ -51,13 +51,13 @@ export function useInventoryIssuesTable({
   }, []);
 
   // Get columns
-  const columns = useInventoryIssueColumns({ onEdit, onDelete });
+  const columns = useInventoryReceiptColumns({ onEdit, onDelete });
 
   // Table filters
   const { columnFilters, setColumnFilters } = useTableFilters();
 
   // Table data filtering
-  const { filteredData } = useTableData<InventoryIssue>({
+  const { filteredData } = useTableData<InventoryReceipt>({
     data,
     statusFilter,
     searchValue,
@@ -65,7 +65,7 @@ export function useInventoryIssuesTable({
   });
 
   // Table columns with selection
-  const { tableColumns } = useTableColumns<InventoryIssue>({
+  const { tableColumns } = useTableColumns<InventoryReceipt>({
     columns,
     enableRowSelection: true
   });
@@ -74,7 +74,7 @@ export function useInventoryIssuesTable({
   const { rowSelection, setRowSelection } = useTableSelection();
 
   // Create table instance
-  const { table, sorting, setSorting, columnVisibility, setColumnVisibility } = useTable<InventoryIssue>({
+  const { table, sorting, setSorting, columnVisibility, setColumnVisibility } = useTable<InventoryReceipt>({
     data: filteredData,
     columns: tableColumns,
     columnFilters,
@@ -85,11 +85,11 @@ export function useInventoryIssuesTable({
   });
 
   // Compute selected rows from table
-  const selectedRows = useSelectedRows<InventoryIssue>(table, true);
+  const selectedRows = useSelectedRows<InventoryReceipt>(table, true);
 
   // Handle row selection change - only notify if callback is provided
   const handleRowSelectionChange = useCallback(
-    (selected: InventoryIssue[]) => {
+    (selected: InventoryReceipt[]) => {
       onSelectionChange?.(selected);
     },
     [onSelectionChange]
@@ -99,7 +99,7 @@ export function useInventoryIssuesTable({
   useSelectionChange(selectedRows, !!onSelectionChange, onSelectionChange ? handleRowSelectionChange : undefined);
 
   // Table CSV export
-  const { csvData, csvHeadersData } = useTableCSV<InventoryIssue>({
+  const { csvData, csvHeadersData } = useTableCSV<InventoryReceipt>({
     table,
     enabled: true
   });

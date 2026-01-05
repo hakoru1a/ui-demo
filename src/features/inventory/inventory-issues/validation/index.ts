@@ -13,32 +13,21 @@ export const inventoryIssueSchema = yup.object<InventoryIssueFormData>().shape({
 
   issueDate: yup.date().required('Ngày xuất là bắt buộc').typeError('Ngày xuất không hợp lệ'),
 
-  issueType: yup.string().oneOf(['warehouse', 'port'], 'Loại xuất không hợp lệ').required('Loại xuất là bắt buộc'),
+  issueType: yup.string().oneOf(['material', 'finished'], 'Loại xuất không hợp lệ').required('Loại xuất là bắt buộc'),
 
   warehouseId: yup.string().required('Kho xuất là bắt buộc'),
 
-  destinationId: yup.string().required('Điểm nhận là bắt buộc'),
-
-  destinationType: yup
-    .string()
-    .oneOf(['warehouse', 'port'], 'Loại điểm nhận không hợp lệ')
-    .when('destinationId', {
-      is: (value: string) => !!value,
-      then: (schema) => schema.required('Loại điểm nhận là bắt buộc'),
-      otherwise: (schema) => schema.optional()
-    }),
-
-  customerId: yup.string().optional(),
-
-  productId: yup.string().required('Sản phẩm / Nguyên liệu là bắt buộc'),
+  productId: yup.string().required('Hàng hóa là bắt buộc'),
 
   batchId: yup.string().optional(),
 
-  quantity: yup.number().required('Khối lượng là bắt buộc').positive('Khối lượng phải lớn hơn 0').typeError('Khối lượng phải là số'),
+  quantity: yup.number().required('Số lượng là bắt buộc').min(0.01, 'Số lượng phải lớn hơn 0').typeError('Số lượng phải là số'),
 
-  transportRef: yup.string().max(200, 'Thông tin vận chuyển không được quá 200 ký tự').optional(),
+  unit: yup.string().required('Đơn vị là bắt buộc'),
 
-  referenceDoc: yup.mixed<File | string>().optional(),
+  destination: yup.string().max(200, 'Điểm nhận không được quá 200 ký tự').optional(),
+
+  referenceDoc: yup.array().optional(),
 
   status: yup.string().oneOf(['draft', 'issued', 'cancelled'], 'Trạng thái không hợp lệ').required('Trạng thái là bắt buộc'),
 
@@ -51,18 +40,16 @@ export const inventoryIssueSchema = yup.object<InventoryIssueFormData>().shape({
 export const inventoryIssueDefaultValues: InventoryIssueFormData = {
   code: '',
   issueDate: new Date(),
-  issueType: 'warehouse',
+  issueType: 'material',
   warehouseId: '',
-  destinationId: '',
-  destinationType: undefined,
-  customerId: undefined,
   productId: '',
   batchId: undefined,
   quantity: 0,
-  transportRef: undefined,
+  unit: 'Kg',
+  destination: undefined,
   referenceDoc: undefined,
   status: 'draft',
-  notes: ''
+  notes: undefined
 };
 
 /**
