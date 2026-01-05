@@ -1,50 +1,21 @@
-SF-3-1: Danh sách phiếu chuyển kho (LIST)
-Filter
-Field Name	Input Type	Optional / Required	Notes
-Mã phiếu chuyển	Text	Optional
-Kho nguồn	Dropdown	Optional
-Kho đích	Dropdown	Optional
-Loại hàng	Dropdown	Optional	Nguyên liệu / Thành phẩm
-Ngày chuyển	Date Range	Optional
-Trạng thái	Dropdown	Optional	Nháp / Đã chuyển / Hủy
-
-Column Name	Display Type	Sortable	Clickable	Notes
-Mã phiếu	Text	Yes	View
-Ngày chuyển	Text	Yes	No	dd/mm/yyyy
-Kho nguồn	Text	Yes	No
-Kho đích	Text	Yes	No
-Số SKU	Number	Yes	No
-Tổng khối lượng	Number	Yes	No	Canh phải
-Trạng thái	Status	Yes	No	Màu theo trạng thái
-Hành động	Action Button	No	Edit	View / Edit / Delete
-
-Action Name	Action Type	Availability	Notes
-Tạo phiếu chuyển kho	Primary	Always
-Export Excel	Secondary	Always
-Export PDF	Secondary	Always
-
-
-
-
-SF-3-2: Thông tin phiếu chuyển kho(VIEW/CREATE/UPDATE)
+SF-3-3: Thông tin truy xuất nguồn gốc
 
 Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
-Transfer Code – Mã phiếu	Text	Yes	Auto-generate	Read-only
-Transfer Date – Ngày chuyển	Date	Yes	Today
-Source Warehouse – Kho nguồn	Dropdown	Yes
-Destination Warehouse – Kho đích	Dropdown	Yes
-Item Type – Loại hàng	Dropdown	Yes		NL / TP
-SKU – Hàng hóa	Dropdown	Yes		Cho phép nhiều SKU
-Batch / Lot – Lô	Dropdown	No		Bắt buộc nếu truy xuất
-Quantity – Số lượng	Number	Yes		> 0
-Unit – Đơn vị	Dropdown	Yes	Kg
-Transport Ref – Thông tin vận chuyển	Text	No
-Status – Trạng thái	Dropdown	Yes	Nháp
-Notes – Ghi chú	Textarea	No
+SKU – Hàng hóa	Text	Yes		Read-only
+Batch / Lot – Lô	Text	Yes		Read-only
+Origin Area – Vùng trồng	Text	Yes		FSC / PEFC
+Harvest Plan – Kế hoạch khai thác	Text	No
+Supplier – Nhà cung cấp	Text	No
+Production Batch – Lô sản xuất	Text	No
+Warehouse History – Lịch sử kho	Textarea	Yes	Auto	Chuỗi thời gian
+Certification – Chứng chỉ	Badge	No		FSC / PEFC
+Trace Status – Trạng thái truy xuất	Status	Yes	Auto	Đầy đủ / Thiếu
 
 Action Name	Action Type	Availability	Notes
-Lưu phiếu	Primary	Edit mode	Validate
-Xác nhận chuyển kho	Primary	Conditional	Khi trạng thái = Nháp
-Chỉnh sửa	Secondary	View mode
-Xem truy xuất nguồn gốc	Secondary	Conditional	Khi có lô
+Xem bản đồ vùng trồng	Secondary	Conditional	Nếu có dữ liệu
+Export PDF	Secondary	Always	Báo cáo truy xuất
 Quay lại	Secondary	Always
+
+Màn hình này tìm kiếm được nguồn gốc click từ  http://localhost:3000/transfers/1
+Hoặc tìm kiếm theo mã transfers  => add 1 filter vào
+Dây chỉ là một màn hình search không có create/update/delete chỉ có xem thôi

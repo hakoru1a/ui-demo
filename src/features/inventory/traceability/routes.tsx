@@ -6,7 +6,7 @@ import DashboardLayout from 'layout/Dashboard';
 
 // ==============================|| Traceability ROUTING ||============================== //
 
-const TraceabilityPage = Loadable(lazy(() => import('./pages/TraceabilityPage')));
+const TransferTraceabilityPage = Loadable(lazy(() => import('../transfers/pages/TransferTraceabilityPage')));
 
 const TraceabilityRoutes = {
   path: '/traceability',
@@ -14,7 +14,7 @@ const TraceabilityRoutes = {
   children: [
     {
       path: '',
-      element: <TraceabilityPage />
+      element: <TransferTraceabilityPage />
     }
   ]
 };
