@@ -37,7 +37,6 @@ import YieldEstimationRoutes from 'features/forest/yield-estimation/routes';
 import InventoryIssuesRoutes from 'features/inventory/inventory-issues/routes';
 import InventoryReceiptsRoutes from 'features/inventory/inventory-receipts/routes';
 import SkuRoutes from 'features/inventory/sku/routes';
-import StockRoutes from 'features/inventory/stock/routes';
 import StocktakesRoutes from 'features/inventory/stocktakes/routes';
 import TraceabilityRoutes from 'features/inventory/traceability/routes';
 import TransfersRoutes from 'features/inventory/transfers/routes';
@@ -93,7 +92,6 @@ export const featureRoutes = [
   InventoryIssuesRoutes,
   InventoryReceiptsRoutes,
   SkuRoutes,
-  StockRoutes,
   StocktakesRoutes,
   TraceabilityRoutes,
   TransfersRoutes,

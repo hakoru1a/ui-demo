@@ -3,9 +3,9 @@ import {
   ImportOutlined,
   UnorderedListOutlined,
   CheckSquareOutlined,
-  AppstoreOutlined,
   SwapOutlined,
-  GlobalOutlined
+  GlobalOutlined,
+  CalendarOutlined
 } from '@ant-design/icons';
 
 import { NavItemType } from 'types/menu';
@@ -52,11 +52,11 @@ const inventory: NavItemType = {
           icon: UnorderedListOutlined
         },
         {
-          id: 'inventory-stock-view',
-          title: 'menu.inventory.stock-view',
+          id: 'inventory-count-schedule',
+          title: 'menu.inventory.count-schedule',
           type: 'item',
-          url: '/stock',
-          icon: AppstoreOutlined
+          url: '/stocktakes/schedule',
+          icon: CalendarOutlined
         },
         {
           id: 'inventory-count-slip-list',

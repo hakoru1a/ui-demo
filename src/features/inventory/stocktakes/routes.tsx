@@ -4,12 +4,13 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
 
-// ==============================|| Stocktakes ROUTING ||============================== //
+// ==============================|| STOCKTAKES ROUTING ||============================== //
 
 const StocktakesListPage = Loadable(lazy(() => import('./pages/StocktakesListPage')));
+const StocktakeSchedulePage = Loadable(lazy(() => import('./pages/StocktakeSchedulePage')));
 const StocktakeDetailPage = Loadable(lazy(() => import('./pages/StocktakeDetailPage')));
 const StocktakeCreatePage = Loadable(lazy(() => import('./pages/StocktakeCreatePage')));
-const StocktakeExecutionPage = Loadable(lazy(() => import('./pages/StocktakeExecutionPage')));
+const StocktakeEditPage = Loadable(lazy(() => import('./pages/StocktakeEditPage')));
 
 const StocktakesRoutes = {
   path: '/stocktakes',
@@ -20,16 +21,20 @@ const StocktakesRoutes = {
       element: <StocktakesListPage />
     },
     {
-      path: ':id',
-      element: <StocktakeDetailPage />
+      path: 'schedule',
+      element: <StocktakeSchedulePage />
     },
     {
       path: 'new',
       element: <StocktakeCreatePage />
     },
     {
-      path: ':id/execution',
-      element: <StocktakeExecutionPage />
+      path: ':id',
+      element: <StocktakeDetailPage />
+    },
+    {
+      path: ':id/edit',
+      element: <StocktakeEditPage />
     }
   ]
 };

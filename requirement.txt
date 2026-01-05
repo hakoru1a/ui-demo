@@ -1,39 +1,50 @@
-SF-2-1: Danh sách SKU
+SF-3-1: Danh sách phiếu chuyển kho (LIST)
 Filter
 Field Name	Input Type	Optional / Required	Notes
-SKU Code	Text	Optional
-Tên hàng hóa	Text	Optional
+Mã phiếu chuyển	Text	Optional
+Kho nguồn	Dropdown	Optional
+Kho đích	Dropdown	Optional
 Loại hàng	Dropdown	Optional	Nguyên liệu / Thành phẩm
-Kho	Dropdown	Optional
-Trạng thái tồn	Dropdown	Optional	Còn hàng / Hết hàng
+Ngày chuyển	Date Range	Optional
+Trạng thái	Dropdown	Optional	Nháp / Đã chuyển / Hủy
 
 Column Name	Display Type	Sortable	Clickable	Notes
-SKU Code	Text	Yes	View
-Tên hàng hóa	Text	Yes	View
-Loại hàng	Badge	Yes	No	NL / TP
-Kho	Text	Yes	No
-Tồn hệ thống	Number	Yes	No	Canh phải
-Đơn vị	Text	No	No	Kg / Tấn
-Trạng thái	Status	Yes	No	Tồn / Hết
-Hành động	Action Button	No	View
+Mã phiếu	Text	Yes	View
+Ngày chuyển	Text	Yes	No	dd/mm/yyyy
+Kho nguồn	Text	Yes	No
+Kho đích	Text	Yes	No
+Số SKU	Number	Yes	No
+Tổng khối lượng	Number	Yes	No	Canh phải
+Trạng thái	Status	Yes	No	Màu theo trạng thái
+Hành động	Action Button	No	Edit	View / Edit / Delete
 
 Action Name	Action Type	Availability	Notes
-Xem chi tiết SKU	Primary	Conditional	Khi chọn 1 dòng
+Tạo phiếu chuyển kho	Primary	Always
 Export Excel	Secondary	Always
+Export PDF	Secondary	Always
 
-SF-2-2: Thông tin SKU & số lượng	(UPDATE/VIEW/CREATE)
+
+
+
+SF-3-2: Thông tin phiếu chuyển kho(VIEW/CREATE/UPDATE)
 
 Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
-SKU Code – Mã SKU	Text	Yes		Read-only
-Item Name – Tên hàng	Text	Yes		Read-only
+Transfer Code – Mã phiếu	Text	Yes	Auto-generate	Read-only
+Transfer Date – Ngày chuyển	Date	Yes	Today
+Source Warehouse – Kho nguồn	Dropdown	Yes
+Destination Warehouse – Kho đích	Dropdown	Yes
 Item Type – Loại hàng	Dropdown	Yes		NL / TP
-Warehouse – Kho	Dropdown	Yes
-System Quantity – SL hệ thống	Number	Yes	Auto	Read-only
-Reserved Quantity – SL giữ chỗ	Number	No	Auto	Read-only
-Available Quantity – SL khả dụng	Number	Yes	Auto	Read-only
-Last Inventory Date – Ngày kiểm kê gần nhất	Date	No
+SKU – Hàng hóa	Dropdown	Yes		Cho phép nhiều SKU
+Batch / Lot – Lô	Dropdown	No		Bắt buộc nếu truy xuất
+Quantity – Số lượng	Number	Yes		> 0
+Unit – Đơn vị	Dropdown	Yes	Kg
+Transport Ref – Thông tin vận chuyển	Text	No
+Status – Trạng thái	Dropdown	Yes	Nháp
 Notes – Ghi chú	Textarea	No
 
 Action Name	Action Type	Availability	Notes
-Tạo phiếu kiểm kê	Primary	Always	Điều hướng SF-2-5
-Quay lại danh sách	Secondary	Always
+Lưu phiếu	Primary	Edit mode	Validate
+Xác nhận chuyển kho	Primary	Conditional	Khi trạng thái = Nháp
+Chỉnh sửa	Secondary	View mode
+Xem truy xuất nguồn gốc	Secondary	Conditional	Khi có lô
+Quay lại	Secondary	Always
