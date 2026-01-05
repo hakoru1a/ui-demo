@@ -1,47 +1,37 @@
-SD-3-1: Danh sách phiếu chi & thanh toán(LIST)
-Filter
+SD-3-3: Danh sách phiếu tạm ứng
+
 Field Name	Input Type	Optional / Required	Notes
-Mã PO	Text	Optional
-Loại phiếu	Dropdown	Optional	Thanh toán / Chi
-Đối tác	Dropdown	Optional	Khách hàng / NCC
-Ngày thanh toán	Date Range	Optional
-Phương thức	Dropdown	Optional	Tiền mặt / Chuyển khoản
-Trạng thái	Dropdown	Optional	Nháp / Chờ duyệt / Đã thanh toán
+Mã tạm ứng	Text	Optional
+Người đề nghị	Dropdown	Optional
+Ngày đề nghị	Date Range	Optional
+Trạng thái	Dropdown	Optional	Chờ duyệt / Đã duyệt / Từ chối
 
 Column Name	Display Type	Sortable	Clickable	Notes
-Mã PO	Text	Yes	View
-Ngày lập	Text	Yes	No	dd/mm/yyyy
-Đối tác	Text	Yes	View
-Loại phiếu	Badge	Yes	No	Chi / Thanh toán
+Mã tạm ứng	Text	Yes	View
+Người đề nghị	Text	Yes	No
+Ngày đề nghị	Text	Yes	No
 Số tiền	Number	Yes	No	Canh phải
-Phương thức	Text	Yes	No
-Trạng thái	Status	Yes	No	Màu theo trạng thái
-Hành động	Action Button	No	Edit	View / Edit / Delete
+Mục đích	Text	No	No
+Trạng thái	Status	Yes	No
+Hành động	Action Button	No	Edit	View
 
 Action Name	Action Type	Availability	Notes
-Tạo PO	Primary	Always
+Tạo phiếu tạm ứng	Primary	Always
 Export Excel	Secondary	Always
-Export PDF	Secondary	Always
 
-
-SD-3-2: Thông tin Payment Order (PO) (VIEW/UPDATE/CREATE)
+SD-3-4: Phê duyệt tạm ứng
 
 Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
-PO Code – Mã PO	Text	Yes	Auto-generate	Read-only
-PO Type – Loại phiếu	Dropdown	Yes	Thanh toán	Thanh toán / Chi
-Partner – Đối tác	Dropdown	Yes
-Related Contract – Hợp đồng	Dropdown	No
-Payment Amount – Số tiền	Number	Yes		> 0
-Currency – Tiền tệ	Dropdown	Yes	VND
-Payment Method – Phương thức	Dropdown	Yes
-Payment Date – Ngày thanh toán	Date	Yes	Today
-Description – Nội dung chi	Textarea	No
-Attachment – Chứng từ	File Upload	No		Hóa đơn / UNC
-Status – Trạng thái	Dropdown	Yes	Nháp
+Advance Code – Mã tạm ứng	Text	Yes		Read-only
+Requester – Người đề nghị	Text	Yes		Read-only
+Requested Amount – Số tiền	Number	Yes		Read-only
+Purpose – Mục đích	Textarea	Yes		Read-only
+Approval Decision – Quyết định	Dropdown	Yes		Duyệt / Từ chối
+Comment – Ý kiến	Textarea	Conditional		Bắt buộc nếu từ chối
+Approval Date – Ngày duyệt	Date	Yes	Today
+Status – Trạng thái	Status	Yes	Auto
 
 Action Name	Action Type	Availability	Notes
-Lưu PO	Primary	Edit mode	Validate
-Gửi duyệt	Primary	Conditional	Khi trạng thái = Nháp
-Chỉnh sửa	Secondary	View mode
-In phiếu	Secondary	Always
+Duyệt tạm ứng	Primary	Conditional	Khi có quyền
+Từ chối	Secondary	Conditional	Yêu cầu lý do
 Quay lại	Secondary	Always

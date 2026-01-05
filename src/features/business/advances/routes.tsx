@@ -9,6 +9,8 @@ import DashboardLayout from 'layout/Dashboard';
 const AdvancesListPage = Loadable(lazy(() => import('./pages/AdvancesListPage')));
 const AdvanceDetailPage = Loadable(lazy(() => import('./pages/AdvanceDetailPage')));
 const AdvanceCreatePage = Loadable(lazy(() => import('./pages/AdvanceCreatePage')));
+const AdvanceEditPage = Loadable(lazy(() => import('./pages/AdvanceEditPage')));
+const AdvanceApprovalPage = Loadable(lazy(() => import('./pages/AdvanceApprovalPage')));
 const AdvanceReconciliationPage = Loadable(lazy(() => import('./pages/AdvanceReconciliationPage')));
 
 const AdvancesRoutes = {
@@ -26,6 +28,14 @@ const AdvancesRoutes = {
     {
       path: 'new',
       element: <AdvanceCreatePage />
+    },
+    {
+      path: ':id/edit',
+      element: <AdvanceEditPage />
+    },
+    {
+      path: ':id/approval',
+      element: <AdvanceApprovalPage />
     },
     {
       path: ':id/reconciliation',
