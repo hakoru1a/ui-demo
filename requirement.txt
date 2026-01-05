@@ -1,50 +1,14 @@
-SC-4-1: Danh sách phiếu xuất hàng => LIST
-Filter
-Field Name	Input Type	Required	Notes
-Mã phiếu xuất	Text	No	Tìm chính xác / gần đúng
-Loại xuất	Dropdown	No	Xuất kho / Xuất cảng
-Kho xuất	Dropdown	No
-Khách hàng / Đơn vị nhận	Dropdown	No
-Ngày xuất	Date Range	No
-Trạng thái phiếu	Dropdown	No	Nháp / Đã xuất / Hủy
+SC-5-1: Báo cáo kiểm tra độ ẩm & Tạp chất
 
-Column Name	Display Type	Sortable	Clickable	Notes
-Mã phiếu	Text	Yes	View
-Ngày xuất	Text	Yes	No	dd/mm/yyyy
-Loại xuất	Badge	Yes	No	Kho / Cảng
-Kho xuất	Text	Yes	No
-Điểm nhận	Text	Yes	No	Kho / Cảng
-Tổng khối lượng (kg)	Number	Yes	No	Canh phải
-Trạng thái	Status	Yes	No	Màu theo trạng thái
-Hành động	Action Button	No	Edit	View / Edit / Delete
+Chart Name	Chart Type	Data Dimension (X-axis)	Metric (Y-axis)	Filters Applied	Notes
+Xu hướng độ ẩm theo thời gian	Line	Ngày kiểm tra	% Độ ẩm	Date range, Sản phẩm, Lô	Tooltip hiển thị giá trị chi tiết
+Tỷ lệ tạp chất theo lô	Bar	Lô sản xuất	% Tạp chất	Date range, Sản phẩm	So sánh giữa các lô
+Phân bố kết quả QC	Pie	Nhóm chất lượng	Số phiếu	Date range	Đạt / Không đạt
 
 Action Name	Action Type	Availability	Notes
-Tạo phiếu xuất	Primary	Always
-Export Excel	Secondary	Always
+Chọn bộ lọc	Primary	Always	Áp dụng cho toàn bộ biểu đồ
 Export PDF	Secondary	Always
-Xóa nhiều phiếu	Secondary	Conditional	Khi chọn ≥1 & còn Nháp
+Export Excel	Secondary	Always
 
 
 
-SC-4-2: Thông tin phiếu xuất (Kho / Cảng) (VIEW/UPDATE/CREATE)
-
-Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
-Issue Code – Mã phiếu	Text	Yes	Auto-generate	Read-only
-Issue Date – Ngày xuất	Date	Yes	Today
-Issue Type – Loại xuất	Dropdown	Yes	Xuất kho	Kho / Cảng
-Warehouse – Kho xuất	Dropdown	Yes
-Destination – Điểm nhận	Dropdown	Yes		Kho nội bộ / Cảng
-Product / Material – SP / NL	Dropdown	Yes
-Batch / Lot – Lô SX	Dropdown	No		Truy vết
-Quantity (kg) – Khối lượng	Number	Yes		> 0
-Transport Ref – Thông tin vận chuyển	Text	No		Xe / Container
-Reference Doc – Chứng từ	File Upload	No		Phiếu giao / Bill
-Status – Trạng thái	Dropdown	Yes	Nháp
-Notes – Ghi chú	Textarea	No
-
-Action Name	Action Type	Availability	Notes
-Lưu	Primary	Edit mode	Validate
-Xác nhận xuất hàng	Primary	Conditional	Khi trạng thái = Nháp
-Chỉnh sửa	Secondary	View mode
-In phiếu	Secondary	Always
-Quay lại danh sách	Secondary	Always

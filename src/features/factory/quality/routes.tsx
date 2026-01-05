@@ -9,6 +9,7 @@ import DashboardLayout from 'layout/Dashboard';
 const QualityInspectionsListPage = Loadable(lazy(() => import('./pages/QualityInspectionsListPage')));
 const QualityInspectionDetailPage = Loadable(lazy(() => import('./pages/QualityInspectionDetailPage')));
 const QualityInspectionCreatePage = Loadable(lazy(() => import('./pages/QualityInspectionCreatePage')));
+const QualityInspectionEditPage = Loadable(lazy(() => import('./pages/QualityInspectionEditPage')));
 const QualityReportsPage = Loadable(lazy(() => import('./pages/QualityReportsPage')));
 
 const QualityRoutes = {
@@ -22,6 +23,10 @@ const QualityRoutes = {
     {
       path: ':id',
       element: <QualityInspectionDetailPage />
+    },
+    {
+      path: ':id/edit',
+      element: <QualityInspectionEditPage />
     },
     {
       path: 'new',

@@ -155,6 +155,15 @@ src
 | | |**_ types.ts
 | | |_** routes.tsx
 | |
+| |**_ production-calendar # Calendar/Scheduling — lịch & nhật ký sản lượng, quản lý ca sản xuất
+| | |_** api
+| | |**_ pages
+| | |_** components
+| | |**_ hooks
+| | |_** validation
+| | |**_ types.ts
+| | |_** routes.tsx
+| |
 | |**_ shift-logs # Operation Log — nhật ký ca & sản lượng, sự cố/dừng máy
 | | |_** api
 | | |**_ pages
