@@ -551,7 +551,7 @@ const PaymentOrderTableHeader = ({
           {/* Xóa nhiều phiếu - Secondary, Conditional (when ≥1 selected & status = draft) */}
           {canBulkDelete && onBulkDelete && (
             <Button variant="outlined" color="error" startIcon={<DeleteOutlined />} onClick={handleBulkDelete}>
-              Xóa nhiều ({selectedCount})
+              ({selectedCount})
             </Button>
           )}
 

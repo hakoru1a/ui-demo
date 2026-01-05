@@ -242,6 +242,7 @@
   "menu.inventory.outbound-slip-list": "Danh sách phiếu xuất kho (nguyên liệu/thành phẩm)",
   "menu.inventory.outbound-slip-detail": "Thông tin phiếu xuất",
   "menu.inventory.stock-count": "Tồn kho/Kiểm kê",
+  "menu.inventory.stock-view": "Xem tồn kho",
   "menu.inventory.sku-list": "Danh sách SKU",
   "menu.inventory.sku-detail": "Thông tin SKU & số lượng",
   "menu.inventory.count-schedule": "Lịch kiểm kê",

@@ -1,45 +1,39 @@
-SF-1-3: Danh sách phiếu xuất kho (Nguyên liệu / Thành phẩm)
-
+SF-2-1: Danh sách SKU
+Filter
 Field Name	Input Type	Optional / Required	Notes
-Mã phiếu xuất	Text	Optional
-Loại xuất	Dropdown	Optional	Nguyên liệu / Thành phẩm
-Kho xuất	Dropdown	Optional
-Ngày xuất	Date Range	Optional
-Trạng thái	Dropdown	Optional	Nháp / Đã xuất / Hủy
+SKU Code	Text	Optional
+Tên hàng hóa	Text	Optional
+Loại hàng	Dropdown	Optional	Nguyên liệu / Thành phẩm
+Kho	Dropdown	Optional
+Trạng thái tồn	Dropdown	Optional	Còn hàng / Hết hàng
 
 Column Name	Display Type	Sortable	Clickable	Notes
-Mã phiếu	Text	Yes	View
-Ngày xuất	Text	Yes	No	dd/mm/yyyy
-Loại xuất	Badge	Yes	No	NL / TP
-Kho xuất	Text	Yes	No
-Tổng khối lượng	Number	Yes	No	Canh phải
-Trạng thái	Status	Yes	No
-Hành động	Action Button	No	Edit	View / Edit / Delete
+SKU Code	Text	Yes	View
+Tên hàng hóa	Text	Yes	View
+Loại hàng	Badge	Yes	No	NL / TP
+Kho	Text	Yes	No
+Tồn hệ thống	Number	Yes	No	Canh phải
+Đơn vị	Text	No	No	Kg / Tấn
+Trạng thái	Status	Yes	No	Tồn / Hết
+Hành động	Action Button	No	View
 
 Action Name	Action Type	Availability	Notes
-Tạo phiếu xuất	Primary	Always
+Xem chi tiết SKU	Primary	Conditional	Khi chọn 1 dòng
 Export Excel	Secondary	Always
-Export PDF	Secondary	Always
 
-SF-1-4: Thông tin phiếu xuất
+SF-2-2: Thông tin SKU & số lượng	(UPDATE/VIEW/CREATE)
 
 Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
-Issue Code – Mã phiếu xuất	Text	Yes	Auto-generate	Read-only
-Issue Date – Ngày xuất	Date	Yes	Today
-Issue Type – Loại xuất	Dropdown	Yes	Nguyên liệu	NL / TP
-Warehouse – Kho xuất	Dropdown	Yes
-Product / Material – Hàng hóa	Dropdown	Yes
-Batch / Lot – Lô	Dropdown	No		Truy vết
-Quantity – Số lượng	Number	Yes		> 0
-Unit – Đơn vị	Dropdown	Yes	Kg
-Destination – Điểm nhận	Text	No		SX / Bán
-Reference Doc – Chứng từ	File Upload	No
-Status – Trạng thái	Dropdown	Yes	Nháp
+SKU Code – Mã SKU	Text	Yes		Read-only
+Item Name – Tên hàng	Text	Yes		Read-only
+Item Type – Loại hàng	Dropdown	Yes		NL / TP
+Warehouse – Kho	Dropdown	Yes
+System Quantity – SL hệ thống	Number	Yes	Auto	Read-only
+Reserved Quantity – SL giữ chỗ	Number	No	Auto	Read-only
+Available Quantity – SL khả dụng	Number	Yes	Auto	Read-only
+Last Inventory Date – Ngày kiểm kê gần nhất	Date	No
 Notes – Ghi chú	Textarea	No
 
 Action Name	Action Type	Availability	Notes
-Lưu phiếu	Primary	Edit mode	Validate
-Xác nhận xuất kho	Primary	Conditional	Khi trạng thái = Nháp
-Chỉnh sửa	Secondary	View mode
-In phiếu	Secondary	Always
-Quay lại	Secondary	Always
+Tạo phiếu kiểm kê	Primary	Always	Điều hướng SF-2-5
+Quay lại danh sách	Secondary	Always

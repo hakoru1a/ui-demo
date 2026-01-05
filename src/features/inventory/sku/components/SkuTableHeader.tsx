@@ -1,10 +1,9 @@
-// ==============================|| INVENTORY ISSUE TABLE HEADER ||============================== //
+// ==============================|| SKU TABLE HEADER ||============================== //
 // Combines: StatusTabs + Toolbar + FilterPopover
 
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
-import FilePdfOutlined from '@ant-design/icons/FilePdfOutlined';
 import FilterOutlined from '@ant-design/icons/FilterOutlined';
 import PlusOutlined from '@ant-design/icons/PlusOutlined';
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
@@ -26,13 +25,12 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import type { ColumnFiltersState, Table } from '@tanstack/react-table';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 
 // project imports
 import Transitions from 'components/@extended/Transitions';
-import DatePickerField from 'components/fields/DatePickerField';
 import SelectField from 'components/fields/SelectField';
 import TextField from 'components/fields/TextField';
 import MainCard from 'components/MainCard';
@@ -40,17 +38,16 @@ import { CSVExport, RowSelection, SelectColumnVisibility } from 'components/thir
 import { useTableFilterDialog } from 'hooks/table';
 import useBoolean from 'hooks/useBoolean';
 import { StatusFilter } from 'types/status';
-import dateHelper from 'utils/dateHelper';
 
-import type { InventoryIssue } from '../types';
-import { INVENTORY_ISSUE_URLS, ISSUE_TYPE_OPTIONS, STATUS_OPTIONS, WAREHOUSE_OPTIONS } from '../types/constants';
+import type { Sku } from '../types';
+import { ITEM_TYPE_OPTIONS, SKU_URLS, STOCK_STATUS_OPTIONS, WAREHOUSE_OPTIONS } from '../types/constants';
 
 // ==============================|| TYPES ||============================== //
 
-interface InventoryIssueTableHeaderProps {
-  table: Table<InventoryIssue>;
+interface SkuTableHeaderProps {
+  table: Table<Sku>;
   // CSV Export
-  csvData: InventoryIssue[];
+  csvData: Sku[];
   csvHeadersData: Array<{ label: string; key: string }>;
   csvFilename?: string;
   // Filter
@@ -67,15 +64,14 @@ interface InventoryIssueTableHeaderProps {
   enableCSVExport?: boolean;
   enableColumnVisibility?: boolean;
   // Actions
-  onBulkDelete?: (selectedIssues: InventoryIssue[]) => void;
+  onBulkDelete?: (selectedSkus: Sku[]) => void;
   onExportExcel?: () => void;
-  onExportPDF?: () => void;
 }
 
 // ==============================|| STATUS TABS ||============================== //
 
 interface StatusTabsProps {
-  table: Table<InventoryIssue>;
+  table: Table<Sku>;
   statusFilter: StatusFilter | string;
   onStatusFilterChange?: (status: StatusFilter | string) => void;
 }
@@ -87,88 +83,104 @@ function StatusTabs({ table, statusFilter, onStatusFilterChange }: StatusTabsPro
     const allRows = table.getPreFilteredRowModel().rows;
     return {
       all: allRows.length,
-      draft: allRows.filter((row) => row.original.status === 'draft').length,
-      issued: allRows.filter((row) => row.original.status === 'issued').length,
-      cancelled: allRows.filter((row) => row.original.status === 'cancelled').length
+      in_stock: allRows.filter((row) => row.original.stockStatus === 'in_stock').length,
+      out_of_stock: allRows.filter((row) => row.original.stockStatus === 'out_of_stock').length
     };
   }, [table]);
 
   // Get color for each status - MUST be different for each status
   const getTabColor = (value: StatusFilter | string) => {
     if (value === StatusFilter.ALL) return theme.palette.primary.main;
-    if (value === 'issued') return theme.palette.success.main;
-    if (value === 'draft') return theme.palette.warning.main;
-    if (value === 'cancelled') return theme.palette.error.main;
+    if (value === 'in_stock') return theme.palette.success.main;
+    if (value === 'out_of_stock') return theme.palette.error.main;
     return theme.palette.primary.main;
   };
 
-  const tabsConfig = useMemo(
-    () => [
-      { value: StatusFilter.ALL, label: 'Tất cả', count: statusCounts.all },
-      {
-        value: 'draft' as StatusFilter | string,
-        label: STATUS_OPTIONS.find((opt) => opt.value === 'draft')?.label || 'Nháp',
-        count: statusCounts.draft
-      },
-      {
-        value: 'issued' as StatusFilter | string,
-        label: STATUS_OPTIONS.find((opt) => opt.value === 'issued')?.label || 'Đã xuất',
-        count: statusCounts.issued
-      },
-      {
-        value: 'cancelled' as StatusFilter | string,
-        label: STATUS_OPTIONS.find((opt) => opt.value === 'cancelled')?.label || 'Hủy',
-        count: statusCounts.cancelled
-      }
-    ],
-    [statusCounts]
-  );
+  const handleChange = (_event: React.SyntheticEvent, newValue: StatusFilter | string) => {
+    onStatusFilterChange?.(newValue);
+  };
 
   return (
-    <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 2, pt: 2 }}>
+    <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 2 }}>
       <Tabs
         value={statusFilter}
-        onChange={(_, value) => onStatusFilterChange?.(value)}
-        sx={{ '& .MuiTabs-indicator': { backgroundColor: getTabColor(statusFilter as StatusFilter | string), height: 3 } }}
+        onChange={handleChange}
+        sx={{
+          '& .MuiTab-root': {
+            minHeight: 48,
+            minWidth: 100
+          },
+          '& .MuiTabs-indicator': {
+            backgroundColor: getTabColor(statusFilter)
+          }
+        }}
       >
-        {tabsConfig.map((tab) => {
-          const tabColor = getTabColor(tab.value);
-          return (
-            <Tab
-              key={tab.value}
-              value={tab.value}
-              label={
-                <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <span>{tab.label}</span>
-                  <Box
-                    component="span"
-                    sx={{
-                      minWidth: 20,
-                      height: 20,
-                      px: 0.75,
-                      borderRadius: '10px',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      bgcolor: tabColor + '20',
-                      color: tabColor,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    {tab.count}
-                  </Box>
-                </Box>
-              }
-              sx={{
-                textTransform: 'none',
-                fontWeight: 600,
-                '&.Mui-selected': { color: tabColor + ' !important' },
-                '&:hover': { color: tabColor }
-              }}
-            />
-          );
-        })}
+        <Tab
+          label={
+            <Stack direction="row" spacing={1} alignItems="center">
+              <span>Tất cả</span>
+              <Box
+                component="span"
+                sx={{
+                  px: 1,
+                  py: 0.25,
+                  borderRadius: 1,
+                  bgcolor: statusFilter === StatusFilter.ALL ? `${getTabColor(StatusFilter.ALL)}20` : 'transparent',
+                  color: statusFilter === StatusFilter.ALL ? getTabColor(StatusFilter.ALL) : 'text.secondary',
+                  fontSize: '0.75rem',
+                  fontWeight: 600
+                }}
+              >
+                {statusCounts.all}
+              </Box>
+            </Stack>
+          }
+          value={StatusFilter.ALL}
+        />
+        <Tab
+          label={
+            <Stack direction="row" spacing={1} alignItems="center">
+              <span>Còn hàng</span>
+              <Box
+                component="span"
+                sx={{
+                  px: 1,
+                  py: 0.25,
+                  borderRadius: 1,
+                  bgcolor: statusFilter === 'in_stock' ? `${getTabColor('in_stock')}20` : 'transparent',
+                  color: statusFilter === 'in_stock' ? getTabColor('in_stock') : 'text.secondary',
+                  fontSize: '0.75rem',
+                  fontWeight: 600
+                }}
+              >
+                {statusCounts.in_stock}
+              </Box>
+            </Stack>
+          }
+          value="in_stock"
+        />
+        <Tab
+          label={
+            <Stack direction="row" spacing={1} alignItems="center">
+              <span>Hết hàng</span>
+              <Box
+                component="span"
+                sx={{
+                  px: 1,
+                  py: 0.25,
+                  borderRadius: 1,
+                  bgcolor: statusFilter === 'out_of_stock' ? `${getTabColor('out_of_stock')}20` : 'transparent',
+                  color: statusFilter === 'out_of_stock' ? getTabColor('out_of_stock') : 'text.secondary',
+                  fontSize: '0.75rem',
+                  fontWeight: 600
+                }}
+              >
+                {statusCounts.out_of_stock}
+              </Box>
+            </Stack>
+          }
+          value="out_of_stock"
+        />
       </Tabs>
     </Box>
   );
@@ -198,46 +210,12 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
     return filter?.value as string | undefined;
   };
 
-  // Get date range value
-  const getDateRangeValue = (id: string) => {
-    const filter = columnFilters.find((f) => f.id === id);
-    if (filter?.value && typeof filter.value === 'object' && 'start' in filter.value && 'end' in filter.value) {
-      return filter.value as { start?: string; end?: string };
-    }
-    return undefined;
-  };
-
   const handleFilterChange = (id: string, value: string | number | boolean | undefined) => {
     const newFilters = columnFilters.filter((f) => f.id !== id);
     if (value !== undefined && value !== null && value !== '') {
       newFilters.push({ id, value });
     }
     onFilterChange(newFilters);
-  };
-
-  const handleDateRangeChange = (id: string, start?: string, end?: string) => {
-    const newFilters = columnFilters.filter((f) => f.id !== id);
-    if (start || end) {
-      newFilters.push({ id, value: { start, end } });
-    }
-    onFilterChange(newFilters);
-  };
-
-  // Date range state for issue date
-  const issueDateRange = getDateRangeValue('issueDate') || {};
-  const [issueStartDate, setIssueStartDate] = useState<Date | null>(issueDateRange.start ? new Date(issueDateRange.start) : null);
-  const [issueEndDate, setIssueEndDate] = useState<Date | null>(issueDateRange.end ? new Date(issueDateRange.end) : null);
-
-  const handleIssueStartDateChange = (value: Date | null) => {
-    setIssueStartDate(value);
-    const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
-    handleDateRangeChange('issueDate', dateStr, issueDateRange.end);
-  };
-
-  const handleIssueEndDateChange = (value: Date | null) => {
-    setIssueEndDate(value);
-    const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
-    handleDateRangeChange('issueDate', issueDateRange.start, dateStr);
   };
 
   return (
@@ -297,10 +275,10 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                 <Divider />
                 <Box sx={{ p: 2.5 }}>
                   <Grid container spacing={2}>
-                    {/* Mã phiếu xuất */}
+                    {/* SKU Code */}
                     <Grid size={{ xs: 12, sm: 4 }}>
                       <TextField
-                        label="Mã phiếu xuất"
+                        label="SKU Code"
                         value={getFilterValue('code') || ''}
                         onChange={(e) => handleFilterChange('code', e.target.value)}
                         fullWidth
@@ -308,22 +286,33 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                       />
                     </Grid>
 
-                    {/* Loại xuất */}
+                    {/* Tên hàng hóa */}
                     <Grid size={{ xs: 12, sm: 4 }}>
-                      <SelectField
-                        label="Loại xuất"
-                        value={getFilterValue('issueType') || ''}
-                        onChange={(e) => handleFilterChange('issueType', e.target.value)}
-                        options={[{ value: '', label: 'Tất cả' }, ...ISSUE_TYPE_OPTIONS]}
+                      <TextField
+                        label="Tên hàng hóa"
+                        value={getFilterValue('name') || ''}
+                        onChange={(e) => handleFilterChange('name', e.target.value)}
                         fullWidth
                         size="medium"
                       />
                     </Grid>
 
-                    {/* Kho xuất */}
+                    {/* Loại hàng */}
                     <Grid size={{ xs: 12, sm: 4 }}>
                       <SelectField
-                        label="Kho xuất"
+                        label="Loại hàng"
+                        value={getFilterValue('itemType') || ''}
+                        onChange={(e) => handleFilterChange('itemType', e.target.value)}
+                        options={[{ value: '', label: 'Tất cả' }, ...ITEM_TYPE_OPTIONS]}
+                        fullWidth
+                        size="medium"
+                      />
+                    </Grid>
+
+                    {/* Kho */}
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <SelectField
+                        label="Kho"
                         value={getFilterValue('warehouseId') || ''}
                         onChange={(e) => handleFilterChange('warehouseId', e.target.value)}
                         options={[{ value: '', label: 'Tất cả' }, ...WAREHOUSE_OPTIONS]}
@@ -332,49 +321,13 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                       />
                     </Grid>
 
-                    {/* Ngày xuất - Date Range */}
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                      <Box>
-                        <Grid container spacing={1}>
-                          <Grid size={{ xs: 12, sm: 6 }}>
-                            <DatePickerField
-                              label="Từ ngày"
-                              value={issueStartDate ? dateHelper.normalizeDateValue(issueStartDate) : null}
-                              onChange={(newValue) => handleIssueStartDateChange(newValue ? newValue.toDate() : null)}
-                              format="DD/MM/YYYY"
-                              slotProps={{
-                                textField: {
-                                  fullWidth: true,
-                                  size: 'medium' as 'small' | 'medium'
-                                }
-                              }}
-                            />
-                          </Grid>
-                          <Grid size={{ xs: 12, sm: 6 }}>
-                            <DatePickerField
-                              label="Đến ngày"
-                              value={issueEndDate ? dateHelper.normalizeDateValue(issueEndDate) : null}
-                              onChange={(newValue) => handleIssueEndDateChange(newValue ? newValue.toDate() : null)}
-                              format="DD/MM/YYYY"
-                              slotProps={{
-                                textField: {
-                                  fullWidth: true,
-                                  size: 'medium' as 'small' | 'medium'
-                                }
-                              }}
-                            />
-                          </Grid>
-                        </Grid>
-                      </Box>
-                    </Grid>
-
-                    {/* Trạng thái */}
-                    <Grid size={{ xs: 12, sm: 3 }}>
+                    {/* Trạng thái tồn */}
+                    <Grid size={{ xs: 12, sm: 4 }}>
                       <SelectField
-                        label="Trạng thái"
-                        value={getFilterValue('status') || ''}
-                        onChange={(e) => handleFilterChange('status', e.target.value)}
-                        options={[{ value: '', label: 'Tất cả' }, ...STATUS_OPTIONS]}
+                        label="Trạng thái tồn"
+                        value={getFilterValue('stockStatus') || ''}
+                        onChange={(e) => handleFilterChange('stockStatus', e.target.value)}
+                        options={[{ value: '', label: 'Tất cả' }, ...STOCK_STATUS_OPTIONS]}
                         fullWidth
                         size="medium"
                       />
@@ -404,11 +357,11 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
 
 // ==============================|| MAIN COMPONENT ||============================== //
 
-const InventoryIssueTableHeader = ({
+const SkuTableHeader = ({
   table,
   csvData,
   csvHeadersData,
-  csvFilename = 'inventory-issues',
+  csvFilename = 'skus',
   columnFilters,
   onFilterChange,
   statusFilter = StatusFilter.ALL,
@@ -419,9 +372,8 @@ const InventoryIssueTableHeader = ({
   enableCSVExport = true,
   enableColumnVisibility = true,
   onBulkDelete,
-  onExportExcel,
-  onExportPDF
-}: InventoryIssueTableHeaderProps) => {
+  onExportExcel
+}: SkuTableHeaderProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const filterPopover = useBoolean(false);
@@ -430,17 +382,20 @@ const InventoryIssueTableHeader = ({
   const selectedRows = table.getFilteredSelectedRowModel().rows;
   const selectedCount = selectedRows.length;
   const hasSelection = selectedCount > 0;
-  // Only draft issues can be bulk deleted
-  const canBulkDelete = hasSelection && selectedRows.every((row) => row.original.status === 'draft');
+  const canBulkDelete = hasSelection;
 
-  const handleCreateNew = () => {
-    navigate(INVENTORY_ISSUE_URLS.NEW);
+  const handleViewDetail = () => {
+    // When exactly 1 row is selected, navigate to detail page
+    if (selectedCount === 1) {
+      const selectedSku = selectedRows[0].original;
+      navigate(SKU_URLS.DETAIL(selectedSku.id));
+    }
   };
 
   const handleBulkDelete = () => {
     if (onBulkDelete && canBulkDelete) {
-      const selectedIssues = selectedRows.map((row) => row.original);
-      onBulkDelete(selectedIssues);
+      const selectedSkus = selectedRows.map((row) => row.original);
+      onBulkDelete(selectedSkus);
     }
   };
 
@@ -448,8 +403,8 @@ const InventoryIssueTableHeader = ({
     onExportExcel?.();
   };
 
-  const handleExportPDF = () => {
-    onExportPDF?.();
+  const handleCreateNew = () => {
+    navigate(SKU_URLS.NEW);
   };
 
   return (
@@ -465,7 +420,7 @@ const InventoryIssueTableHeader = ({
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%' }}>
           <TextField
-            placeholder="Tìm kiếm theo mã phiếu, kho xuất, hàng hóa..."
+            placeholder="Tìm kiếm theo mã SKU, tên hàng hóa..."
             value={searchValue}
             onChange={(e) => onSearchChange?.(e.target.value)}
             size="medium"
@@ -514,13 +469,6 @@ const InventoryIssueTableHeader = ({
             </IconButton>
           </Tooltip>
 
-          {/* Export PDF - Secondary, Always */}
-          <Tooltip title="Export PDF">
-            <IconButton size="medium" color="error" onClick={handleExportPDF}>
-              <FilePdfOutlined />
-            </IconButton>
-          </Tooltip>
-
           {enableColumnVisibility && (
             <SelectColumnVisibility
               getVisibleLeafColumns={table.getVisibleLeafColumns}
@@ -530,16 +478,23 @@ const InventoryIssueTableHeader = ({
             />
           )}
 
-          {/* Xóa nhiều phiếu - Secondary, Conditional (when ≥1 selected & status = draft) */}
-          {canBulkDelete && onBulkDelete && (
-            <Button variant="outlined" color="error" startIcon={<DeleteOutlined />} onClick={handleBulkDelete}>
-              ({selectedCount})
+          {/* Xem chi tiết SKU - Primary, Conditional (when 1 row selected) */}
+          {selectedCount === 1 && (
+            <Button variant="contained" color="primary" onClick={handleViewDetail}>
+              Xem chi tiết SKU
             </Button>
           )}
 
-          {/* Tạo phiếu xuất - Primary, Always */}
+          {/* Xóa nhiều - Secondary, Conditional (when ≥1 selected) */}
+          {canBulkDelete && onBulkDelete && (
+            <Button variant="outlined" color="error" startIcon={<DeleteOutlined />} onClick={handleBulkDelete}>
+              Xóa ({selectedCount})
+            </Button>
+          )}
+
+          {/* Tạo SKU mới - Primary, Always */}
           <Button variant="contained" color="primary" startIcon={<PlusOutlined />} onClick={handleCreateNew}>
-            Tạo phiếu xuất
+            Tạo SKU mới
           </Button>
         </Stack>
       </Toolbar>
@@ -556,4 +511,4 @@ const InventoryIssueTableHeader = ({
   );
 };
 
-export default InventoryIssueTableHeader;
+export default SkuTableHeader;

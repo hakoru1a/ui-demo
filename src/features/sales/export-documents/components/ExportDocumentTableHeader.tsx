@@ -540,7 +540,7 @@ const ExportDocumentTableHeader = ({
           {/* Xóa nhiều chứng từ - Secondary, Conditional (when ≥1 selected) */}
           {hasSelection && onBulkDelete && (
             <Button variant="outlined" color="error" startIcon={<DeleteOutlined />} onClick={handleBulkDelete}>
-              Xóa nhiều ({selectedCount})
+              ({selectedCount})
             </Button>
           )}
 
