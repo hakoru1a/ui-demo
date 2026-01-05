@@ -4,27 +4,35 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
 
-// ==============================|| Complaints ROUTING ||============================== //
+import { COMPLAINT_PATHS } from './types/constants';
 
+// ==============================|| COMPLAINTS ROUTING ||============================== //
+
+// Lazy load pages
 const ComplaintsListPage = Loadable(lazy(() => import('./pages/ComplaintsListPage')));
 const ComplaintDetailPage = Loadable(lazy(() => import('./pages/ComplaintDetailPage')));
 const ComplaintCreatePage = Loadable(lazy(() => import('./pages/ComplaintCreatePage')));
+const ComplaintEditPage = Loadable(lazy(() => import('./pages/ComplaintEditPage')));
 
 const ComplaintsRoutes = {
-  path: '/complaints',
+  path: COMPLAINT_PATHS.ROOT,
   element: <DashboardLayout />,
   children: [
     {
-      path: '',
+      path: COMPLAINT_PATHS.LIST,
       element: <ComplaintsListPage />
     },
     {
-      path: ':id',
+      path: COMPLAINT_PATHS.NEW,
+      element: <ComplaintCreatePage />
+    },
+    {
+      path: COMPLAINT_PATHS.DETAIL,
       element: <ComplaintDetailPage />
     },
     {
-      path: 'new',
-      element: <ComplaintCreatePage />
+      path: COMPLAINT_PATHS.EDIT,
+      element: <ComplaintEditPage />
     }
   ]
 };

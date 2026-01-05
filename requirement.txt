@@ -1,21 +1,60 @@
-SG-2-3 – Lệnh điều phối nhân sự cho nhà máy
+SG-3-1 – Quản lý đào tạo & An toàn lao động
+Filter
+Field Name	Input Type	Optional / Required	Notes
+Khóa đào tạo	Text	Optional
+Loại đào tạo	Dropdown	Optional	Kỹ năng / An toàn
+Bộ phận	Dropdown	Optional
+Trạng thái	Dropdown	Optional	Đang mở / Đã hoàn thành / Hủy
+Ngày bắt đầu	Date Range	Optional
 
-Field Name	Input Type	Required	Default Value	Business Notes
-Mã lệnh điều phối	Text	Yes	Auto-generate	Read-only
-Ngày áp dụng	Date	Yes	Today
-Nhà máy	Dropdown	Yes
-Ca sản xuất	Dropdown	Yes
-Bộ phận	Dropdown	Yes
-
-Field Name	Input Type	Required	Default Value	Business Notes
-Nhân sự	Multi-select	Yes		Lọc theo bộ phận
-Vai trò	Dropdown	Yes		Công nhân / Tổ trưởng
-Ghi chú	Textarea	No
-Trạng thái	Status	Yes	Draft	Draft / Approved / Applied
+Column Name	Display Type	Sortable	Clickable	Notes
+Tên khóa	Text	Yes	View
+Loại đào tạo	Badge	Yes	No
+Bộ phận tham gia	Text	No	No
+Ngày bắt đầu	Date	Yes	No
+Ngày kết thúc	Date	Yes	No
+Số người tham gia	Number	Yes	No
+Trạng thái	Status	Yes	No	Màu khác nhau theo trạng thái
+Hành động	Action Button	No	Edit	View / Edit / Delete
 
 Action Name	Action Type	Availability	Notes
-Lưu nháp	Primary	Edit mode
-Trình duyệt	Primary	View mode
-Phê duyệt	Primary	Conditional	Theo quyền
-Hủy lệnh	Secondary	Conditional	Khi chưa áp dụng
-In lệnh	Secondary	Always	PDF
+Tạo khóa đào tạo	Primary	Always
+Export Excel	Secondary	Always
+Export PDF	Secondary	Always
+
+
+
+SG-3-2 – Tiếp nhận & Xử lý khiếu nại (Complaints)
+Filter
+Field Name	Input Type	Optional / Required	Notes
+Mã khiếu nại	Text	Optional
+Nhân sự liên quan	Dropdown	Optional
+Loại khiếu nại	Dropdown	Optional	Lao động / Sản xuất / An toàn
+Trạng thái	Dropdown	Optional	Mới / Đang xử lý / Đã giải quyết
+Ngày tiếp nhận	Date Range	Optional
+
+Column Name	Display Type	Sortable	Clickable	Notes
+Mã khiếu nại	Text	Yes	View
+Người gửi	Text	Yes	View
+Loại khiếu nại	Badge	Yes	No
+Ngày tiếp nhận	Date	Yes	No
+Trạng thái	Status	Yes	No
+Hành động	Action Button	No	Edit	View / Edit / Delete
+
+Action Name	Action Type	Availability	Notes
+Tạo khiếu nại	Primary	Always
+Cập nhật trạng thái	Primary	Conditional	Khi đang xử lý
+Export Excel / PDF	Secondary	Always
+
+
+SG-3-3 – Sắp lịch đào tạo
+Calendar View	Event Type	Event Display	Click Behavior	Notes
+Month / Week	Khóa đào tạo	Màu theo loại	View detail
+Day	Buổi đào tạo	Label + Icon	Edit / Quick add
+Week	Khiếu nại hẹn xử lý	Icon cảnh báo	Popup	Chỉ hiển thị khi liên quan
+
+Action Name	Action Type	Availability	Notes
+Thêm lịch đào tạo	Primary	Always
+Điều chỉnh lịch	Primary	Conditional	Khi chưa bắt đầu
+Xem chi tiết khóa	Secondary	Always
+Export lịch	Secondary	Always	Excel / PDF

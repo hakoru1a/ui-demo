@@ -4,34 +4,42 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
 
-// ==============================|| Training Safety ROUTING ||============================== //
+import { TRAINING_PATHS } from './types/constants';
 
+// ==============================|| TRAINING & SAFETY ROUTING ||============================== //
+
+// Lazy load pages
 const TrainingListPage = Loadable(lazy(() => import('./pages/TrainingListPage')));
 const TrainingDetailPage = Loadable(lazy(() => import('./pages/TrainingDetailPage')));
 const TrainingCreatePage = Loadable(lazy(() => import('./pages/TrainingCreatePage')));
-const SafetyIncidentsPage = Loadable(lazy(() => import('./pages/SafetyIncidentsPage')));
+const TrainingEditPage = Loadable(lazy(() => import('./pages/TrainingEditPage')));
+const TrainingSchedulePage = Loadable(lazy(() => import('./pages/TrainingSchedulePage')));
 
-const TrainingsafetyRoutes = {
-  path: '/training-safety',
+const TrainingSafetyRoutes = {
+  path: TRAINING_PATHS.ROOT,
   element: <DashboardLayout />,
   children: [
     {
-      path: 'training',
+      path: TRAINING_PATHS.LIST,
       element: <TrainingListPage />
     },
     {
-      path: 'training/:id',
-      element: <TrainingDetailPage />
-    },
-    {
-      path: 'training/new',
+      path: TRAINING_PATHS.NEW,
       element: <TrainingCreatePage />
     },
     {
-      path: 'safety/incidents',
-      element: <SafetyIncidentsPage />
+      path: TRAINING_PATHS.DETAIL,
+      element: <TrainingDetailPage />
+    },
+    {
+      path: TRAINING_PATHS.EDIT,
+      element: <TrainingEditPage />
+    },
+    {
+      path: 'schedule',
+      element: <TrainingSchedulePage />
     }
   ]
 };
 
-export default TrainingsafetyRoutes;
+export default TrainingSafetyRoutes;

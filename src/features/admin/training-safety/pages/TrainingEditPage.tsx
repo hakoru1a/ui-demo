@@ -1,5 +1,5 @@
-import { EditOutlined, ArrowLeftOutlined } from '@ant-design/icons';
-import { Stack, Button } from '@mui/material';
+import { SaveOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import { Stack, Button, Alert } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -26,13 +26,14 @@ const entityToFormData = (entity: Training): TrainingFormData => ({
   status: entity.status
 });
 
-// ==============================|| TRAINING DETAIL PAGE ||============================== //
+// ==============================|| TRAINING EDIT PAGE ||============================== //
 
-const TrainingDetailPage = () => {
+const TrainingEditPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<Training | null>(null);
   const [initialValues, setInitialValues] = useState<TrainingFormData>(trainingDefaultValues);
@@ -65,17 +66,40 @@ const TrainingDetailPage = () => {
     }
   }, [id]);
 
-  // Handle edit navigation
-  const handleEdit = useCallback(() => {
-    if (id) {
-      navigate(TRAINING_URLS.EDIT(id));
-    }
-  }, [navigate, id]);
+  // Handle form submission
+  const handleSubmit = useCallback(
+    async (values: TrainingFormData) => {
+      if (!id) return;
+
+      setIsSubmitting(true);
+      setError(null);
+
+      try {
+        // TODO: Call API to update training
+        // await trainingService.updateTraining(id, values);
+
+        // Mock API call
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        // Navigate to detail page after success
+        navigate(TRAINING_URLS.DETAIL(id));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Có lỗi xảy ra khi cập nhật khóa đào tạo');
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [navigate, id]
+  );
 
   // Handle back navigation
   const handleBack = useCallback(() => {
-    navigate(TRAINING_URLS.LIST);
-  }, [navigate]);
+    if (id) {
+      navigate(TRAINING_URLS.DETAIL(id));
+    } else {
+      navigate(TRAINING_URLS.LIST);
+    }
+  }, [navigate, id]);
 
   if (isLoading) {
     return (
@@ -100,32 +124,45 @@ const TrainingDetailPage = () => {
 
   return (
     <MainCard
-      title="Chi tiết khóa đào tạo"
+      title="Chỉnh sửa khóa đào tạo"
       secondary={
-        <Stack direction="row" spacing={1}>
-          <Button variant="outlined" startIcon={<ArrowLeftOutlined />} onClick={handleBack}>
-            Quay lại
-          </Button>
-          <Button variant="contained" startIcon={<EditOutlined />} onClick={handleEdit}>
-            Chỉnh sửa
-          </Button>
-        </Stack>
+        <Button variant="outlined" startIcon={<ArrowLeftOutlined />} onClick={handleBack}>
+          Quay lại
+        </Button>
       }
     >
-      <Formik
-        initialValues={initialValues}
-        validationSchema={trainingSchema}
-        enableReinitialize
-        onSubmit={() => {
-          // No submit in view mode
-        }}
-      >
-        <Form>
-          <TrainingForm mode="view" />
-        </Form>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
+      <Formik initialValues={initialValues} validationSchema={trainingSchema} enableReinitialize onSubmit={handleSubmit}>
+        {({ handleSubmit: formikSubmit, isSubmitting: formikIsSubmitting }) => (
+          <Form>
+            <TrainingForm mode="edit" />
+            <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ mt: 3 }}>
+              <Button variant="outlined" onClick={handleBack} disabled={isSubmitting || formikIsSubmitting}>
+                Hủy
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                startIcon={<SaveOutlined />}
+                onClick={(e) => {
+                  e.preventDefault();
+                  formikSubmit();
+                }}
+                disabled={isSubmitting || formikIsSubmitting}
+              >
+                {isSubmitting || formikIsSubmitting ? 'Đang lưu...' : 'Lưu'}
+              </Button>
+            </Stack>
+          </Form>
+        )}
       </Formik>
     </MainCard>
   );
 };
 
-export default TrainingDetailPage;
+export default TrainingEditPage;
