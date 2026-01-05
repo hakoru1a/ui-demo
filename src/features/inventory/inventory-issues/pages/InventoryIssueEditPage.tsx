@@ -1,4 +1,4 @@
-import { EditOutlined, PrinterOutlined, ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons';
+import { SaveOutlined, CloseOutlined } from '@ant-design/icons';
 import { Stack, Button, Box, CircularProgress, Alert } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Formik, Form } from 'formik';
@@ -36,9 +36,9 @@ const entityToFormData = (entity: InventoryIssue): InventoryIssueFormData => ({
   notes: entity.notes
 });
 
-// ==============================|| INVENTORY ISSUE DETAIL PAGE ||============================== //
+// ==============================|| INVENTORY ISSUE EDIT PAGE ||============================== //
 
-const InventoryIssueDetailPage = () => {
+const InventoryIssueEditPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
@@ -46,7 +46,6 @@ const InventoryIssueDetailPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [initialValues, setInitialValues] = useState<InventoryIssueFormData>(inventoryIssueDefaultValues);
   const [originalData, setOriginalData] = useState<InventoryIssue | null>(null);
-  const [isConfirming, setIsConfirming] = useState(false);
 
   // Fetch data on mount
   useEffect(() => {
@@ -96,73 +95,64 @@ const InventoryIssueDetailPage = () => {
     }
   }, [id]);
 
-  // Handle confirm issue (change status from draft to issued)
-  const handleConfirmIssue = useCallback(async () => {
-    if (!id || !originalData || originalData.status !== 'draft') return;
+  // Handle form submission
+  const handleSubmit = useCallback(
+    async (values: InventoryIssueFormData) => {
+      if (!id) return;
 
-    setIsConfirming(true);
-    try {
-      if (!id.startsWith('mock-')) {
-        const response = await inventoryIssueService.confirmIssue(id);
-        if (response.success && response.data) {
+      try {
+        if (!id.startsWith('mock-')) {
+          const response = await inventoryIssueService.updateInventoryIssue(id, values);
+          if (response.success && response.data) {
+            openSnackbar({
+              open: true,
+              message: 'Cập nhật phiếu xuất thành công',
+              variant: 'alert',
+              alert: { color: 'success' }
+            } as SnackbarProps);
+            navigate(INVENTORY_ISSUE_URLS.DETAIL(id));
+          } else {
+            openSnackbar({
+              open: true,
+              message: 'Có lỗi xảy ra khi cập nhật phiếu xuất',
+              variant: 'alert',
+              alert: { color: 'error' }
+            } as SnackbarProps);
+          }
+        } else {
+          // Mock success
           openSnackbar({
             open: true,
-            message: 'Xác nhận xuất hàng thành công',
+            message: 'Cập nhật phiếu xuất thành công (Mock)',
             variant: 'alert',
             alert: { color: 'success' }
           } as SnackbarProps);
-          // Refresh data
-          setOriginalData(response.data);
-          setInitialValues(entityToFormData(response.data));
-        } else {
-          openSnackbar({
-            open: true,
-            message: 'Có lỗi xảy ra khi xác nhận xuất hàng',
-            variant: 'alert',
-            alert: { color: 'error' }
-          } as SnackbarProps);
+          navigate(INVENTORY_ISSUE_URLS.DETAIL(id));
         }
-      } else {
-        // Mock success
-        const updated = { ...originalData, status: 'issued' as const };
-        setOriginalData(updated);
-        setInitialValues(entityToFormData(updated));
+      } catch (err) {
+        console.error('Error updating inventory issue:', err);
         openSnackbar({
           open: true,
-          message: 'Xác nhận xuất hàng thành công',
+          message: 'Có lỗi xảy ra khi cập nhật phiếu xuất',
           variant: 'alert',
-          alert: { color: 'success' }
+          alert: { color: 'error' }
         } as SnackbarProps);
       }
-    } catch (err) {
-      console.error('Error confirming issue:', err);
-      openSnackbar({
-        open: true,
-        message: 'Có lỗi xảy ra khi xác nhận xuất hàng',
-        variant: 'alert',
-        alert: { color: 'error' }
-      } as SnackbarProps);
-    } finally {
-      setIsConfirming(false);
-    }
-  }, [id, originalData]);
+    },
+    [navigate, id]
+  );
 
-  // Handle print
-  const handlePrint = useCallback(() => {
-    window.print();
-  }, []);
-
-  // Handle edit
-  const handleEdit = useCallback(() => {
+  // Handle cancel
+  const handleCancel = useCallback(() => {
     if (id) {
-      navigate(INVENTORY_ISSUE_URLS.EDIT(id));
+      navigate(INVENTORY_ISSUE_URLS.DETAIL(id));
     }
   }, [navigate, id]);
 
   // Loading state
   if (isLoading) {
     return (
-      <MainCard title="Chi tiết phiếu xuất">
+      <MainCard title="Chỉnh sửa phiếu xuất">
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 300 }}>
           <CircularProgress />
         </Box>
@@ -173,7 +163,7 @@ const InventoryIssueDetailPage = () => {
   // Error state
   if (error) {
     return (
-      <MainCard title="Chi tiết phiếu xuất">
+      <MainCard title="Chỉnh sửa phiếu xuất">
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
@@ -184,54 +174,33 @@ const InventoryIssueDetailPage = () => {
     );
   }
 
-  const canConfirm = originalData?.status === 'draft';
-
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={inventoryIssueSchema}
-      onSubmit={() => {}}
+      onSubmit={handleSubmit}
       enableReinitialize
-      validateOnChange={false}
-      validateOnBlur={false}
+      validateOnChange
+      validateOnBlur
     >
-      {() => (
+      {({ isSubmitting, dirty, values }) => (
         <Form>
           <MainCard
-            title={`Chi tiết phiếu xuất: ${originalData?.code || ''}`}
+            title={`Chỉnh sửa: ${originalData?.code || ''}`}
             secondary={
               <Stack direction="row" spacing={1}>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={<ArrowLeftOutlined />}
-                  onClick={() => navigate(INVENTORY_ISSUE_URLS.LIST)}
-                >
-                  Quay lại danh sách
+                <Button variant="outlined" color="secondary" startIcon={<CloseOutlined />} onClick={handleCancel} disabled={isSubmitting}>
+                  Hủy
                 </Button>
-                <Button variant="outlined" color="info" startIcon={<PrinterOutlined />} onClick={handlePrint}>
-                  In phiếu
-                </Button>
-                {canConfirm && (
-                  <Button
-                    variant="contained"
-                    color="success"
-                    startIcon={<CheckOutlined />}
-                    onClick={handleConfirmIssue}
-                    disabled={isConfirming}
-                  >
-                    {isConfirming ? 'Đang xác nhận...' : 'Xác nhận xuất hàng'}
-                  </Button>
-                )}
-                <Button variant="contained" color="primary" startIcon={<EditOutlined />} onClick={handleEdit}>
-                  Chỉnh sửa
+                <Button type="submit" variant="contained" color="primary" startIcon={<SaveOutlined />} disabled={isSubmitting || !dirty}>
+                  {isSubmitting ? 'Đang lưu...' : 'Lưu thay đổi'}
                 </Button>
               </Stack>
             }
           >
             <Grid container spacing={3} sx={{ p: 1 }}>
               <Grid size={12}>
-                <InventoryIssueForm mode="view" />
+                <InventoryIssueForm mode="edit" />
               </Grid>
             </Grid>
           </MainCard>
@@ -241,4 +210,4 @@ const InventoryIssueDetailPage = () => {
   );
 };
 
-export default InventoryIssueDetailPage;
+export default InventoryIssueEditPage;

@@ -9,6 +9,7 @@ import DashboardLayout from 'layout/Dashboard';
 const InventoryIssuesListPage = Loadable(lazy(() => import('./pages/InventoryIssuesListPage')));
 const InventoryIssueDetailPage = Loadable(lazy(() => import('./pages/InventoryIssueDetailPage')));
 const InventoryIssueCreatePage = Loadable(lazy(() => import('./pages/InventoryIssueCreatePage')));
+const InventoryIssueEditPage = Loadable(lazy(() => import('./pages/InventoryIssueEditPage')));
 
 const InventoryissuesRoutes = {
   path: '/inventory-issues',
@@ -19,12 +20,16 @@ const InventoryissuesRoutes = {
       element: <InventoryIssuesListPage />
     },
     {
+      path: 'new',
+      element: <InventoryIssueCreatePage />
+    },
+    {
       path: ':id',
       element: <InventoryIssueDetailPage />
     },
     {
-      path: 'new',
-      element: <InventoryIssueCreatePage />
+      path: ':id/edit',
+      element: <InventoryIssueEditPage />
     }
   ]
 };

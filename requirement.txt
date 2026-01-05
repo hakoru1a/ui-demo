@@ -1,21 +1,50 @@
-Nhật ký vận hành ca sản xuất(LIST)
+SC-4-1: Danh sách phiếu xuất hàng => LIST
 Filter
 Field Name	Input Type	Required	Notes
-Ca sản xuất	Dropdown	No
-Lô sản xuất	Dropdown	No
-Ngày làm việc	Date	No
-Trạng thái ca	Dropdown	No	Đang chạy / Kết thúc
+Mã phiếu xuất	Text	No	Tìm chính xác / gần đúng
+Loại xuất	Dropdown	No	Xuất kho / Xuất cảng
+Kho xuất	Dropdown	No
+Khách hàng / Đơn vị nhận	Dropdown	No
+Ngày xuất	Date Range	No
+Trạng thái phiếu	Dropdown	No	Nháp / Đã xuất / Hủy
 
 Column Name	Display Type	Sortable	Clickable	Notes
-Mã ca	Text	Yes	View
-Lô sản xuất	Text	Yes	View
-Thời gian ca	Text	Yes	No
-Sản lượng ca	Number	Yes	No
-Sự cố	Badge	No	No	Có / Không
-Trạng thái	Status	Yes	No
-Hành động	Action Button	No	View	View
+Mã phiếu	Text	Yes	View
+Ngày xuất	Text	Yes	No	dd/mm/yyyy
+Loại xuất	Badge	Yes	No	Kho / Cảng
+Kho xuất	Text	Yes	No
+Điểm nhận	Text	Yes	No	Kho / Cảng
+Tổng khối lượng (kg)	Number	Yes	No	Canh phải
+Trạng thái	Status	Yes	No	Màu theo trạng thái
+Hành động	Action Button	No	Edit	View / Edit / Delete
 
 Action Name	Action Type	Availability	Notes
-Ghi nhận nhật ký	Primary	Conditional	Khi ca đang chạy
+Tạo phiếu xuất	Primary	Always
 Export Excel	Secondary	Always
-Quay lại lịch	Secondary	Always	SC-3-3
+Export PDF	Secondary	Always
+Xóa nhiều phiếu	Secondary	Conditional	Khi chọn ≥1 & còn Nháp
+
+
+
+SC-4-2: Thông tin phiếu xuất (Kho / Cảng) (VIEW/UPDATE/CREATE)
+
+Field Name (EN – VI)	Input Type	Required	Default Value	Business Notes
+Issue Code – Mã phiếu	Text	Yes	Auto-generate	Read-only
+Issue Date – Ngày xuất	Date	Yes	Today
+Issue Type – Loại xuất	Dropdown	Yes	Xuất kho	Kho / Cảng
+Warehouse – Kho xuất	Dropdown	Yes
+Destination – Điểm nhận	Dropdown	Yes		Kho nội bộ / Cảng
+Product / Material – SP / NL	Dropdown	Yes
+Batch / Lot – Lô SX	Dropdown	No		Truy vết
+Quantity (kg) – Khối lượng	Number	Yes		> 0
+Transport Ref – Thông tin vận chuyển	Text	No		Xe / Container
+Reference Doc – Chứng từ	File Upload	No		Phiếu giao / Bill
+Status – Trạng thái	Dropdown	Yes	Nháp
+Notes – Ghi chú	Textarea	No
+
+Action Name	Action Type	Availability	Notes
+Lưu	Primary	Edit mode	Validate
+Xác nhận xuất hàng	Primary	Conditional	Khi trạng thái = Nháp
+Chỉnh sửa	Secondary	View mode
+In phiếu	Secondary	Always
+Quay lại danh sách	Secondary	Always
