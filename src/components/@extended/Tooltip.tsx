@@ -59,7 +59,7 @@ const TooltipStyle = styled(({ className, ...props }: TooltipProps) => <MuiToolt
 })<StyleProps>(({ theme, color, labelColor }) => ({
   variants: [
     {
-      props: ({ color }) => color,
+      props: ({ color: colorProp }) => colorProp,
       style: getVariantStyle({ color, theme, labelColor })
     }
   ]

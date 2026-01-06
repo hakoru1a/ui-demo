@@ -260,6 +260,6 @@ export function useProductionPlanColumns({ onDelete }: UseProductionPlanColumnsP
         }
       }
     ],
-    [onDelete, handleEdit, handleView, theme, getStatusColor]
+    [onDelete, handleEdit, handleView, getStatusColor]
   );
 }

@@ -10,6 +10,7 @@ import {
   useTable,
   useTableCSV
 } from 'hooks/table';
+import { StatusFilter } from 'types/status';
 
 import { useShipmentColumns } from '../components/ShipmentColumns';
 import type { Shipment } from '../types';
@@ -58,7 +59,7 @@ export function useShipmentsTable({
   // Table data filtering
   const { filteredData } = useTableData<Shipment>({
     data,
-    statusFilter,
+    statusFilter: statusFilter as StatusFilter | undefined,
     searchValue,
     searchFilterFn
   });
@@ -99,9 +100,7 @@ export function useShipmentsTable({
 
   // Table CSV export
   const { csvData, csvHeadersData } = useTableCSV<Shipment>({
-    table,
-    columns: tableColumns,
-    filename: 'shipments-export'
+    table
   });
 
   return {

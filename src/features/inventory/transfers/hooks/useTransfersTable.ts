@@ -47,8 +47,8 @@ export function useTransfersTable({
     const searchLower = search.toLowerCase();
     return !!(
       item.code.toLowerCase().includes(searchLower) ||
-      item.sourceWarehouseName.toLowerCase().includes(searchLower) ||
-      item.destinationWarehouseName.toLowerCase().includes(searchLower)
+      (item.sourceWarehouseName || '').toLowerCase().includes(searchLower) ||
+      (item.destinationWarehouseName || '').toLowerCase().includes(searchLower)
     );
   }, []);
 
@@ -61,7 +61,7 @@ export function useTransfersTable({
   // Table data filtering
   const { filteredData } = useTableData<Transfer>({
     data,
-    statusFilter,
+    statusFilter: statusFilter as StatusFilter | undefined,
     searchValue,
     searchFilterFn
   });

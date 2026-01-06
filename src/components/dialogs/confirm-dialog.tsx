@@ -58,7 +58,7 @@ export default function ConfirmDialog({
         {data.length > 0 && (
           <Stack spacing={1.5} sx={{ mt: 2, p: 2, bgcolor: 'background.default', borderRadius: 1 }}>
             {data.map((item, index) => (
-              <Stack key={index} direction="row" spacing={1} justifyContent="space-between">
+              <Stack key={`${item.label}-${index}`} direction="row" spacing={1} justifyContent="space-between">
                 <Typography variant="subtitle2" color="text.secondary">
                   {item.label}:
                 </Typography>

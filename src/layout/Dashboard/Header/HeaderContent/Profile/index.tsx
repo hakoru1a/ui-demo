@@ -97,13 +97,16 @@ export default function Profile() {
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
       <ButtonBase
-        sx={(theme) => ({
+        sx={(muiTheme) => ({
           p: 0.25,
           bgcolor: open ? 'grey.100' : 'transparent',
           borderRadius: 1,
           '&:hover': { bgcolor: 'secondary.lighter' },
-          '&:focus-visible': { outline: `2px solid ${theme.palette.secondary.dark}`, outlineOffset: 2 },
-          ...theme.applyStyles('dark', { bgcolor: open ? 'background.default' : 'transparent', '&:hover': { bgcolor: 'secondary.light' } })
+          '&:focus-visible': { outline: `2px solid ${muiTheme.palette.secondary.dark}`, outlineOffset: 2 },
+          ...theme.applyStyles('dark', {
+            bgcolor: open ? 'background.default' : 'transparent',
+            '&:hover': { bgcolor: 'secondary.light' }
+          })
         })}
         aria-label="open profile"
         ref={anchorRef}
@@ -138,7 +141,14 @@ export default function Profile() {
       >
         {({ TransitionProps }) => (
           <Transitions type="grow" position="top-right" in={open} {...TransitionProps}>
-            <Paper sx={(theme) => ({ boxShadow: theme.customShadows.z1, width: 290, minWidth: 240, maxWidth: { xs: 250, md: 290 } })}>
+            <Paper
+              sx={(muiTheme) => ({
+                boxShadow: muiTheme.customShadows.z1,
+                width: 290,
+                minWidth: 240,
+                maxWidth: { xs: 250, md: 290 }
+              })}
+            >
               <ClickAwayListener onClickAway={handleClose}>
                 <MainCard elevation={0} border={false} content={false}>
                   <CardContent sx={{ px: 2.5, pt: 3 }}>

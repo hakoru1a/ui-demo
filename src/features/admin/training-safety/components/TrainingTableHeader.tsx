@@ -345,8 +345,12 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                               const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
                               handleDateRangeChange('startDate', dateStr, startDateRange.end);
                             }}
-                            fullWidth
-                            size="medium"
+                            slotProps={{
+                              textField: {
+                                fullWidth: true,
+                                size: 'medium'
+                              }
+                            }}
                           />
                           <DatePickerField
                             label="Đến ngày"
@@ -355,8 +359,12 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                               const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
                               handleDateRangeChange('startDate', startDateRange.start, dateStr);
                             }}
-                            fullWidth
-                            size="medium"
+                            slotProps={{
+                              textField: {
+                                fullWidth: true,
+                                size: 'medium'
+                              }
+                            }}
                           />
                         </Stack>
                       </Box>

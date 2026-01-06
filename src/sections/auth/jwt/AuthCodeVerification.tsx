@@ -25,7 +25,7 @@ export default function AuthCodeVerification() {
       })}
       onSubmit={(values, { resetForm }) => {
         resetForm();
-        console.log(values);
+        // TODO: Handle form submission
 
         // reset focus after submission
         const activeElement = document.activeElement as HTMLElement | null;

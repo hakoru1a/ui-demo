@@ -242,6 +242,6 @@ export function useQualityInspectionColumns({ onDelete }: UseQualityInspectionCo
         }
       }
     ],
-    [onDelete, handleEdit, handleView, theme, getResultColor]
+    [onDelete, handleEdit, handleView, getResultColor]
   );
 }

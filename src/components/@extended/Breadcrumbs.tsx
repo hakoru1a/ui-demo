@@ -219,7 +219,7 @@ export default function Breadcrumbs({
 
             return (
               <Typography
-                key={index}
+                key={`${link.title || 'breadcrumb'}-${index}`}
                 {...(link.to && { component: Link, to: link.to })}
                 variant={!link.to ? 'subtitle1' : 'h6'}
                 sx={{ textDecoration: 'none' }}

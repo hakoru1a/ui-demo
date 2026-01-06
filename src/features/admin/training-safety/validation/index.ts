@@ -39,8 +39,8 @@ export const trainingDefaultValues: TrainingFormData = {
   name: '',
   type: 'skill',
   department: 'production',
-  startDate: undefined,
-  endDate: undefined,
+  startDate: '',
+  endDate: '',
   participantCount: 0,
   status: 'open'
 };

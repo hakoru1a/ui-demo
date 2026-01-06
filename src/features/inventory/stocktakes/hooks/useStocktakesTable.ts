@@ -57,7 +57,7 @@ export function useStocktakesTable({
   // Table data filtering
   const { filteredData } = useTableData<Stocktake>({
     data,
-    statusFilter,
+    statusFilter: statusFilter as StatusFilter | undefined,
     searchValue,
     searchFilterFn
   });

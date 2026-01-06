@@ -103,72 +103,72 @@ interface StyleProps extends Omit<IconButtonStyleProps, 'theme'> {
   shape?: IconButtonShapeProps;
 }
 
-const IconButtonStyle = styled(MuiIconButton, { shouldForwardProp: (prop) => prop !== 'variant' && prop !== 'shape' })<StyleProps>(
-  ({ theme, color, variant }) => ({
-    position: 'relative',
-    '::after': {
-      content: '""',
-      display: 'block',
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      width: '100%',
-      height: '100%',
-      borderRadius: 4,
-      opacity: 0,
-      transition: 'all 0.5s'
+const IconButtonStyle = styled(MuiIconButton, {
+  shouldForwardProp: (prop) => prop !== 'variant' && prop !== 'shape'
+})<StyleProps>(({ theme, color, variant }) => ({
+  position: 'relative',
+  '::after': {
+    content: '""',
+    display: 'block',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    borderRadius: 4,
+    opacity: 0,
+    transition: 'all 0.5s'
+  },
+
+  ':active::after': {
+    position: 'absolute',
+    borderRadius: 4,
+    left: 0,
+    top: 0,
+    opacity: 1,
+    transition: '0s'
+  },
+
+  ...getColorStyle({ variant, theme, color }),
+
+  variants: [
+    {
+      props: { shape: 'rounded' },
+      style: {
+        borderRadius: '50%',
+        '::after': { borderRadius: '50%' },
+        ':active::after': { borderRadius: '50%' }
+      }
     },
-
-    ':active::after': {
-      position: 'absolute',
-      borderRadius: 4,
-      left: 0,
-      top: 0,
-      opacity: 1,
-      transition: '0s'
+    {
+      props: { variant: 'outlined' },
+      style: {
+        border: '1px solid',
+        borderColor: 'inherit'
+      }
     },
-
-    ...getColorStyle({ variant, theme, color }),
-
-    variants: [
-      {
-        props: { shape: 'rounded' },
-        style: {
-          borderRadius: '50%',
-          '::after': { borderRadius: '50%' },
-          ':active::after': { borderRadius: '50%' }
-        }
-      },
-      {
-        props: { variant: 'outlined' },
-        style: {
-          border: '1px solid',
-          borderColor: 'inherit'
-        }
-      },
-      {
-        props: { variant: 'dashed' },
-        style: {
-          border: '1px dashed',
-          borderColor: 'inherit'
-        }
-      },
-      {
-        props: ({ variant }) => variant !== 'text',
-        style: {
-          '&.Mui-disabled': {
+    {
+      props: { variant: 'dashed' },
+      style: {
+        border: '1px dashed',
+        borderColor: 'inherit'
+      }
+    },
+    {
+      props: ({ variant: variantProp }) => variantProp !== 'text',
+      style: {
+        '&.Mui-disabled': {
+          background: theme.palette.grey[200],
+          '&:hover': {
             background: theme.palette.grey[200],
-            '&:hover': {
-              background: theme.palette.grey[200],
-              color: theme.palette.grey[300],
-              borderColor: 'inherit'
-            }
+            color: theme.palette.grey[300],
+            borderColor: 'inherit'
           }
         }
       }
-    ]
-  })
-);
+    }
+  ]
+}));
 
 // ==============================|| EXTENDED - ICON BUTTON ||============================== //
 

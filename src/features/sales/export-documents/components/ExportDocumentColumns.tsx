@@ -268,6 +268,6 @@ export function useExportDocumentColumns({ onEdit, onDelete }: UseExportDocument
         }
       }
     ],
-    [handleView, handleEdit, handleDelete, theme, getStatusColor, getTypeColor]
+    [handleView, handleEdit, handleDelete, getStatusColor, getTypeColor]
   );
 }

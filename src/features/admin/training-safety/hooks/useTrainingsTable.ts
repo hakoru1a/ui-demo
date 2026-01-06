@@ -19,7 +19,7 @@ import type { Training } from '../types';
 
 interface UseTrainingsTableProps {
   data: Training[];
-  statusFilter: StatusFilter;
+  statusFilter?: string | undefined;
   searchValue: string;
   onEdit?: (training: Training) => void;
   onDelete?: (training: Training) => void;
@@ -55,7 +55,7 @@ export function useTrainingsTable({
   // Table data filtering
   const { filteredData } = useTableData<Training>({
     data,
-    statusFilter,
+    statusFilter: statusFilter as StatusFilter | undefined,
     searchValue,
     searchFilterFn
   });
@@ -74,14 +74,13 @@ export function useTrainingsTable({
     data: filteredData,
     columns: tableColumns,
     columnFilters,
-    setColumnFilters,
     rowSelection,
-    setRowSelection,
+    onRowSelectionChange: setRowSelection,
     initialPageSize
   });
 
   // Selected rows
-  const selectedRows = useSelectedRows<Training>(table, rowSelection);
+  const selectedRows = useSelectedRows<Training>(table, true);
 
   // Selection change handler
   useSelectionChange(selectedRows, !!onSelectionChange, onSelectionChange ? handleRowSelectionChange : undefined);
@@ -92,9 +91,7 @@ export function useTrainingsTable({
 
   // CSV export
   const { csvData, csvHeadersData } = useTableCSV<Training>({
-    table,
-    columns,
-    filename: 'trainings'
+    table
   });
 
   return {

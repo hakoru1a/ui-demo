@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 // ==============================|| CARD - PAGINATION ||============================== //
 
-export default function usePagination(data: any, itemsPerPage: number) {
+export default function usePagination<T>(data: T[], itemsPerPage: number) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const maxPage = Math.ceil(data.length / itemsPerPage);
 
@@ -13,11 +13,11 @@ export default function usePagination(data: any, itemsPerPage: number) {
   }
 
   function next() {
-    setCurrentPage((currentPage: number) => Math.min(currentPage + 1, maxPage));
+    setCurrentPage((prevPage: number) => Math.min(prevPage + 1, maxPage));
   }
 
   function prev() {
-    setCurrentPage((currentPage: number) => Math.max(currentPage - 1, 1));
+    setCurrentPage((prevPage: number) => Math.max(prevPage - 1, 1));
   }
 
   function jump(page: number) {

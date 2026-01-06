@@ -323,9 +323,12 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                       <DatePickerField
                         label="Ngày kiểm kê từ"
                         value={getDateRangeValue('inventoryDateFrom')}
-                        onChange={(value) => handleDateRangeChange('inventoryDateFrom', value)}
-                        fullWidth
-                        size="medium"
+                        onChange={(value) => handleDateRangeChange('inventoryDateFrom', value?.toDate() || null)}
+                        slotProps={{
+                          textField: {
+                            fullWidth: true
+                          }
+                        }}
                       />
                     </Grid>
 
@@ -333,9 +336,12 @@ function FilterPopover({ open, onClose, anchorEl, columnFilters, onFilterChange 
                       <DatePickerField
                         label="Ngày kiểm kê đến"
                         value={getDateRangeValue('inventoryDateTo')}
-                        onChange={(value) => handleDateRangeChange('inventoryDateTo', value)}
-                        fullWidth
-                        size="medium"
+                        onChange={(value) => handleDateRangeChange('inventoryDateTo', value?.toDate() || null)}
+                        slotProps={{
+                          textField: {
+                            fullWidth: true
+                          }
+                        }}
                       />
                     </Grid>
 

@@ -180,7 +180,7 @@ export default function NavGroup({
         return <NavItem key={menuItem.id} item={menuItem} level={1} />;
       default:
         return (
-          <Typography key={index} variant="h6" color="error" align="center">
+          <Typography key={`nav-error-${index}`} variant="h6" color="error" align="center">
             Fix - Group Collapse or Items
           </Typography>
         );
@@ -188,7 +188,7 @@ export default function NavGroup({
   });
 
   const moreItems = remItems.map((itemRem: NavItemType, i) => (
-    <Fragment key={i}>
+    <Fragment key={`more-item-${itemRem.id || i}`}>
       {itemRem.url ? (
         <NavItem item={itemRem} level={1} />
       ) : (

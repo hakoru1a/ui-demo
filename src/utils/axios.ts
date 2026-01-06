@@ -8,7 +8,8 @@ axiosServices.interceptors.request.use(
   async (config) => {
     const accessToken = localStorage.getItem('serviceToken');
     if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },

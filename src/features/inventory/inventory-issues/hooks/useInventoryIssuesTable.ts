@@ -59,7 +59,7 @@ export function useInventoryIssuesTable({
   // Table data filtering
   const { filteredData } = useTableData<InventoryIssue>({
     data,
-    statusFilter,
+    statusFilter: statusFilter as StatusFilter | undefined,
     searchValue,
     searchFilterFn
   });

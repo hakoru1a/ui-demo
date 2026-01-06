@@ -241,6 +241,6 @@ export function useBatchColumns({ onDelete }: UseBatchColumnsProps = {}): Column
         }
       }
     ],
-    [onDelete, handleEdit, handleView, theme, getStatusColor]
+    [onDelete, handleEdit, handleView, getStatusColor]
   );
 }

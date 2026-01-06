@@ -292,9 +292,9 @@ const WorkforceDispatchOrderForm = ({ mode }: WorkforceDispatchOrderFormProps) =
                     <Field name={`personnel.${index}.personnelId`}>
                       {({ field }: FieldProps) => (
                         <Autocomplete
-                          {...field}
                           value={employeeOptions.find((opt) => opt.id === field.value) || null}
                           onChange={(_, newValue) => {
+                            field.onChange(newValue?.id || '');
                             handlePersonnelFieldChange(index, 'personnelId', newValue?.id || '');
                           }}
                           options={employeeOptions}

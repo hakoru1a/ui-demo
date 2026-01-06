@@ -94,14 +94,13 @@ export function useWorkforceDispatchOrdersTable({
     data: filteredData,
     columns: tableColumns,
     columnFilters,
-    setColumnFilters,
     rowSelection,
-    setRowSelection,
+    onRowSelectionChange: setRowSelection,
     initialPageSize
   });
 
   // Selected rows
-  const selectedRows = useSelectedRows<WorkforceDispatchOrder>(table, rowSelection);
+  const selectedRows = useSelectedRows<WorkforceDispatchOrder>(table, true);
 
   // Selection change handler
   useSelectionChange(selectedRows, !!onSelectionChange, onSelectionChange ? handleRowSelectionChange : undefined);
@@ -112,9 +111,7 @@ export function useWorkforceDispatchOrdersTable({
 
   // CSV export
   const { csvData, csvHeadersData } = useTableCSV<WorkforceDispatchOrder>({
-    table,
-    columns,
-    filename: 'workforce-dispatch-orders'
+    table
   });
 
   return {

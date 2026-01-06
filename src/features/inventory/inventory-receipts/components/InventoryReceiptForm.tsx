@@ -252,9 +252,8 @@ const InventoryReceiptForm = ({ mode }: InventoryReceiptFormProps) => {
           required
           error={!!getError('quantity')}
           helperText={getError('quantity')}
-          format="number"
           slotProps={{
-            input: {
+            htmlInput: {
               readOnly: isReadOnly
             }
           }}

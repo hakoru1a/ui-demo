@@ -74,14 +74,13 @@ export function useEmployeesTable({
     data: filteredData,
     columns: tableColumns,
     columnFilters,
-    setColumnFilters,
     rowSelection,
-    setRowSelection,
+    onRowSelectionChange: setRowSelection,
     initialPageSize
   });
 
   // Selected rows
-  const selectedRows = useSelectedRows<Employee>(table, rowSelection);
+  const selectedRows = useSelectedRows<Employee>(table, true);
 
   // Selection change handler
   useSelectionChange(selectedRows, !!onSelectionChange, onSelectionChange ? handleRowSelectionChange : undefined);
@@ -92,9 +91,7 @@ export function useEmployeesTable({
 
   // CSV export
   const { csvData, csvHeadersData } = useTableCSV<Employee>({
-    table,
-    columns,
-    filename: 'employees'
+    table
   });
 
   return {

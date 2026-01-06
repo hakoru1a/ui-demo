@@ -219,6 +219,6 @@ export function useVesselTrackingColumns({ onEdit, onDelete }: UseVesselTracking
         }
       }
     ],
-    [handleView, handleEdit, handleDelete, theme, getStatusColor]
+    [handleView, handleEdit, handleDelete, getStatusColor]
   );
 }

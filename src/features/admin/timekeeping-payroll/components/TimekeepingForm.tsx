@@ -232,7 +232,7 @@ const TimekeepingForm = ({ mode }: TimekeepingFormProps) => {
           error={!!getError('startTime')}
           helperText={getError('startTime')}
           slotProps={{
-            input: {
+            htmlInput: {
               readOnly: isReadOnly,
               step: 300 // 5 minutes
             }
@@ -268,7 +268,7 @@ const TimekeepingForm = ({ mode }: TimekeepingFormProps) => {
           error={!!getError('endTime')}
           helperText={getError('endTime')}
           slotProps={{
-            input: {
+            htmlInput: {
               readOnly: isReadOnly,
               step: 300 // 5 minutes
             }

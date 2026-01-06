@@ -30,32 +30,32 @@ type ConfigProviderProps = {
 };
 
 function ConfigProvider({ children }: ConfigProviderProps) {
-  const [config, setConfig] = useLocalStorage('mantis-react-ts-config', initialState);
+  const [configState, setConfig] = useLocalStorage('mantis-react-ts-config', initialState);
 
   const onChangeContainer = (container: boolean) => {
     setConfig({
-      ...config,
+      ...configState,
       container: container
     });
   };
 
   const onChangeLocalization = (lang: I18n) => {
     setConfig({
-      ...config,
+      ...configState,
       i18n: lang
     });
   };
 
   const onChangeMode = (mode: ThemeMode) => {
     setConfig({
-      ...config,
+      ...configState,
       mode
     });
   };
 
   const onChangePresetColor = (theme: PresetColor) => {
     setConfig({
-      ...config,
+      ...configState,
       presetColor: theme
     });
   };
@@ -84,14 +84,14 @@ function ConfigProvider({ children }: ConfigProviderProps) {
 
   const onChangeMenuOrientation = (layout: MenuOrientation) => {
     setConfig({
-      ...config,
+      ...configState,
       menuOrientation: layout
     });
   };
 
   const onChangeFontFamily = (fontFamily: FontFamily) => {
     setConfig({
-      ...config,
+      ...configState,
       fontFamily
     });
   };
@@ -99,7 +99,7 @@ function ConfigProvider({ children }: ConfigProviderProps) {
   return (
     <ConfigContext
       value={{
-        ...config,
+        ...configState,
         onChangeContainer,
         onChangeLocalization,
         onChangeMode,

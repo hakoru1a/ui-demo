@@ -184,10 +184,10 @@ const StocktakeForm = ({ mode }: StocktakeFormProps) => {
             setFieldValue('inventoryDate', newValue ? newValue.toDate() : new Date());
           }}
           format="DD/MM/YYYY"
-          required
           slotProps={{
             textField: {
               fullWidth: true,
+              required: true,
               error: !!getError('inventoryDate'),
               helperText: getError('inventoryDate'),
               readOnly: isReadOnly
@@ -283,10 +283,10 @@ const StocktakeForm = ({ mode }: StocktakeFormProps) => {
                   options={skuOptions}
                   getOptionLabel={getSkuOptionLabel}
                   value={skuOptions.find((sku) => sku.id === item.skuId) || null}
-                  onChange={(_, newValue) => handleSkuChange(index, newValue)}
+                  onChange={(_: any, newValue: any) => handleSkuChange(index, newValue)}
                   disabled={isReadOnly}
                   fullWidth
-                  renderOption={(props, option) => (
+                  renderOption={(props: any, option: any) => (
                     <Box component="li" {...props} key={option.id}>
                       <Stack>
                         <Typography variant="body2" fontWeight={600}>

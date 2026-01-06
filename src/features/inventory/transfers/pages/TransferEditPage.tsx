@@ -33,7 +33,8 @@ const entityToFormData = (entity: Transfer): TransferFormData => ({
     skuName: item.skuName,
     batchId: item.batchId,
     quantity: item.quantity,
-    unit: item.unit
+    unit: item.unit,
+    weight: item.weight || 0
   })),
   transportRef: entity.transportRef,
   status: entity.status,

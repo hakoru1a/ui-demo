@@ -169,13 +169,12 @@ const TrainingForm = ({ mode }: TrainingFormProps) => {
             const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
             setFieldValue('startDate', dateStr);
           }}
-          onBlur={handleBlur}
-          fullWidth
-          required
-          error={!!getError('startDate')}
-          helperText={getError('startDate')}
           slotProps={{
-            input: {
+            textField: {
+              fullWidth: true,
+              required: true,
+              error: !!getError('startDate'),
+              helperText: getError('startDate') || undefined,
               readOnly: isReadOnly
             }
           }}
@@ -192,13 +191,12 @@ const TrainingForm = ({ mode }: TrainingFormProps) => {
             const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
             setFieldValue('endDate', dateStr);
           }}
-          onBlur={handleBlur}
-          fullWidth
-          required
           error={!!getError('endDate')}
-          helperText={getError('endDate')}
+          helperText={getError('endDate') || undefined}
           slotProps={{
-            input: {
+            textField: {
+              fullWidth: true,
+              required: true,
               readOnly: isReadOnly
             }
           }}

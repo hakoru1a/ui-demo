@@ -219,6 +219,6 @@ export function useMaterialReceiptColumns({ onDelete }: UseMaterialReceiptColumn
         }
       }
     ],
-    [theme, onDelete, handleEdit, handleView, getStatusColor]
+    [onDelete, handleEdit, handleView, getStatusColor]
   );
 }

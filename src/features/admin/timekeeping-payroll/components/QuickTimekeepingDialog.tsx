@@ -130,7 +130,7 @@ const QuickTimekeepingDialog = ({
                     required
                     type="time"
                     slotProps={{
-                      input: {
+                      htmlInput: {
                         step: 300 // 5 minutes
                       }
                     }}
@@ -147,7 +147,7 @@ const QuickTimekeepingDialog = ({
                     required
                     type="time"
                     slotProps={{
-                      input: {
+                      htmlInput: {
                         step: 300 // 5 minutes
                       }
                     }}

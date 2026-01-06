@@ -29,6 +29,7 @@ const InventoryReportFilterDrawer = ({ open, onClose, onApply, initialFilter }: 
   const handleApply = () => {
     onApply({
       startDate: date ? date.toDate() : null,
+      endDate: null, // Add endDate as required by DashboardFilter
       warehouseId: warehouseId || null,
       skuId: skuId || null
     });

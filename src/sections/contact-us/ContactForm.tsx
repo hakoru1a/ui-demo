@@ -87,7 +87,7 @@ export default function ContactForm() {
             <Grid size={{ xs: 12, md: 6 }}>
               <TextField select fullWidth placeholder="Company Size" value={size} onChange={handleCompanySize}>
                 {sizes.map((option, index) => (
-                  <MenuItem key={index} value={option.value}>
+                  <MenuItem key={option.value || `size-${index}`} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}
@@ -96,7 +96,7 @@ export default function ContactForm() {
             <Grid size={{ xs: 12, md: 6 }}>
               <TextField select fullWidth placeholder="Project Budget" value={budget} onChange={handleProjectBudget}>
                 {currencies.map((option, index) => (
-                  <MenuItem key={index} value={option.value}>
+                  <MenuItem key={option.value || `budget-${index}`} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}

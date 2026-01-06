@@ -59,7 +59,7 @@ export default function AvatarUpload({ error, file, setFieldValue, sx }: UploadP
     onDrop: (acceptedFiles: CustomFile[]) => {
       setFieldValue(
         'files',
-        acceptedFiles.map((file: CustomFile) => Object.assign(file, { preview: URL.createObjectURL(file) }))
+        acceptedFiles.map((uploadedFile: CustomFile) => Object.assign(uploadedFile, { preview: URL.createObjectURL(uploadedFile) }))
       );
     }
   });

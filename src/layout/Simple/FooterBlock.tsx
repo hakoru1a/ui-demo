@@ -264,7 +264,7 @@ export default function FooterBlock({ isFull }: showProps) {
                     </Typography>
                     <Stack sx={{ gap: { xs: 1.5, md: 2.5 } }}>
                       {frameworks.map((item, index) => (
-                        <FooterLink href={item.link} target="_blank" underline="none" key={index}>
+                        <FooterLink href={item.link} target="_blank" underline="none" key={`${item.title}-${index}`}>
                           {item.title}
                           {/* {item.isUpcoming && <Chip variant="outlined" size="small" label="Upcoming" sx={{ ml: 0.5 }} />} */}
                         </FooterLink>
@@ -307,7 +307,12 @@ export default function FooterBlock({ isFull }: showProps) {
       </Box>
       <Divider sx={{ borderColor: 'grey.700' }} />
       <Box
-        sx={(theme) => ({ py: 1.5, pb: { xs: 7.5, sm: 1.5 }, bgcolor: 'grey.800', ...theme.applyStyles('dark', { bgcolor: 'grey.50' }) })}
+        sx={(theme) => ({
+          py: 1.5,
+          pb: { xs: 7.5, sm: 1.5 },
+          bgcolor: 'grey.800',
+          ...theme.applyStyles('dark', { bgcolor: 'grey.50' })
+        })}
       >
         <Container>
           <Grid container spacing={2}>

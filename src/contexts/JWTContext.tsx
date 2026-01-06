@@ -129,7 +129,7 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
   };
 
   const resetPassword = async (email: string) => {
-    console.log('email - ', email);
+    console.warn('Reset password for email:', email);
   };
 
   const updateProfile = () => {};

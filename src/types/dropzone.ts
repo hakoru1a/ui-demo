@@ -19,7 +19,7 @@ export interface CustomFile extends File {
 export interface UploadProps extends DropzoneOptions {
   error?: boolean;
   file: CustomFile[] | null;
-  setFieldValue: (field: string, value: any) => void;
+  setFieldValue: (field: string, value: unknown) => void;
   sx?: SxProps<Theme>;
 }
 
@@ -32,7 +32,7 @@ export interface UploadMultiFileProps extends DropzoneOptions {
   onUpload?: VoidFunction;
   onRemove?: (file: File | string) => void;
   onRemoveAll?: VoidFunction;
-  setFieldValue: (field: string, value: any) => void;
+  setFieldValue: (field: string, value: unknown) => void;
 }
 
 export interface FilePreviewProps {

@@ -75,14 +75,9 @@ export default function AnimateButton({
 
     case 'scale':
     default:
-      if (typeof scale === 'number') {
-        scale = {
-          hover: scale,
-          tap: scale
-        };
-      }
+      const scaleConfig = typeof scale === 'number' ? { hover: scale, tap: scale } : scale;
       return (
-        <motion.div whileHover={{ scale: scale?.hover }} whileTap={{ scale: scale?.tap }}>
+        <motion.div whileHover={{ scale: scaleConfig?.hover }} whileTap={{ scale: scaleConfig?.tap }}>
           {children}
         </motion.div>
       );

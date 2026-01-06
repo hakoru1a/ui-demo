@@ -50,8 +50,8 @@ export const employeeDefaultValues: EmployeeFormData = {
   department: 'production',
   position: '',
   contractType: 'probation',
-  effectiveDate: undefined,
-  expiryDate: undefined,
+  effectiveDate: '',
+  expiryDate: '',
   status: 'active'
 };
 

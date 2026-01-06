@@ -59,7 +59,7 @@ export function useSkuTable({
   // Table data filtering
   const { filteredData } = useTableData<Sku>({
     data,
-    statusFilter,
+    statusFilter: statusFilter as StatusFilter | undefined,
     searchValue,
     searchFilterFn
   });

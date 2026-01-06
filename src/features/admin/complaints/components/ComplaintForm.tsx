@@ -135,13 +135,12 @@ const ComplaintForm = ({ mode }: ComplaintFormProps) => {
             const dateStr = value ? dateHelper.formatDate(value, 'YYYY-MM-DD') : undefined;
             setFieldValue('receivedDate', dateStr);
           }}
-          onBlur={handleBlur}
-          fullWidth
-          required
-          error={!!getError('receivedDate')}
-          helperText={getError('receivedDate')}
           slotProps={{
-            input: {
+            textField: {
+              fullWidth: true,
+              required: true,
+              error: !!getError('receivedDate'),
+              helperText: getError('receivedDate') || undefined,
               readOnly: isReadOnly
             }
           }}

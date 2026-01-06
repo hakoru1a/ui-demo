@@ -42,7 +42,7 @@ export const complaintDefaultValues: ComplaintFormData = {
   sender: '',
   relatedEmployeeId: undefined,
   type: 'labor',
-  receivedDate: undefined,
+  receivedDate: '',
   status: 'new',
   description: '',
   resolution: ''

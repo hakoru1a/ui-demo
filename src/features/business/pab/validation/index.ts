@@ -2,7 +2,7 @@
 
 import * as yup from 'yup';
 
-import type { PabFormData, PabApprovalFormData, PabTransactionFormData } from '../types';
+import type { PabFormData, PabApprovalFormData, PabTransactionFormData, ApprovalLayer, ApprovalDecision } from '../types';
 
 /**
  * Validation schema for PAB form (SD-1-1)
@@ -103,9 +103,9 @@ export const pabDefaultValues: PabFormData = {
  */
 export const pabApprovalDefaultValues: PabApprovalFormData = {
   pabCode: '',
-  approvalLayer: 'business',
+  approvalLayer: 'business' as ApprovalLayer,
   approverId: '',
-  decision: 'approved',
+  decision: 'approved' as ApprovalDecision,
   comment: '',
   approvalDate: new Date()
 };
@@ -114,7 +114,9 @@ export const pabApprovalDefaultValues: PabApprovalFormData = {
  * Default values for PAB transaction form
  */
 export const pabTransactionDefaultValues: PabTransactionFormData = {
+  pabId: '',
   pabCode: '',
+  transactionType: 'execute',
   contractRef: '',
   transactionStatus: 'negotiating',
   relatedOrderIds: [],

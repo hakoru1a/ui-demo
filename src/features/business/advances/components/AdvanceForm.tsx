@@ -117,10 +117,8 @@ const AdvanceForm = ({ mode }: AdvanceFormProps) => {
           required
           error={!!getError('requestedAmount')}
           helperText={getError('requestedAmount')}
-          format="currency"
-          currency="VND"
           slotProps={{
-            input: {
+            htmlInput: {
               readOnly: isReadOnly
             }
           }}
